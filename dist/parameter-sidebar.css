@@ -22,7 +22,8 @@ body.has-parameter-sidebar > :is(.site-header,main,.site-footer).page-width { wi
 @media(max-width:860px) {
   .parameter-workspace,.parameter-workspace[data-expanded="false"] { grid-template-columns:minmax(0,1fr); gap:14px; }
   .parameter-sidebar { position:absolute; z-index:12; left:0; top:50px; width:min(330px,100%); max-height:min(75vh,740px); overflow:auto; overscroll-behavior:contain; box-shadow:0 12px 40px #0003; scrollbar-width:thin; }
-  .parameter-backdrop:not([hidden]) { display:block; position:absolute; z-index:11; inset:50px 0 0; min-height:220px; border:0; border-radius:8px; background:#0002; cursor:pointer; padding:0; }
+  /* This structural button must stay independent of each demo's pill controls. */
+  .parameter-backdrop:not([hidden]) { display:block; position:absolute; z-index:11; inset:50px 0 0; min-height:220px; border:0!important; border-radius:8px!important; background:#0002!important; cursor:pointer; padding:0!important; }
   .parameter-stage { grid-column:1; }
   .parameter-host .parameter-toggle { min-height:40px; }
 }
