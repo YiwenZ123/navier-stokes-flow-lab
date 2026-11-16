@@ -16,6 +16,7 @@ Interactive, browser-based CFD demonstrations for learning incompressible Navier
 - Comparison of these two Navier–Stokes solution methods at the same physical time, with selectable time steps, initial conditions and Jacobi / Gauss–Seidel / SOR iterations.
 - A Navier–Stokes wave-impact application: a 2D tank with square, circular and triangular obstacle cross-sections, adjustable size and position, and three spatial resolutions.
 - Free-surface, velocity and pressure views, pressure history, and force per unit span.
+- Wave-pressure colors keep a fixed −5 to 20 kPa default scale during playback; set limits, fit the current frame once, or restore the default without restarting the simulation.
 - A one-dimensional advection lab with 10 finite-difference schemes, five built-in profiles and a custom initial-condition curve editor. Adjust the grid, CFL number and positive or negative transport velocity; compare numerical curves with the exact solution.
 - A draggable curve editor with smooth or linear interpolation, linked periodic endpoints, coordinate inputs, and undo/redo. Both schemes sample the same curve on the selected grid; editing restarts both calculations, and the curve is saved in the browser for the current site address.
 - Export custom curves as JSON and import them on another device or site address. The file stores control points, interpolation and endpoint linking; import restarts both schemes at t = 0 while keeping the selected schemes, grid and time step.
@@ -50,6 +51,7 @@ Individual checks are also available:
 npm run test:iterations
 npm run test:stability
 npm run test:waves
+npm run test:pressure-display
 npm run test:advection
 npm run test:custom-profile
 npm run test:curve-file

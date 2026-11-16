@@ -16,6 +16,7 @@
 - 比较上述两种 Navier–Stokes 求解方法在同一物理时刻的结果，支持时间步长、初始条件及 Jacobi / 高斯–塞德尔 / SOR 选项。
 - Navier–Stokes 应用——二维波浪冲击：正方形、圆形和三角形障碍物截面，可选尺寸、位置和三档空间步长。
 - 自由液面、速度、压力场、压力历程和单位跨度受力。
+- 波浪压力图默认固定使用 −5 至 20 kPa 色标，可手动设置范围、仅按当前帧拟合或恢复默认，调整显示不重置计算。
 - 一维对流教学：10 种差分格式、5 种内置波形和自定义初始条件，可调网格、CFL 数和正负对流速度，并叠加精确解。
 - 可拖动曲线控件支持平滑/折线、周期首尾联动、坐标输入和撤销/重做。两种格式在所选网格上采样同一曲线；编辑后同时从初始时刻重算，曲线会保存在当前浏览器的当前站点地址下。
 - 自定义曲线支持 JSON 导出/导入，可跨设备、站点地址或离线端口恢复。文件保存控制点、插值方式和端点联动；导入后两种格式均从 t = 0 重算，保留所选格式、网格和时间步长。
@@ -50,6 +51,7 @@ npm test
 npm run test:iterations
 npm run test:stability
 npm run test:waves
+npm run test:pressure-display
 npm run test:advection
 npm run test:custom-profile
 npm run test:curve-file

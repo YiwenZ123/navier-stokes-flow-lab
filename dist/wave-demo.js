@@ -1,6 +1,7 @@
 import { createWaveSolver } from "./wave-solver.js?v=14";
 import { t } from "./i18n.js?v=14";
 import { mountParameterSidebar } from "./parameter-sidebar.js?v=edb979ef0040";
+import { DEFAULT_PRESSURE_RANGE, createPressureRange, pressureColor, pressureExtent, fitPressureRange } from "./pressure-display.js?v=7c372234c443";
 
 const byId = id => document.getElementById(id);
 const scenarioSelect = byId("wave-scenario");
@@ -22,6 +23,56 @@ let solver;
 let playing = false;
 let animationFrame;
 let pressureHistory = [];
+// Display state is independent of the solver and survives resets/replays.
+let pressureRange = DEFAULT_PRESSURE_RANGE;
+let pressureRangeError = false;
+
+function setDisplayText(id, value) {
+  const node = byId(id);
+  if (node.textContent !== value) node.textContent = value;
+}
+
+function renderPressureScale() {
+  const pressureMode = fieldSelect.value === "pressure";
+  byId("wave-pressure-controls").hidden = !pressureMode;
+  byId("wave-pressure-scale").hidden = !pressureMode;
+  byId("wave-pressure-range-note").hidden = !pressureMode;
+  const label = value => `${Number.isInteger(value / 1000) ? number(value / 1000, 1) : String(value / 1000)} kPa`;
+  setDisplayText("wave-pressure-low", label(pressureRange.minimum));
+  setDisplayText("wave-pressure-high", label(pressureRange.maximum));
+  const extent = pressureMode ? pressureExtent(solver.state.pressure, solver.state.liquid) : null;
+  const clipped = extent && (extent.minimum < pressureRange.minimum || extent.maximum > pressureRange.maximum);
+  setDisplayText("wave-pressure-range-note", clipped
+    ? t("Fixed color range · out-of-range values use the endpoint colors.", "固定色标 · 超出范围的压力使用端点颜色显示。")
+    : t("Fixed color range", "固定色标范围"));
+  const error = byId("wave-pressure-error");
+  error.hidden = !pressureRangeError;
+  setDisplayText("wave-pressure-error", pressureRangeError
+    ? t("Enter finite limits with minimum lower than maximum.", "请输入有限数值，且下限必须小于上限。") : "");
+  for (const id of ["wave-pressure-min", "wave-pressure-max"]) {
+    byId(id).setAttribute("aria-invalid", String(pressureRangeError));
+  }
+}
+
+function setPressureRange(range) {
+  pressureRange = range;
+  pressureRangeError = false;
+  byId("wave-pressure-min").value = String(range.minimum / 1000);
+  byId("wave-pressure-max").value = String(range.maximum / 1000);
+  render();
+}
+
+function applyPressureRange() {
+  let range;
+  try {
+    range = createPressureRange(byId("wave-pressure-min").value, byId("wave-pressure-max").value);
+  } catch {
+    pressureRangeError = true;
+    renderPressureScale();
+    return;
+  }
+  setPressureRange(range);
+}
 
 function createSimulation() {
   return createWaveSolver({
@@ -101,18 +152,6 @@ function drawTank(colors) {
   const bottom = top + tankHeight;
   const cell = h * scale;
   const pressureMode = fieldSelect.value === "pressure";
-  let peakPressure = 1000;
-  let lowestPressure = 0;
-  for (let index = 0; index < state.pressure.length; index++) {
-    if (state.liquid[index]) {
-      peakPressure = Math.max(peakPressure, state.pressure[index]);
-      lowestPressure = Math.min(lowestPressure, state.pressure[index]);
-    }
-  }
-  const pressureMaximum = Math.ceil(peakPressure / 1000) * 1000;
-  const pressureMinimum = lowestPressure < -1 ? Math.floor(lowestPressure / 1000) * 1000 : 0;
-  byId("wave-pressure-low").textContent = `${number(pressureMinimum / 1000, 1)} kPa`;
-  byId("wave-pressure-high").textContent = `${number(pressureMaximum / 1000, 1)} kPa`;
 
   context.fillStyle = colors.surface;
   context.fillRect(left, top, tankWidth, tankHeight);
@@ -121,11 +160,8 @@ function drawTank(colors) {
       const index = j * nx + i;
       if (!state.liquid[index]) continue;
       if (pressureMode) {
-        const fraction = Math.max(0, Math.min(1, (state.pressure[index] - pressureMinimum) / (pressureMaximum - pressureMinimum)));
-        const red = Math.round(167 + fraction * 64);
-        const green = Math.round(217 - fraction * 91);
-        const blue = Math.round(247 - fraction * 192);
-        context.fillStyle = `rgb(${red}, ${green}, ${blue})`;
+        context.fillStyle = Number.isFinite(state.pressure[index])
+          ? pressureColor(state.pressure[index], pressureRange) : colors.paper;
       } else {
         context.fillStyle = "#60b6e6";
       }
@@ -277,7 +313,7 @@ function render() {
   byId("wave-divergence").textContent = `${scientific(state.maxDivergence)} s⁻¹`;
   byId("wave-dt").textContent = state.dt > 0 ? `${number(state.dt * 1000, 2)} ms` : "—";
   byId("wave-field-label").textContent = pressureMode ? t("Water pressure · gauge", "水中压力 · 表压") : t("Water & free surface", "水体与自由液面");
-  byId("wave-pressure-scale").hidden = !pressureMode;
+  renderPressureScale();
   tank.setAttribute("aria-label", pressureMode
     ? t("Water pressure and a fixed obstacle in a 2D tank. Blue to orange indicates increasing pressure.", "二维水槽中的水体压力场与固定障碍物，蓝色至橙色表示压力由低到高。")
     : t("Free surface and a fixed obstacle in a 2D tank. Blue represents water.", "二维水槽中的自由液面和固定障碍物，蓝色表示水体。"));
@@ -371,6 +407,17 @@ for (const control of [centerXInput, bottomYInput]) {
 window.addEventListener("languagechange", () => { if (solver) render(); });
 fieldSelect.addEventListener("change", render);
 arrowsCheckbox.addEventListener("change", render);
+byId("wave-pressure-apply").addEventListener("click", applyPressureRange);
+byId("wave-pressure-fit").addEventListener("click", () => {
+  // Snapshot the visible frame once. Future frames never expand this range.
+  setPressureRange(fitPressureRange(solver.state.pressure, solver.state.liquid));
+});
+byId("wave-pressure-default").addEventListener("click", () => setPressureRange(DEFAULT_PRESSURE_RANGE));
+for (const id of ["wave-pressure-min", "wave-pressure-max"]) {
+  byId(id).addEventListener("keydown", event => {
+    if (event.key === "Enter") { event.preventDefault(); applyPressureRange(); }
+  });
+}
 document.addEventListener("visibilitychange", () => {
   if (document.hidden && playing) { pause(); render(); }
 });

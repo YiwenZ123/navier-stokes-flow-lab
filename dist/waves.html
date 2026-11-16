@@ -7,11 +7,11 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
   <title>Navier–Stokes Flow Lab · Wave impact</title>
   <link rel="stylesheet" href="./guide.css?v=c2ba94d1a5a6">
-  <link rel="stylesheet" href="./wave-demo.css?v=6cc34e1a8768">
+  <link rel="stylesheet" href="./wave-demo.css?v=173fcd8dee34">
   <link rel="stylesheet" href="./parameter-sidebar.css?v=6549589aa856">
   <script defer src="./page-tabs.js"></script>
   <script type="module" src="./i18n.js?v=14"></script>
-  <script type="module" src="./wave-demo.js?v=8b1a698b22bc"></script>
+  <script type="module" src="./wave-demo.js?v=82ed6dc19ffa"></script>
 </head>
 <body>
   <header class="site-header page-width">
@@ -67,10 +67,28 @@
           <select id="wave-field"><option value="water" data-en="Water &amp; free surface" data-zh="水体与自由液面">Water &amp; free surface</option><option value="pressure" data-en="Water pressure" data-zh="水中压力">Water pressure</option></select>
           <label class="wave-checkbox"><input id="wave-arrows" type="checkbox"><span data-en="Velocity arrows" data-zh="速度箭头">Velocity arrows</span></label>
         </div>
+        <div class="wave-setting" id="wave-pressure-controls" role="group" aria-labelledby="wave-pressure-label" hidden>
+          <span id="wave-pressure-label" data-en="Pressure color range (kPa)" data-zh="压力色标范围（kPa）">Pressure color range (kPa)</span>
+          <div class="wave-pressure-limits">
+            <label for="wave-pressure-min"><span data-en="Minimum" data-zh="下限">Minimum</span><input id="wave-pressure-min" type="number" value="-5" step="any" aria-describedby="wave-pressure-error"></label>
+            <label for="wave-pressure-max"><span data-en="Maximum" data-zh="上限">Maximum</span><input id="wave-pressure-max" type="number" value="20" step="any" aria-describedby="wave-pressure-error"></label>
+          </div>
+          <div class="wave-pressure-actions">
+            <button id="wave-pressure-apply" type="button" data-en="Apply" data-zh="应用">Apply</button>
+            <button id="wave-pressure-fit" type="button" data-en="Fit current frame" data-zh="适应当前帧">Fit current frame</button>
+            <button id="wave-pressure-default" type="button" data-en="Default" data-zh="默认">Default</button>
+          </div>
+          <p id="wave-pressure-error" class="wave-pressure-error" role="alert" hidden></p>
+          <details class="parameter-help"><summary data-en="Color range details" data-zh="色标范围说明">Color range details</summary><div class="parameter-help-body">
+            <p data-en="The range stays fixed during play, step, replay, reset and geometry changes. Fit current frame updates it once from the frame shown." data-zh="播放、单步、重播、重置及改变几何时，范围保持固定。“适应当前帧”仅按当前画面更新一次范围。">The range stays fixed during play, step, replay, reset and geometry changes. Fit current frame updates it once from the frame shown.</p>
+            <p data-en="These limits affect colors only. Values outside the range use its endpoint colors; calculated pressures are unchanged." data-zh="这些上下限只改变颜色。超出范围的值使用端点颜色显示；计算得到的压力数值不变。">These limits affect colors only. Values outside the range use its endpoint colors; calculated pressures are unchanged.</p>
+          </div></details>
+        </div>
         <figure class="wave-tank-figure">
           <figcaption class="wave-caption"><strong id="wave-field-label">Water &amp; free surface</strong><span id="wave-time">t = 0.00 s</span></figcaption>
           <canvas id="wave-tank" role="img" aria-label="Free surface and a fixed obstacle in a 2D tank. Blue represents water."></canvas>
           <div class="wave-scale" id="wave-pressure-scale" hidden><span id="wave-pressure-low">0 kPa</span><i aria-hidden="true"></i><span id="wave-pressure-high">0 kPa</span></div>
+          <p id="wave-pressure-range-note" class="wave-pressure-range-note" hidden></p>
           <p class="wave-domain" id="wave-domain"></p>
         </figure>
         <dl class="wave-metrics">

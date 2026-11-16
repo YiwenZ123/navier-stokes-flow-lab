@@ -32,7 +32,9 @@
 .wave-history-figure figcaption strong { font-weight: 400; }
 .wave-history-figure figcaption > span { color: var(--muted); font-size: 12px; }
 #wave-history { display: block; width: 100%; height: 150px; margin-top: 8px; }
-.wave-scale { display: grid; grid-template-columns: auto 1fr auto; gap: 8px; align-items: center; margin: 4px 24px 8px 34px; font-size: 12px; font-variant-numeric: tabular-nums; }
+.wave-scale { display: grid; grid-template-columns: minmax(0, 11ch) minmax(0, 1fr) minmax(0, 11ch); gap: 8px; align-items: center; margin: 4px 24px 8px 34px; font-size: 12px; font-variant-numeric: tabular-nums; }
+.wave-scale > span { min-width: 0; overflow-wrap: anywhere; line-height: 1.4; }
+#wave-pressure-high { text-align: right; }
 .wave-scale i { height: 7px; border-radius: 4px; background: linear-gradient(90deg, #a7d9f7, #e77e37); }
 @media (max-width: 520px) {
   .wave-animation { padding: 8px 2px; }
@@ -57,3 +59,14 @@
 #wave-demo .wave-parameter-control .wave-checkbox { min-height: 32px; }
 #wave-demo .wave-parameter-control .parameter-help { width: 100%; min-width: 0; }
 #wave-demo .wave-parameter-control .parameter-help-body { overflow-wrap: anywhere; }
+
+/* Display-only pressure limits keep the legend stable while the solver advances. */
+#wave-demo #wave-pressure-controls { display: grid; grid-template-columns: minmax(0, 1fr); align-items: stretch; gap: 8px; }
+#wave-demo .wave-pressure-limits { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; min-width: 0; }
+#wave-demo .wave-pressure-limits label { display: grid; gap: 4px; min-width: 0; color: var(--muted); font-size: 12px; }
+#wave-demo .wave-pressure-limits input[type="number"] { width: 100%; min-width: 0; padding-inline: 10px; font-size: 13px; }
+#wave-demo .wave-pressure-actions { display: flex; flex-wrap: wrap; gap: 6px; min-width: 0; }
+#wave-demo .wave-pressure-actions button { flex: 1 1 auto; min-width: 0; min-height: 32px; padding: 6px 10px; font-size: 12px; line-height: 1.4; white-space: normal; }
+#wave-demo .wave-pressure-error { margin: 0; color: var(--orange); font-size: 12px; line-height: 1.5; overflow-wrap: anywhere; }
+.wave-pressure-range-note { min-height: 3em; margin: 0 24px 8px 34px; color: var(--muted); font-size: 12px; line-height: 1.5; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+#wave-demo :is(#wave-pressure-controls,#wave-pressure-error,#wave-pressure-range-note)[hidden] { display: none!important; }
