@@ -1,4 +1,4 @@
-import { metadata, frames } from './assets/home-wave-data.js?v=c6775c3af025';
+import { metadata, frames } from './assets/home-wave-data.js?v=044e89ff1d5f';
 
 // These frames come from the lesson's MAC solver. Playback avoids running the
 // 120 × 60 pressure solve on the homepage's main thread (especially on phones).

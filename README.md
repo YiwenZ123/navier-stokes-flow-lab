@@ -15,7 +15,8 @@ Interactive, browser-based CFD demonstrations for learning incompressible Navier
 - Implicit MAC projection for Navier–Stokes, including face-velocity and combined-velocity arrows.
 - Comparison of these two Navier–Stokes solution methods at the same physical time, with selectable time steps, initial conditions and Jacobi / Gauss–Seidel / SOR iterations.
 - Both comparison fields share a fixed 0–0.5 velocity-perturbation color and arrow scale during playback, time-step changes and replay. Set a maximum, fit the current frame once, or restore the default; overrange display is capped and flagged without changing numerical results.
-- A Navier–Stokes wave-impact application: a 2D tank with square, circular and triangular obstacle cross-sections, adjustable size and position, and three spatial resolutions.
+- A Navier–Stokes wave-impact application: a 2D tank with square, circular and triangular obstacle cross-sections, adjustable size and position, and six spatial resolutions (40 × 20 to 160 × 80).
+- Six wave initial conditions: traveling pulse, double pulse, released hump, standing-wave release, dam break and still water. Choose wave height (0.04–0.40 m), dam level difference (0.20–1.00 m), water depth (0.25 / 0.50 / 0.75 m), and physical simulation duration (2 / 6 / 10 / 15 / 20 s).
 - Free-surface, velocity and pressure views, pressure history, and force per unit span.
 - Wave-pressure colors keep a fixed −5 to 20 kPa default scale during playback; set limits, fit the current frame once, or restore the default without restarting the simulation.
 - A one-dimensional advection lab with 10 finite-difference schemes, five built-in profiles and a custom initial-condition curve editor. Adjust the grid, CFL number and positive or negative transport velocity; compare numerical curves with the exact solution.
@@ -52,6 +53,7 @@ Individual checks are also available:
 npm run test:iterations
 npm run test:stability
 npm run test:waves
+npm run test:wave-options
 npm run test:pressure-display
 npm run test:compare-display
 npm run test:advection

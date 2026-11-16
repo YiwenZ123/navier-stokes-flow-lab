@@ -1,5 +1,5 @@
 import { getLanguage, t } from './i18n.js?v=14';
-import { mountHomeWave } from './home-wave.js?v=f22154b79cae';
+import { mountHomeWave } from './home-wave.js?v=8deca07628d4';
 
 // Existing bookmarks to the original explicit lesson keep their destination.
 function preserveExplicitBookmarks() {

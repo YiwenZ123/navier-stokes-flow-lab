@@ -7,11 +7,11 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
   <title>Navier–Stokes Flow Lab · Wave impact</title>
   <link rel="stylesheet" href="./guide.css?v=c2ba94d1a5a6">
-  <link rel="stylesheet" href="./wave-demo.css?v=173fcd8dee34">
+  <link rel="stylesheet" href="./wave-demo.css?v=864bae101c9c">
   <link rel="stylesheet" href="./parameter-sidebar.css?v=6549589aa856">
   <script defer src="./page-tabs.js"></script>
   <script type="module" src="./i18n.js?v=14"></script>
-  <script type="module" src="./wave-demo.js?v=82ed6dc19ffa"></script>
+  <script type="module" src="./wave-demo.js?v=f400097a0b14"></script>
 </head>
 <body>
   <header class="site-header page-width">
@@ -46,13 +46,25 @@
         </header>
         <div class="wave-setting">
           <label for="wave-scenario" data-en="Initial condition" data-zh="初始条件">Initial condition</label>
-          <select id="wave-scenario"><option value="pulse" data-en="Wave pulse" data-zh="波包冲击">Wave pulse</option><option value="dam-break" data-en="Dam break" data-zh="溃坝涌浪">Dam break</option><option value="still" data-en="Still water" data-zh="静水">Still water</option></select>
+          <select id="wave-scenario" aria-describedby="wave-scenario-note">
+            <option value="pulse" data-en="Wave pulse" data-zh="行进波包">Wave pulse</option>
+            <option value="double-pulse" data-en="Double pulse" data-zh="双波包">Double pulse</option>
+            <option value="hump" data-en="Released hump" data-zh="静止隆起释放">Released hump</option>
+            <option value="standing-wave" data-en="Standing-wave release" data-zh="驻波释放">Standing-wave release</option>
+            <option value="dam-break" data-en="Dam break" data-zh="溃坝涌浪">Dam break</option>
+            <option value="still" data-en="Still water" data-zh="静水">Still water</option>
+          </select>
           <details class="parameter-help"><summary aria-label="Wave initial-condition details" data-en-aria-label="Wave initial-condition details" data-zh-aria-label="波浪初始条件说明" data-en="Details" data-zh="说明">Details</summary><div class="parameter-help-body"><p id="wave-scenario-note">Release a wave pulse on the left to observe propagation, impact and reflection. Both ends of the tank are closed.</p></div></details>
         </div>
         <div class="wave-setting" id="wave-amplitude-row">
-          <label for="wave-amplitude" data-en="Initial wave height" data-zh="初始波包高度">Initial wave height</label>
-          <select id="wave-amplitude"><option value="0.08">0.08 m</option><option value="0.12" selected>0.12 m</option><option value="0.18">0.18 m</option></select>
-          <details class="parameter-help"><summary aria-label="Wave-height details" data-en-aria-label="Wave-height details" data-zh-aria-label="波包高度说明" data-en="Details" data-zh="说明">Details</summary><div class="parameter-help-body"><p data-en="Height is the initial crest elevation above still water. Changing the initial condition or height restarts the simulation at t = 0." data-zh="高度是初始波峰相对静水面的抬升量。切换初始条件或高度后从 t = 0 重新计算。">Height is the initial crest elevation above still water. Changing the initial condition or height restarts the simulation at t = 0.</p></div></details>
+          <label id="wave-height-label" for="wave-amplitude">Initial wave height</label>
+          <select id="wave-amplitude" aria-describedby="wave-height-note"><option value="0.04">0.04 m</option><option value="0.08">0.08 m</option><option value="0.12" selected>0.12 m</option><option value="0.18">0.18 m</option><option value="0.25">0.25 m</option><option value="0.35">0.35 m</option><option value="0.4">0.40 m</option></select>
+          <details class="parameter-help"><summary aria-label="Wave-height details" data-en-aria-label="Wave-height details" data-zh-aria-label="波高说明" data-en="Details" data-zh="说明">Details</summary><div class="parameter-help-body"><p id="wave-height-note">Height is the initial crest elevation above still water. Changing the initial condition or height restarts the simulation at t = 0.</p></div></details>
+        </div>
+        <div class="wave-setting" id="wave-depth-row">
+          <label id="wave-depth-label" for="wave-depth">Still-water depth</label>
+          <select id="wave-depth" aria-describedby="wave-depth-note"><option value="0.25">0.25 m</option><option value="0.5" selected>0.50 m</option><option value="0.75">0.75 m</option></select>
+          <details class="parameter-help"><summary aria-label="Water-depth details" data-en-aria-label="Water-depth details" data-zh-aria-label="水深说明" data-en="Details" data-zh="说明">Details</summary><div class="parameter-help-body"><p id="wave-depth-note">Depth sets the still-water level. For dam break, it sets the downstream depth; the selected level difference is added upstream. Changing depth restarts the simulation at t = 0.</p></div></details>
         </div>
         <div class="wave-controls-grid">
           <div class="wave-setting"><label for="wave-shape" data-en="Obstacle shape" data-zh="障碍物形状">Obstacle shape</label><select id="wave-shape"><option value="square" data-en="Cube · square section" data-zh="正方体 · 正方形截面">Cube · square section</option><option value="circle" data-en="Cylinder · circle section" data-zh="圆柱体 · 圆形截面">Cylinder · circle section</option><option value="triangle" data-en="Triangular prism · triangle section" data-zh="三棱柱 · 三角形截面">Triangular prism · triangle section</option></select></div>
@@ -61,7 +73,12 @@
           <div class="wave-setting"><label for="wave-bottom-y" data-en="Bottom y" data-zh="底部高度 y">Bottom y</label><span class="wave-number"><input id="wave-bottom-y" type="number" value="0" min="0" max="1.25" step="0.01" inputmode="decimal"><span>m</span></span></div>
         </div>
         <details class="parameter-help" id="wave-geometry-help"><summary aria-label="Obstacle geometry details" data-en-aria-label="Obstacle geometry details" data-zh-aria-label="障碍物几何说明" data-en="Geometry details" data-zh="几何说明">Geometry details</summary><div class="parameter-help-body"><p data-en="Size sets the bounding-box width and height. For a circle it is the diameter; the triangle is upright and isosceles, with equal width and height. Position uses the horizontal center and bottom elevation; values are limited to the tank bounds." data-zh="尺寸表示截面包围盒的宽度和高度；圆形时为直径，三角形为宽高相等、顶点朝上的等腰三角形。水平位置取中心，竖向位置取底部；数值会限制在水槽允许范围内。">Size sets the bounding-box width and height. For a circle it is the diameter; the triangle is upright and isosceles, with equal width and height. Position uses the horizontal center and bottom elevation; values are limited to the tank bounds.</p><p data-en="The solver and drawing use the same grid-based solid boundary. Circle and triangle edges are stair-stepped; a smaller spatial step resolves their shape more closely. Geometry or grid changes restart the simulation at t = 0." data-zh="计算与绘图都使用网格化的固体边界。圆和三角形的边缘呈阶梯状，减小空间步长会改善形状分辨率。改变几何或网格会从 t = 0 重新计算。">The solver and drawing use the same grid-based solid boundary. Circle and triangle edges are stair-stepped; a smaller spatial step resolves their shape more closely. Geometry or grid changes restart the simulation at t = 0.</p></div></details>
-        <div class="wave-setting"><label for="wave-resolution" data-en="Spatial step" data-zh="空间步长">Spatial step</label><select id="wave-resolution"><option value="40">Δx = Δy = 0.100 m · 40 × 20</option><option value="80" selected>Δx = Δy = 0.050 m · 80 × 40</option><option value="120">Δx = Δy ≈ 0.033 m · 120 × 60</option></select><details class="parameter-help"><summary aria-label="Spatial-step details" data-en-aria-label="Spatial-step details" data-zh-aria-label="空间步长说明" data-en="Details" data-zh="说明">Details</summary><div class="parameter-help-body"><p data-en="A finer grid resolves smaller waves and solid-boundary details, with more computation. The time step adapts to the grid, velocity and gravity. Compare grids to explore the effect of resolution." data-zh="细网格能够分辨更小的波形和固体边界，同时需要更多计算。时间步长会随网格、流速与重力自动调整；不同网格下的结果可用于观察分辨率影响。">A finer grid resolves smaller waves and solid-boundary details, with more computation. The time step adapts to the grid, velocity and gravity. Compare grids to explore the effect of resolution.</p></div></details></div>
+        <div class="wave-setting"><label for="wave-resolution" data-en="Spatial step" data-zh="空间步长">Spatial step</label><select id="wave-resolution"><option value="40">Δx = Δy = 0.100 m · 40 × 20</option><option value="60">Δx = Δy ≈ 0.067 m · 60 × 30</option><option value="80" selected>Δx = Δy = 0.050 m · 80 × 40</option><option value="100">Δx = Δy = 0.040 m · 100 × 50</option><option value="120">Δx = Δy ≈ 0.033 m · 120 × 60</option><option value="160">Δx = Δy = 0.025 m · 160 × 80</option></select><details class="parameter-help"><summary aria-label="Spatial-step details" data-en-aria-label="Spatial-step details" data-zh-aria-label="空间步长说明" data-en="Details" data-zh="说明">Details</summary><div class="parameter-help-body"><p data-en="A finer grid resolves smaller waves and solid-boundary details, with more computation. The time step adapts to the grid, velocity and gravity. Compare grids to explore the effect of resolution." data-zh="细网格能够分辨更小的波形和固体边界，同时需要更多计算。时间步长会随网格、流速与重力自动调整；不同网格下的结果可用于观察分辨率影响。">A finer grid resolves smaller waves and solid-boundary details, with more computation. The time step adapts to the grid, velocity and gravity. Compare grids to explore the effect of resolution.</p></div></details></div>
+        <div class="wave-setting">
+          <label for="wave-duration" data-en="Simulation duration" data-zh="模拟时长">Simulation duration</label>
+          <select id="wave-duration" aria-describedby="wave-duration-note"><option value="2">2 s</option><option value="6" selected>6 s</option><option value="10">10 s</option><option value="15">15 s</option><option value="20">20 s</option></select>
+          <details class="parameter-help"><summary aria-label="Simulation-duration details" data-en-aria-label="Simulation-duration details" data-zh-aria-label="模拟时长说明" data-en="Details" data-zh="说明">Details</summary><div class="parameter-help-body"><p id="wave-duration-note" data-en="This is physical simulation time, not playback time. Changing the duration restarts at t = 0. The computational time step is chosen separately and adapts to the grid, velocity and gravity." data-zh="这里设置的是物理模拟时长，不是动画播放耗时。改变时长后从 t = 0 重新计算。计算时间步长另行确定，随网格、流速与重力自动调整。">This is physical simulation time, not playback time. Changing the duration restarts at t = 0. The computational time step is chosen separately and adapts to the grid, velocity and gravity.</p></div></details>
+        </div>
         <div class="wave-setting">
           <label for="wave-field" data-en="Display" data-zh="显示">Display</label>
           <select id="wave-field"><option value="water" data-en="Water &amp; free surface" data-zh="水体与自由液面">Water &amp; free surface</option><option value="pressure" data-en="Water pressure" data-zh="水中压力">Water pressure</option></select>

@@ -1,4 +1,4 @@
-import { createWaveSolver } from "./wave-solver.js?v=14";
+import { createWaveSolver } from "./wave-solver.js?v=90dd4e5a83e9";
 import { t } from "./i18n.js?v=14";
 import { mountParameterSidebar } from "./parameter-sidebar.js?v=edb979ef0040";
 import { DEFAULT_PRESSURE_RANGE, createPressureRange, pressureColor, pressureExtent, fitPressureRange } from "./pressure-display.js?v=7c372234c443";
@@ -6,6 +6,8 @@ import { DEFAULT_PRESSURE_RANGE, createPressureRange, pressureColor, pressureExt
 const byId = id => document.getElementById(id);
 const scenarioSelect = byId("wave-scenario");
 const amplitudeSelect = byId("wave-amplitude");
+const depthSelect = byId("wave-depth");
+const durationSelect = byId("wave-duration");
 const fieldSelect = byId("wave-field");
 const shapeSelect = byId("wave-shape");
 const sizeSelect = byId("wave-size");
@@ -17,7 +19,7 @@ const playButton = byId("wave-play");
 const stepButton = byId("wave-step");
 const tank = byId("wave-tank");
 const historyCanvas = byId("wave-history");
-const endTime = 6;
+let endTime = 6;
 const frameDuration = 1 / 60;
 let solver;
 let playing = false;
@@ -26,6 +28,27 @@ let pressureHistory = [];
 // Display state is independent of the solver and survives resets/replays.
 let pressureRange = DEFAULT_PRESSURE_RANGE;
 let pressureRangeError = false;
+const scenarioChoices = new Map();
+const waveHeights = [0.04, 0.08, 0.12, 0.18, 0.25, 0.35, 0.4];
+const damHeights = [0.2, 0.4, 0.6, 0.82, 1];
+
+function configureScenarioControls() {
+  const scenario = scenarioSelect.value;
+  const dam = scenario === "dam-break";
+  const saved = scenarioChoices.get(scenario) || { height: dam ? 0.82 : 0.12, depth: dam ? 0.25 : 0.5 };
+  amplitudeSelect.replaceChildren(...(dam ? damHeights : waveHeights).map(height => {
+    const option = document.createElement("option");
+    option.value = String(height);
+    option.textContent = `${height.toFixed(2)} m`;
+    return option;
+  }));
+  amplitudeSelect.value = String(saved.height);
+  depthSelect.value = String(saved.depth);
+}
+
+function rememberScenarioControls() {
+  scenarioChoices.set(scenarioSelect.value, { height: Number(amplitudeSelect.value), depth: Number(depthSelect.value) });
+}
 
 function setDisplayText(id, value) {
   const node = byId(id);
@@ -77,7 +100,8 @@ function applyPressureRange() {
 function createSimulation() {
   return createWaveSolver({
     scenario: scenarioSelect.value,
-    amplitude: scenarioSelect.value === "pulse" ? Number(amplitudeSelect.value) : 0.12,
+    waveHeight: Number(amplitudeSelect.value),
+    depth: Number(depthSelect.value),
     resolution: Number(resolutionSelect.value),
     obstacle: {
       shape: shapeSelect.value,
@@ -266,7 +290,10 @@ function drawHistory(colors) {
     context.fillText(number(maximum * tick / 2, 1), left - 7, y + 4);
   }
   context.textAlign = "center";
-  for (let time = 0; time <= endTime; time += 2) context.fillText(`${time} s`, left + (right - left) * time / endTime, bottom + 19);
+  for (let tick = 0; tick <= 4; tick++) {
+    const time = endTime * tick / 4;
+    context.fillText(`${Number(time.toFixed(2))} s`, left + (right - left) * tick / 4, bottom + 19);
+  }
   context.beginPath();
   pressureHistory.forEach((point, index) => {
     const x = left + (right - left) * point.time / endTime;
@@ -282,7 +309,7 @@ function drawHistory(colors) {
 function recordPressure() {
   const { time, wallPressure } = solver.state;
   const last = pressureHistory[pressureHistory.length - 1];
-  if (!last || time - last.time >= 0.025) pressureHistory.push({ time, pressure: wallPressure });
+  if (!last || time - last.time >= 0.025 || (time > last.time && time >= endTime - 1e-8)) pressureHistory.push({ time, pressure: wallPressure });
 }
 
 function shapeName() {
@@ -320,7 +347,7 @@ function render() {
   const status = byId("wave-status");
   status.dataset.failed = String(Boolean(state.failed));
   status.textContent = state.failed ? failureMessage(state)
-    : complete ? t("Six seconds of physical time completed. Replay or change the initial condition.", "已完成 6 秒物理时间，可重播或切换初始条件。")
+    : complete ? t(`${endTime} seconds of physical time completed. Replay or change the settings.`, `已完成 ${endTime} 秒物理时间，可重播或更改设置。`)
     : playing ? t("Advancing water velocity, pressure and the free surface.", "正在推进水体速度、压力与自由液面。")
     : state.time > 0 ? t("Paused. Step through the simulation or resume playback.", "已暂停，可单步观察或继续播放。")
     : t("Ready. Press Play to observe wave impact.", "就绪，点击播放观察波浪冲击。");
@@ -331,10 +358,27 @@ function render() {
   );
   const notes = {
     pulse: t("Release a wave pulse on the left to observe propagation, impact and reflection. Both ends of the tank are closed.", "从水槽左侧释放初始波包，观察波传播、撞击与反射。水槽两端为封闭边界。"),
+    "double-pulse": t("Two separated crests start with rightward velocities. Observe successive impacts and reflected waves in the closed tank.", "两个分开的波峰带有向右的初始速度，可观察连续冲击与封闭水槽中的反射波。"),
+    hump: t("Release a smooth raised water surface from rest. It spreads in both directions before interacting with the obstacle and walls.", "将平滑隆起的水面从静止状态释放，观察它向两侧扩散并与障碍物和槽壁相互作用。"),
+    "standing-wave": t("Release a cosine-shaped water surface from rest, with crests at the tank ends. The obstacle modifies the subsequent oscillation; this is an initial shape, not a prescribed exact solution.", "将余弦形水面从静止状态释放，初始波峰位于水槽两端。障碍物会改变后续振荡；这里设置的是初始形状，并非指定的精确解。"),
     "dam-break": t("Release a taller water column on the left. The surge travels right toward the obstacle. Both ends of the tank are closed.", "释放左侧较高的水柱，涌浪向右传播并冲击障碍物。水槽两端为封闭边界。"),
     still: t("Start from a flat, still water surface to observe the balance of gravity and the pressure gradient.", "从静止的平坦水面开始，观察重力与压力梯度的平衡。")
   };
   byId("wave-scenario-note").textContent = notes[scenarioSelect.value];
+  const dam = solver.scenario === "dam-break";
+  const standing = solver.scenario === "standing-wave";
+  setDisplayText("wave-height-label", dam ? t("Initial water-level difference", "初始上下游水位差") : t("Initial wave height H", "初始波高 H"));
+  const heightDescription = dam
+    ? t(`Upstream depth = downstream depth + H = ${number(solver.depth + solver.waveHeight)} m. Changing a physical setting restarts at t = 0.`, `上游水深 = 下游水深 + H = ${number(solver.depth + solver.waveHeight)} m。更改物理设置后从 t = 0 重新计算。`)
+    : standing
+      ? t("H is crest-to-trough height. The initial surface varies by ±H/2 around the mean depth; initial velocity is zero.", "H 为初始波峰到波谷的高度差。液面围绕平均水深上下变化 H/2；初始速度为零。")
+      : t("H is the crest elevation above the flat water level. Each crest in the double pulse has this height. Changing a physical setting restarts at t = 0.", "H 为初始波峰相对平坦水面的抬升量；双波包中每个波峰均为此高度。更改物理设置后从 t = 0 重新计算。");
+  setDisplayText("wave-height-note", heightDescription + (solver.waveHeight > 0 && solver.waveHeight < solver.h
+    ? t(" This height is smaller than one grid cell; a finer grid will better resolve the initial surface.", " 当前高度小于一个网格间距，使用更细网格可更好地分辨初始液面。") : ""));
+  setDisplayText("wave-depth-label", dam ? t("Downstream water depth", "下游水深") : t("Still-water depth", "静水深"));
+  setDisplayText("wave-depth-note", dam
+    ? t("The downstream level is set here; the upstream level is this depth plus the selected height difference.", "此处设置下游水位；上游水深为该值加上所选水位差。")
+    : t("The base water level before adding the wave. For a standing wave this is the mean level; for still water it sets the flat surface.", "叠加波形前的基准水位。驻波以此为平均水位；静水算例的整个液面保持此高度。"));
   byId("wave-domain").textContent = t(
     `${number(solver.width, 1)} × ${number(solver.height, 1)} m tank · ${solver.nx} × ${solver.ny} grid · Δx = Δy = ${number(solver.h, 4)} m`,
     `${number(solver.width, 1)} × ${number(solver.height, 1)} m 水槽 · ${solver.nx} × ${solver.ny} 网格 · Δx = Δy = ${number(solver.h, 4)} m`
@@ -365,10 +409,12 @@ function frame() {
 
 function reset() {
   pause();
+  endTime = [2, 6, 10, 15, 20].includes(Number(durationSelect.value)) ? Number(durationSelect.value) : 6;
+  durationSelect.value = String(endTime);
   solver = createSimulation();
   pressureHistory = [];
   recordPressure();
-  byId("wave-amplitude-row").hidden = scenarioSelect.value !== "pulse";
+  byId("wave-amplitude-row").hidden = scenarioSelect.value === "still";
   const { size, centerX, bottomY } = solver.obstacle;
   // Bounds can fall between hundredths on the 120-cell grid.
   centerXInput.step = "any";
@@ -394,8 +440,11 @@ playButton.addEventListener("click", () => {
 });
 stepButton.addEventListener("click", () => { advance(); render(); });
 byId("wave-reset").addEventListener("click", reset);
-scenarioSelect.addEventListener("change", reset);
-amplitudeSelect.addEventListener("change", reset);
+scenarioSelect.addEventListener("change", () => { configureScenarioControls(); reset(); });
+for (const control of [amplitudeSelect, depthSelect]) {
+  control.addEventListener("change", () => { rememberScenarioControls(); reset(); });
+}
+durationSelect.addEventListener("change", reset);
 for (const control of [shapeSelect, sizeSelect, centerXInput, bottomYInput, resolutionSelect]) {
   control.addEventListener("change", reset);
 }
@@ -433,4 +482,5 @@ for (const control of sidebarControls) control.classList.add("wave-parameter-con
 mountParameterSidebar(waveRoot, { controls: sidebarControls, content: sidebarContent, key: "waves" });
 waveRoot.classList.add("wave-sidebar-ready");
 new ResizeObserver(() => { if (solver) render(); }).observe(tank);
+configureScenarioControls();
 reset();

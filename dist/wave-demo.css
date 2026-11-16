@@ -40,7 +40,7 @@
   .wave-animation { padding: 8px 2px; }
   .wave-heading { align-items: flex-start; gap: 12px; }
   .wave-buttons { gap: 6px; }
-  #wave-demo :is(button, select) { padding-inline: 12px; }
+  #wave-demo :is(button, select, input[type="number"]) { min-height: 44px; padding-inline: 12px; }
   .wave-controls-grid { grid-template-columns: minmax(0, 1fr); gap: 12px; }
   .wave-metrics { gap: 10px 12px; }
   .wave-metrics dd { font-size: 14px; }

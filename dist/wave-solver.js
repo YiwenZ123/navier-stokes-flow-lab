@@ -1,17 +1,65 @@
 // Liquid-only MAC projection with material markers and atmospheric free surfaces.
 // Positions are metres, velocities m/s, pressure Pa relative to atmosphere.
 export function createWaveSolver(options = {}) {
-  const nx = Math.max(40, Math.min(120, Math.round((options.resolution ?? 80) / 4) * 4));
+  const finiteOption = (value, fallback) => {
+    if ((typeof value !== 'number' && typeof value !== 'string')
+      || (typeof value === 'string' && value.trim() === '')) return fallback;
+    const number = Number(value);
+    return Number.isFinite(number) ? number : fallback;
+  };
+  const nx = Math.max(40, Math.min(160, Math.round(finiteOption(options.resolution, 80) / 4) * 4));
   const ny = nx / 2;
   const width = 4;
   const height = 2;
   const h = width / nx;
   const density = 1000;
   const gravity = 9.81;
-  const viscosity = Math.max(0, options.viscosity ?? 1e-6);
-  const scenario = ['pulse', 'dam-break', 'still'].includes(options.scenario) ? options.scenario : 'pulse';
-  const amplitude = Math.max(0, Math.min(0.25, options.amplitude ?? 0.12));
-  const depth = 0.5;
+  const viscosity = Math.max(0, finiteOption(options.viscosity, 1e-6));
+  const scenario = ['pulse', 'double-pulse', 'hump', 'standing-wave', 'dam-break', 'still'].includes(options.scenario)
+    ? options.scenario : 'pulse';
+  // Keep the original amplitude option for saved lessons and the homepage replay.
+  const legacyAmplitude = Math.max(0, Math.min(0.25, finiteOption(options.amplitude, 0.12)));
+  const legacyDamSurface = 0.95 + legacyAmplitude;
+  const legacyHeight = scenario === 'dam-break' ? legacyDamSurface - 0.25 : legacyAmplitude;
+  const waveHeight = scenario === 'still' ? 0 : Math.max(0,
+    Math.min(scenario === 'dam-break' ? 1 : 0.4, finiteOption(options.waveHeight, legacyHeight)));
+  const amplitude = scenario === 'dam-break' ? legacyAmplitude : waveHeight;
+  const depth = Math.max(0.25, Math.min(0.75, finiteOption(options.depth, scenario === 'dam-break' ? 0.25 : 0.5)));
+  const useLegacyDamSurface = options.waveHeight === undefined && options.depth === undefined;
+
+  function pulseElevation(x) {
+    if (scenario === 'double-pulse') {
+      let elevation = 0;
+      for (const center of [0.55, 1.55]) {
+        const offset = (x - center) / 0.32;
+        if (Math.abs(offset) < 1) elevation += waveHeight * (1 + Math.cos(Math.PI * offset)) / 2;
+      }
+      return elevation;
+    }
+    return waveHeight * Math.exp(-(((x - 0.85) / 0.35) ** 2));
+  }
+
+  function pulseDerivative(x) {
+    if (scenario === 'double-pulse') {
+      let derivative = 0;
+      for (const center of [0.55, 1.55]) {
+        const offset = (x - center) / 0.32;
+        if (Math.abs(offset) < 1) derivative -= waveHeight * Math.PI * Math.sin(Math.PI * offset) / (2 * 0.32);
+      }
+      return derivative;
+    }
+    return -2 * (x - 0.85) * pulseElevation(x) / (0.35 ** 2);
+  }
+
+  // H means crest elevation for isolated pulses, crest-to-trough height for a
+  // standing wave, and upstream-minus-downstream depth for a dam release.
+  function initialSurfaceAt(x) {
+    if (scenario === 'dam-break') return x < 1.25 ? (useLegacyDamSurface ? legacyDamSurface : depth + waveHeight) : depth;
+    if (scenario === 'standing-wave') return depth + waveHeight * Math.cos(2 * Math.PI * x / width) / 2;
+    if (scenario === 'hump') return depth + waveHeight * Math.exp(-(((x - 1) / 0.45) ** 2));
+    if (scenario === 'pulse' || scenario === 'double-pulse') return depth + pulseElevation(x);
+    return depth;
+  }
   const geometry = typeof options.obstacle === 'object' && options.obstacle !== null ? options.obstacle : {};
   const shape = ['square', 'circle', 'triangle'].includes(geometry.shape) ? geometry.shape : 'square';
   const requestedSize = Number(geometry.size ?? 0.7);
@@ -430,27 +478,23 @@ export function createWaveSolver(options = {}) {
           for (let sx = 0; sx < 2; sx++) {
             const x = (i + (sx + 0.5) / 2) * h;
             const y = (j + (sy + 0.5) / 2) * h;
-            let surface = depth;
-            if (scenario === 'pulse') surface += amplitude * Math.exp(-(((x - 0.85) / 0.35) ** 2));
-            if (scenario === 'dam-break') surface = x < 1.25 ? 0.95 + amplitude : 0.25;
-            if (y < surface) particles.push({ x, y });
+            if (y < initialSurfaceAt(x)) particles.push({ x, y });
           }
         }
       }
     }
-    if (scenario === 'pulse') {
+    if (scenario === 'pulse' || scenario === 'double-pulse') {
       const c = Math.sqrt(gravity * depth);
       for (let j = 0; j < ny; j++) {
         for (let i = 0; i <= nx; i++) {
-          const eta = amplitude * Math.exp(-(((i * h - 0.85) / 0.35) ** 2));
+          const eta = pulseElevation(i * h);
           u[j * (nx + 1) + i] = c * eta / depth;
         }
       }
       for (let j = 0; j <= ny; j++) {
         for (let i = 0; i < nx; i++) {
           const x = (i + 0.5) * h;
-          const eta = amplitude * Math.exp(-(((x - 0.85) / 0.35) ** 2));
-          const derivative = -2 * (x - 0.85) * eta / (0.35 ** 2);
+          const derivative = pulseDerivative(x);
           v[j * nx + i] = -Math.min(j * h, depth) * c * derivative / depth;
         }
       }
@@ -499,5 +543,5 @@ export function createWaveSolver(options = {}) {
   }
 
   reset();
-  return { nx, ny, h, width, height, density, gravity, viscosity, depth, obstacle, scenario, amplitude, state, step, reset, velocityAt };
+  return { nx, ny, h, width, height, density, gravity, viscosity, depth, obstacle, scenario, amplitude, waveHeight, initialSurfaceAt, state, step, reset, velocityAt };
 }
