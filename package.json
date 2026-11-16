@@ -18,7 +18,8 @@
     "test:iterations": "node tests/iterations.mjs",
     "test:stability": "node tests/stability.mjs",
     "test:waves": "node tests/waves.mjs",
-    "test": "npm run check:grid && npm run test:iterations && npm run test:stability && npm run test:waves && npm run test:advection",
-    "test:advection": "node tests/advection.mjs"
+    "test": "npm run check:grid && npm run test:iterations && npm run test:stability && npm run test:waves && npm run test:advection && npm run test:custom-profile",
+    "test:advection": "node tests/advection.mjs",
+    "test:custom-profile": "node tests/custom-profile.mjs"
   }
 }

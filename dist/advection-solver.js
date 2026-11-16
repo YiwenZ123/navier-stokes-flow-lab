@@ -1,7 +1,10 @@
+import { DEFAULT_CURVE, createCurveProfile } from './custom-profile.js?v=341dbc61d218';
+
 /* Constant-coefficient 1D transport on a periodic [-1, 1) grid.
  * Formulas follow CFD 4; sign-aware stencils support either velocity direction.
  * No filtering, clipping, substepping or artificial stabilisation is applied.
  */
+const defaultCustomProfile = createCurveProfile(DEFAULT_CURVE);
 const wrap = x => x - 2 * Math.floor((x + 1) / 2);
 const mod = (i, n) => (i % n + n) % n;
 const common = {
@@ -49,8 +52,10 @@ export const PROFILES = [
   { id:'gaussian', nameEn:'Gaussian pulse', nameZh:'高斯脉冲', formula:'u₀(x) = exp[−100 d(x, −0.5)²]', noteEn:'d is the shortest periodic distance on the length-2 domain.', noteZh:'d 为长度 2 的周期区域上的最短距离。' },
   { id:'square', nameEn:'Square pulse', nameZh:'方波脉冲', formula:'u₀(x) = 1 for −0.5 ≤ x < 0; otherwise 0', noteEn:'Sharp jumps expose diffusion, overshoot and undershoot.', noteZh:'陡峭间断便于观察耗散、过冲与欠冲。' },
   { id:'triangle', nameEn:'Triangle pulse', nameZh:'三角脉冲', formula:'u₀(x) = max(1 − |d(x, −0.5)|/0.25, 0)', noteEn:'Continuous but not smooth at the corners.', noteZh:'波形连续，但尖角处不光滑。' },
+  { id:'custom', nameEn:'Custom initial condition', nameZh:'自定义初始条件', formula:'u₀(x) = interpolation of the shared control points', noteEn:'Both schemes sample the same curve on the selected grid. Exact transport translates this interpolated profile. Linked endpoints match values and, in smooth mode, derivatives; unlinked endpoints create a periodic jump.', noteZh:'两种格式在所选网格上采样同一条曲线；精确解对该插值曲线作平移。首尾联动时高度相同，平滑模式还匹配斜率；解除联动时，周期接缝允许间断。' },
 ];
 export function initialValue(profile, x) {
+  if (profile === 'custom') return defaultCustomProfile.value(x);
   x = wrap(x);
   // Normalisation and x_i = -1 + iΔx can round exact jump endpoints
   // to either side. Snap only the prescribed breakpoints, within roundoff.
@@ -105,7 +110,7 @@ function periodicSolver(n, lower, diagonal, upper) {
   };
 }
 
-export function createSimulation({scheme='upwind',profile='composite',N=200,a=1,cfl=.5}={}) {
+export function createSimulation({scheme='upwind',profile='composite',N=200,a=1,cfl=.5,customCurve}={}) {
   if (!SCHEMES.some(s=>s.id===scheme)) throw new RangeError('Unknown difference scheme');
   if (!PROFILES.some(p=>p.id===profile)) throw new RangeError('Unknown initial condition');
   if (!Number.isInteger(N)||N<8||N>1000) throw new RangeError('N must be an integer from 8 to 1000');
@@ -113,12 +118,14 @@ export function createSimulation({scheme='upwind',profile='composite',N=200,a=1,
   if (!Number.isFinite(cfl)||cfl<=0||cfl>2) throw new RangeError('CFL must be in (0, 2]');
   const dx=2/N, dt=cfl*dx/Math.abs(a), C=Math.sign(a)*cfl, r=cfl, s=Math.sign(a);
   const x=Float64Array.from({length:N},(_,i)=>-1+i*dx);
-  const initial=Float64Array.from(x,xi=>initialValue(profile,xi));
+  const curveProfile = profile === 'custom' ? createCurveProfile(customCurve ?? DEFAULT_CURVE) : null;
+  const valueAt = curveProfile ? curveProfile.value : xi => initialValue(profile, xi);
+  const initial=Float64Array.from(x,valueAt);
   const initialMass=initial.reduce((v,w)=>v+w,0)*dx;
   let previous=null;
   const implicit = scheme==='crank-nicolson' ? periodicSolver(N,-C/4,1,C/4)
     : scheme==='implicit-upwind' ? periodicSolver(N,s>0?-r:0,1+r,s<0?-r:0) : null;
-  const sim={scheme,profile,N,a,cfl,dx,dt,x,u:initial.slice(),g:new Float64Array(N),t:0,steps:0,failed:false,failureReason:'',
+  const sim={scheme,profile,N,a,cfl,dx,dt,x,initialCurve:curveProfile?.curve ?? null,u:initial.slice(),g:new Float64Array(N),t:0,steps:0,failed:false,failureReason:'',
     step() {
       if(this.failed) return;
       const u=this.u; let next=new Float64Array(N), nextG=null;
@@ -164,7 +171,7 @@ export function createSimulation({scheme='upwind',profile='composite',N=200,a=1,
       // Grid-aligned departures must return exactly the sampled initial data,
       // especially at square-pulse jumps; avoid floating-point boundary flips.
       if(Math.abs(shift-nearest)<1e-9) return Float64Array.from({length:N},(_,i)=>initial[mod(i-nearest,N)]);
-      return Float64Array.from(x,xi=>initialValue(profile,xi-a*time));
+      return Float64Array.from(x,xi=>valueAt(xi-a*time));
     },
     metrics() {
       const exact=this.exact(); let abs=0,square=0,linf=0,min=Infinity,max=-Infinity,sum=0,totalVariation=0;

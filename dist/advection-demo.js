@@ -1,4 +1,6 @@
-import { SCHEMES, PROFILES, createSimulation } from './advection-solver.js?v=e656c1702565';
+import { SCHEMES, PROFILES, createSimulation } from './advection-solver.js?v=6c8206143de0';
+import { DEFAULT_CURVE, normalizeCurve } from './custom-profile.js?v=341dbc61d218';
+import { mountCurveEditor } from './curve-editor.js?v=1ec4eaffdc48';
 import { t } from './i18n.js?v=14';
 
 const $ = id => document.getElementById(id);
@@ -12,6 +14,17 @@ const mod = (i, n) => (i % n + n) % n;
 let sims = [], snapshots = [], stepNumber = 0, playing = false, frame = 0, lastFrame = 0, accumulator = 0, runningToEnd = false;
 let completionToken = 0, parametersValid = true;
 const historyMedia = matchMedia('(prefers-color-scheme: dark)');
+const curveStorageKey = 'cfd-custom-advection-curve-v1';
+function readSavedCurve() {
+  try {
+    const saved = localStorage.getItem(curveStorageKey);
+    if (saved) return normalizeCurve(JSON.parse(saved));
+  } catch { /* Invalid or unavailable storage: use the reviewed starting curve. */ }
+  return normalizeCurve(DEFAULT_CURVE);
+}
+function rememberCurve(value) {
+  try { localStorage.setItem(curveStorageKey, JSON.stringify(normalizeCurve(value))); } catch { /* Editing also works without storage. */ }
+}
 
 function populate(select, items, initial) {
   const selected = select.value || initial;
@@ -46,11 +59,20 @@ function refreshSelectionText() {
   const profile = PROFILES.find(item => item.id === control.profile.value);
   const info = $('adv-profile-info');
   info.replaceChildren(element('div', profile.formula, 'adv-formula-text'), element('p', t(profile.noteEn, profile.noteZh)));
+  if (profile.id === 'custom') updateCustomDescription();
   if (profile.id === 'composite') {
     const detail = 'G(x,z) = exp[−β(x − z)²], F(x,b) = √max(1 − α²(x − b)², 0)\n−0.8 ≤ x ≤ −0.6: [G(x,z−δ) + G(x,z+δ) + 4G(x,z)] / 6\n−0.4 ≤ x ≤ −0.2: 1\n0 ≤ x ≤ 0.2: 1 − |10(x − 0.1)|\n0.4 ≤ x ≤ 0.6: [F(x,b−δ) + F(x,b+δ) + 4F(x,b)] / 6';
     info.append(element('div', detail, 'adv-formula-text'), element('p', t('Zero elsewhere; x is wrapped periodically. This reproduces the printed log₁₀ parameter in the handout.', '其余位置为 0，x 按周期回绕；β 使用课件印出的 log₁₀ 参数。')));
   }
   renderFormulas();
+}
+
+function updateCustomDescription() {
+  const curve = curveEditor.getValue();
+  const info = $('adv-profile-info');
+  const method = curve.mode === 'smooth' ? t('Shape-preserving cubic interpolation', '保形三次插值') : t('Piecewise linear interpolation', '分段线性插值');
+  info.replaceChildren(element('div', 'u₀(x) = P(x),  u(x,t) = P(periodic(x − at))', 'adv-formula-text'));
+  info.append(element('p', `${method} · ${curve.points.length} ${t('control points', '个控制点')} · ${curve.periodic ? t('linked endpoints', '首尾联动') : t('independent endpoints; a jump at the periodic seam is allowed', '端点独立，周期接缝允许间断')}`));
 }
 
 function renderFormulas() {
@@ -70,17 +92,23 @@ function renderFormulas() {
   }
 }
 
-function reset() {
+function reset(refreshLabels = true) {
   stop(); completionToken++; runningToEnd = false;
+  const custom = control.profile.value === 'custom';
+  $('adv-custom-panel').hidden = !custom;
+  curveEditor.setSampleCount(+control.N.value);
   // Empty or out-of-range values are rejected instead of silently changing CFL.
   parametersValid = control.cfl.checkValidity() && control.cfl.value !== '';
-  if (!parametersValid) { render(); control.cfl.reportValidity(); return; }
-  const params = { profile: control.profile.value, N: +control.N.value, a: +control.a.value, cfl: +control.cfl.value };
+  if (!parametersValid) { render(); if (refreshLabels) control.cfl.reportValidity(); return; }
+  // Snapshot once so both solvers start from the same curve definition.
+  const params = { profile: control.profile.value, N: +control.N.value, a: +control.a.value, cfl: +control.cfl.value, ...(custom ? { customCurve: curveEditor.getValue() } : {}) };
   sims = selectors.map(select => createSimulation({ ...params, scheme: select.value }));
   snapshots = [null, null]; stepNumber = 0;
   $('adv-node').max = String(params.N - 1);
   $('adv-node').value = String(Math.min(params.N - 1, Math.max(0, Math.round(+$('adv-node').value) || 0)));
-  refreshSelectionText(); render();
+  if (refreshLabels) refreshSelectionText();
+  else if (custom) updateCustomDescription();
+  render();
 }
 
 const targetSteps = () => Math.ceil(2 * +$('adv-circuits').value / (Math.abs(sims[0].a) * sims[0].dt) - 1e-10);
@@ -219,6 +247,14 @@ function exportCSV() {
   const link = document.createElement('a'); link.href=url; link.download=`advection-${stepNumber}.csv`; link.click(); setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
 
+const curveEditor = mountCurveEditor($('adv-curve-editor'), {
+  value: readSavedCurve(),
+  sampleCount: +control.N.value,
+  onChange(value) {
+    rememberCurve(value);
+    if (control.profile.value === 'custom') reset(false);
+  }
+});
 populate(control.profile,PROFILES,'composite');
 selectors.forEach((select,i)=>populate(select,SCHEMES,i?'lax-wendroff':'upwind'));
 Object.values(control).forEach(node=>node.addEventListener('change',reset));
@@ -241,7 +277,7 @@ document.querySelectorAll('[data-experiment]').forEach(button=>button.addEventLi
   const [profile,a,b,cfl]=presets[button.dataset.experiment];
   control.profile.value=profile;selectors[0].value=a;selectors[1].value=b;control.cfl.value=String(cfl);control.N.value='200';control.a.value='1';$('adv-circuits').value='1';reset();
 }));
-window.addEventListener('languagechange',()=>{refreshSelectionText();render();});
+window.addEventListener('languagechange',()=>{curveEditor.refreshLanguage();refreshSelectionText();render();});
 new ResizeObserver(draw).observe($('adv-plot'));
 historyMedia.addEventListener('change',draw);
 document.addEventListener('visibilitychange',()=>{if(document.hidden){stop();render();}});

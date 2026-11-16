@@ -6,7 +6,7 @@ const distance=(a,b)=>Math.max(...a.map((v,i)=>Math.abs(v-b[i])));
 const mass=s=>s.dx*s.u.reduce((sum,v)=>sum+v,0);
 const evolve=(s,n)=>{for(let i=0;i<n;i++)s.step();return s;};
 assert.equal(SCHEMES.length,10);
-assert.equal(PROFILES.length,5);
+assert.equal(PROFILES.length,6);
 
 // Every stencil and cyclic implicit solve must preserve a constant state.
 for(const {id} of SCHEMES) for(const a of [1,-1]) {

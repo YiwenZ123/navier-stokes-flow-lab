@@ -4,8 +4,8 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
 <title>Navier–Stokes Flow Lab · 1D advection</title>
-<link rel="stylesheet" href="./guide.css?v=0e9bed92abf7"><link rel="stylesheet" href="./advection-demo.css?v=fb26fef64561">
-<script defer src="./page-tabs.js"></script><script type="module" src="./i18n.js?v=14"></script><script type="module" src="./advection-demo.js?v=5d2ac84e3037"></script>
+<link rel="stylesheet" href="./guide.css?v=0e9bed92abf7"><link rel="stylesheet" href="./advection-demo.css?v=6ea29f325ce1"><link rel="stylesheet" href="./curve-editor.css?v=39f38e98fd5a">
+<script defer src="./page-tabs.js"></script><script type="module" src="./i18n.js?v=14"></script><script type="module" src="./advection-demo.js?v=ea48390a4e5d"></script>
 </head><body>
   <header class="site-header page-width">
     <h1>Navier–Stokes Flow Lab</h1>
@@ -30,6 +30,11 @@
 <div class="adv-parameters" id="adv-parameters" data-i18n-ignore></div>
 <details class="parameter-help"><summary  data-en="Grid &amp; time-step details" data-zh="网格与时间步长说明">Grid &amp; time-step details</summary><div class="parameter-help-body"><p  data-en="Periodic domain [−1, 1), with no duplicate endpoint. Both schemes use exactly the same grid and time step Δt = |C| Δx / |a|. Changing a numerical setting restarts at t = 0. The time step is never reduced to stabilize a scheme." data-zh="周期区间 [−1, 1)，不重复计算右端点。两种格式使用完全相同的网格与时间步长 Δt = |C| Δx / |a|。改变计算参数后从 t = 0 重算，不会自动缩小时间步长来掩盖失稳。">Periodic domain [−1, 1), with no duplicate endpoint. Both schemes use exactly the same grid and time step Δt = |C| Δx / |a|. Changing a numerical setting restarts at t = 0. The time step is never reduced to stabilize a scheme.</p></div></details>
 <details class="parameter-help"><summary data-en="Initial-condition formula" data-zh="初始条件公式">Initial-condition formula</summary><div class="parameter-help-body" id="adv-profile-info" data-i18n-ignore></div></details>
+<details id="adv-custom-panel" class="adv-custom-panel" open hidden>
+  <summary data-en="Edit the shared initial curve" data-zh="编辑两种格式共用的初始曲线">Edit the shared initial curve</summary>
+  <div id="adv-curve-editor" data-i18n-ignore></div>
+  <details class="parameter-help"><summary data-en="How this curve is used" data-zh="这条曲线如何参与计算">How this curve is used</summary><div class="parameter-help-body"><p data-en="Both schemes sample this same curve on the selected grid. Editing the curve restarts both at t = 0; changing the grid resamples the same curve. The dashed exact solution translates this curve continuously. Curve settings are remembered for this site address when local storage is available." data-zh="两种格式在所选网格上采样同一条曲线。修改曲线后，两种格式均从 t = 0 重算；修改网格则对同一曲线重新采样。虚线精确解由该曲线连续平移得到。浏览器允许本地存储时，会记住当前站点地址的曲线设置。">Both schemes sample this same curve on the selected grid. Editing the curve restarts both at t = 0; changing the grid resamples the same curve. The dashed exact solution translates this curve continuously. Curve settings are remembered for this site address when local storage is available.</p></div></details>
+</details>
 <div class="adv-schemes">
 <div class="adv-scheme adv-a"><label for="adv-scheme-a"><span  data-en="Scheme A" data-zh="格式 A">Scheme A</span></label><select id="adv-scheme-a"></select><p id="adv-stability-a" data-i18n-ignore></p></div>
 <div class="adv-scheme adv-b"><label for="adv-scheme-b"><span  data-en="Scheme B" data-zh="格式 B">Scheme B</span></label><select id="adv-scheme-b"></select><p id="adv-stability-b" data-i18n-ignore></p></div>

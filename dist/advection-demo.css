@@ -15,6 +15,9 @@
 .adv-controls select { min-width: 0; }
 .adv-controls input { width: 92px; }
 .adv-parameters { font-variant-numeric: tabular-nums; font-size: 13px; }
+.adv-custom-panel > summary { width: fit-content; cursor: pointer; padding: 4px 0; }
+.adv-custom-panel > summary:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+.adv-custom-panel > .parameter-help { margin-top: 10px; }
 .adv-schemes { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .adv-scheme { min-width: 0; padding-left: 12px; border-left: 3px solid var(--blue); }
 .adv-scheme.adv-b { border-left-color: var(--orange); }
