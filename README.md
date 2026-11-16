@@ -1,8 +1,8 @@
 # Navier–Stokes Flow Lab
 
-Interactive, browser-based CFD demonstrations for learning incompressible Navier–Stokes time stepping and free-surface flow.
+Interactive, browser-based CFD demonstrations for learning incompressible Navier–Stokes time stepping, free-surface flow and one-dimensional linear advection.
 
-[Live demo](https://explicit-ns-animation.lovableglobe2.chatgpt.site/) · [中文说明](README.zh-CN.md) · [MIT license](LICENSE)
+[Live demo](https://navier-stoke.lovableglobe2.chatgpt.site/) · [中文说明](README.zh-CN.md) · [MIT license](LICENSE)
 
 ## Features
 
@@ -11,6 +11,8 @@ Interactive, browser-based CFD demonstrations for learning incompressible Navier
 - Comparisons at the same physical time, with selectable time steps, initial conditions and Jacobi / Gauss–Seidel / SOR iterations.
 - A 2D wave-impact tank with square, circular and triangular obstacle cross-sections, adjustable size and position, and three spatial resolutions.
 - Free-surface, velocity and pressure views, pressure history, and force per unit span.
+- A one-dimensional advection lab with 10 finite-difference schemes and five initial profiles. Adjust the grid, CFL number and positive or negative transport velocity; compare numerical curves with the exact solution.
+- Advection error and mass diagnostics, a single-step stencil inspector, and CSV export.
 - English and Chinese interfaces; English is the default.
 
 ## Run locally
@@ -41,10 +43,11 @@ Individual checks are also available:
 npm run test:iterations
 npm run test:stability
 npm run test:waves
+npm run test:advection
 npm run check:grid
 ```
 
-The tests cover iterative solvers, discrete pressure-projection identities, time-step comparisons, hydrostatic equilibrium, solid boundaries, particle collisions, and wave-obstacle geometries.
+The tests cover iterative solvers, discrete pressure-projection identities, time-step comparisons, hydrostatic equilibrium, solid boundaries, particle collisions, wave-obstacle geometries, and the one-dimensional advection schemes.
 
 ## Project layout
 
@@ -60,6 +63,8 @@ The tests cover iterative solvers, discrete pressure-projection identities, time
 These are educational demonstrations. The wave solver uses a staggered MAC grid, pressure projection, marker particles for the free surface, and a grid-aligned approximation of the obstacle. It models a fixed **2D cross-section**, with atmospheric pressure at the free surface and impermeable, free-slip solid boundaries.
 
 Grid resolution, velocity interpolation and marker tracking introduce numerical error. Wave-impact pressures and forces illustrate trends; quantitative engineering predictions require convergence studies and experimental validation. The comparison page's growth thresholds are demonstration criteria, not general stability guarantees.
+
+The advection lab solves constant-speed linear transport on a periodic one-dimensional domain. It overlays the translated initial profile as an exact reference and reports errors at grid points. The CFL and scheme controls expose numerical diffusion, dispersion and unstable growth; a bounded animation does not by itself establish stability.
 
 ## License
 
