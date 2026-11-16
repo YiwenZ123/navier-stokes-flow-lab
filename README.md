@@ -14,6 +14,7 @@ Interactive, browser-based CFD demonstrations for learning incompressible Navier
 - Explicit Navier–Stokes time-stepping animation with pressure iterations, workflow diagrams and equations.
 - Implicit MAC projection for Navier–Stokes, including face-velocity and combined-velocity arrows.
 - Comparison of these two Navier–Stokes solution methods at the same physical time, with selectable time steps, initial conditions and Jacobi / Gauss–Seidel / SOR iterations.
+- Both comparison fields share a fixed 0–0.5 velocity-perturbation color and arrow scale during playback, time-step changes and replay. Set a maximum, fit the current frame once, or restore the default; overrange display is capped and flagged without changing numerical results.
 - A Navier–Stokes wave-impact application: a 2D tank with square, circular and triangular obstacle cross-sections, adjustable size and position, and three spatial resolutions.
 - Free-surface, velocity and pressure views, pressure history, and force per unit span.
 - Wave-pressure colors keep a fixed −5 to 20 kPa default scale during playback; set limits, fit the current frame once, or restore the default without restarting the simulation.
@@ -52,6 +53,7 @@ npm run test:iterations
 npm run test:stability
 npm run test:waves
 npm run test:pressure-display
+npm run test:compare-display
 npm run test:advection
 npm run test:custom-profile
 npm run test:curve-file

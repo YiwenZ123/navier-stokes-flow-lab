@@ -14,6 +14,7 @@
 - Navier–Stokes 显式时间推进动画、压力迭代、推进流程图和公式。
 - Navier–Stokes 隐式 MAC 投影法，可切换面速度箭头与合速度箭头。
 - 比较上述两种 Navier–Stokes 求解方法在同一物理时刻的结果，支持时间步长、初始条件及 Jacobi / 高斯–塞德尔 / SOR 选项。
+- 两幅对比流场共用固定的 0–0.5 速度扰动色标和箭头比例，播放、切换时间步长和重播时保持不变。可手动设置上限、仅适应当前帧或恢复默认；超限显示会截断并提示，不改变计算结果。
 - Navier–Stokes 应用——二维波浪冲击：正方形、圆形和三角形障碍物截面，可选尺寸、位置和三档空间步长。
 - 自由液面、速度、压力场、压力历程和单位跨度受力。
 - 波浪压力图默认固定使用 −5 至 20 kPa 色标，可手动设置范围、仅按当前帧拟合或恢复默认，调整显示不重置计算。
@@ -52,6 +53,7 @@ npm run test:iterations
 npm run test:stability
 npm run test:waves
 npm run test:pressure-display
+npm run test:compare-display
 npm run test:advection
 npm run test:custom-profile
 npm run test:curve-file

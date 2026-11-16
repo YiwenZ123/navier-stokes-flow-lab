@@ -4,6 +4,7 @@ import { SPATIAL_GRID, spatialGridSummary } from "./spatial-grid.js";
 import { readIterationOptions, writeIterationQuery, iterationLabel, mountIterationControls } from "./iteration-controls.js";
 import { t, translateText } from "./i18n.js?v=14";
 import { mountParameterSidebar } from "./parameter-sidebar.js?v=edb979ef0040";
+import { DEFAULT_FIELD_MAX, parseFieldMaximum, fieldPeak, fitFieldMaximum, fieldVector } from "./compare-display.js?v=e159cbc217d8";
 
 const root = document.querySelector("#comparison-demo");
 const methods = ["explicit", "mac"];
@@ -16,7 +17,8 @@ let settings;
 let frames = [];
 let selected = 0;
 let last = 0;
-let plotPeak = 1;
+let plotPeak = DEFAULT_FIELD_MAX;
+let scaleError = false;
 let playing = false;
 let timer;
 let inputTimer;
@@ -48,6 +50,19 @@ root.innerHTML = `
   <div class="comparison-chart-control">
     <label for="comparison-chart-metric" data-en="Chart metric" data-zh="图表指标">${t("Chart metric", "图表指标")}</label>
     <select id="comparison-chart-metric" data-compare="chart-metric"><option value="growthFactor">扰动增长倍数</option><option value="velocityRmsError">速度 RMS 误差</option><option value="maxDivergence">最大绝对散度</option></select>
+  </div>
+  <div class="comparison-scale-control">
+    <label for="comparison-field-max" data-en="Flow display · fixed maximum" data-zh="流场显示 · 固定上限">${t("Flow display · fixed maximum", "流场显示 · 固定上限")}</label>
+    <input id="comparison-field-max" data-compare="field-max" type="number" min="0" step="any" value="${DEFAULT_FIELD_MAX}" aria-describedby="comparison-scale-help comparison-scale-error">
+    <div class="comparison-scale-actions">
+      <button type="button" data-compare="scale-apply" data-en="Apply" data-zh="应用">${t("Apply", "应用")}</button>
+      <button type="button" data-compare="scale-fit" data-en="Fit current frame" data-zh="适应当前帧" disabled>${t("Fit current frame", "适应当前帧")}</button>
+      <button type="button" data-compare="scale-default" data-en="Default" data-zh="恢复默认">${t("Default", "恢复默认")}</button>
+    </div>
+    <p id="comparison-scale-error" data-compare="scale-error" class="comparison-scale-error" role="status" hidden></p>
+    <details class="parameter-help"><summary data-en="Details" data-zh="说明">${t("Details", "说明")}</summary><div class="parameter-help-body">
+      <p id="comparison-scale-help" class="comparison-note" data-en="Colors show velocity perturbation magnitude |u − U₀|, not pressure. Both plots share a fixed color and arrow scale, including during replay and time-step changes. Fit current frame locks a new maximum once. Above the maximum, colors and arrow lengths saturate; computed values and diagnostics stay unchanged." data-zh="颜色表示速度扰动幅值 |u − U₀|，不是压力。两幅图共用固定色标与箭头比例，重播和改变时间步长时也不自动缩放。“适应当前帧”仅设置一次新上限。超限时颜色与箭头长度饱和，计算值和诊断指标保持不变。">${t("Colors show velocity perturbation magnitude |u − U₀|, not pressure. Both plots share a fixed color and arrow scale, including during replay and time-step changes. Fit current frame locks a new maximum once. Above the maximum, colors and arrow lengths saturate; computed values and diagnostics stay unchanged.", "颜色表示速度扰动幅值 |u − U₀|，不是压力。两幅图共用固定色标与箭头比例，重播和改变时间步长时也不自动缩放。“适应当前帧”仅设置一次新上限。超限时颜色与箭头长度饱和，计算值和诊断指标保持不变。")}</p>
+    </div></details>
   </div>
   <p class="comparison-message" data-compare="message" role="status">正在计算…</p>
   <div data-compare="results" hidden>
@@ -85,8 +100,9 @@ root.innerHTML = `
       <figure><figcaption>隐式 MAC 投影法 <span class="comparison-field-status" data-compare="mac-field-status"></span></figcaption><canvas class="comparison-field" data-compare="mac-field" role="img" aria-label="MAC 的速度扰动场，面速度平均至单元中心，已扣除均匀平移速度"></canvas></figure>
     </div>
     <div class="comparison-colorbar"><span>0</span><i aria-hidden="true"></i><span data-compare="scale"></span></div>
+    <p class="comparison-scale-caption" data-compare="scale-caption"></p>
     <details class="parameter-help"><summary aria-label="流场说明">说明</summary><div class="parameter-help-body">
-      <p class="comparison-note">两幅图在当前时刻使用同一速度尺度；停止计算后不再显示流场，避免将旧结果当作当前结果。MAC 面速度平均到单元中心后绘图。</p>
+      <p class="comparison-note" data-en="Both fields use the same fixed scale throughout playback. A stopped method has no later field. MAC face velocities are averaged to cell centers for plotting." data-zh="两幅图在整个播放过程中使用同一固定尺度；停止计算后不再显示后续流场。MAC 面速度平均到单元中心后绘图。">${t("Both fields use the same fixed scale throughout playback. A stopped method has no later field. MAC face velocities are averaged to cell centers for plotting.", "两幅图在整个播放过程中使用同一固定尺度；停止计算后不再显示后续流场。MAC 面速度平均到单元中心后绘图。")}</p>
       <p class="comparison-note" data-compare="uniform-note" hidden>均匀流扣除背景速度后为零，图中没有涡结构；初始扰动为零时，增长倍数不定义。</p>
     </div></details>
   </div>
@@ -129,6 +145,20 @@ const decimal = value => Number.isFinite(value) ? Number(value.toFixed(3)).toStr
 const timeText = value => Number(value.toFixed(3)).toString();
 function setText(name, value) { elements[name].textContent = value; }
 function pause() { clearTimeout(timer); playing = false; }
+function renderScaleError() {
+  elements["scale-error"].hidden = !scaleError;
+  setText("scale-error", scaleError ? t("Enter a finite maximum greater than zero.", "请输入大于零的有限上限值。") : "");
+  elements["field-max"].setAttribute("aria-invalid", String(scaleError));
+}
+function setFieldMaximum(value) {
+  try {
+    plotPeak = parseFieldMaximum(value);
+    elements["field-max"].value = String(plotPeak);
+    scaleError = false;
+  } catch { scaleError = true; }
+  renderScaleError();
+  render();
+}
 
 function updateStepControls() {
   elements.dt.value = String(DT_OPTIONS.indexOf(timeStep));
@@ -170,6 +200,7 @@ function showError(message) {
   errorMessage = message;
   pause();
   elements.results.hidden = true;
+  elements["scale-fit"].disabled = true;
   elements["sweep-table"].hidden = true;
   setText("message", t(`Calculation incomplete: ${translateText(message)} Adjust the time step and try again.`, `计算未完成：${message} 请调整步长重试。`));
   setText("sweep-message", t("This sweep did not finish.", "本次扫描未完成。"));
@@ -185,6 +216,7 @@ function requestComparison(startAt = "end") {
   errorMessage = null;
   result = null;
   frames = [];
+  elements["scale-fit"].disabled = true;
   updateStepControls();
   updateNotes();
   iterationControls?.render(iterationOptions);
@@ -203,6 +235,7 @@ function requestComparison(startAt = "end") {
       ({ settings, frames } = result);
       last = frames.length - 1;
       selected = startAt === "start" ? 0 : last;
+      elements["scale-fit"].disabled = false;
       elements.slider.max = String(last);
       elements.results.hidden = false;
       setText("message", t(`Calculation complete · Δt = ${settings.dt} · observed to t = ${settings.finalTime}`, `已完成本次计算 · Δt = ${settings.dt} · 观察至 t = ${settings.finalTime}`));
@@ -283,18 +316,18 @@ function drawField(canvas, field, theme) {
   context.fillStyle = theme.field;
   for (let j = 0; j < size; j++) for (let i = 0; i < size; i++) {
     const index = j * size + i;
-    const speed = Math.hypot(field.u[index] - driftX, field.v[index] - driftY);
-    context.globalAlpha = 0.68 * Math.min(1, speed / plotPeak);
+    context.globalAlpha = fieldVector(field.u[index] - driftX, field.v[index] - driftY, plotPeak).alpha;
     const x = Math.round(left + i * cell), y = Math.round(bottom - (j + 1) * cell);
     context.fillRect(x, y, Math.round(left + (i + 1) * cell) - x, Math.round(bottom - j * cell) - y);
   }
   context.globalAlpha = 1; context.strokeStyle = theme.grid; context.lineWidth = 1;
   context.strokeRect(left, bottom - span, span, span);
-  const arrowScale = 0.78 * stride * cell / plotPeak, offset = Math.floor(stride / 2);
+  const arrowScale = 0.78 * stride * cell, offset = Math.floor(stride / 2);
   context.strokeStyle = theme.arrow; context.lineWidth = 1.2; context.lineCap = "round"; context.beginPath();
   for (let j = offset; j < size; j += stride) for (let i = offset; i < size; i += stride) {
     const index = j * size + i;
-    addArrow(context, left + (i + 0.5) * cell, bottom - (j + 0.5) * cell, (field.u[index] - driftX) * arrowScale, -(field.v[index] - driftY) * arrowScale);
+    const vector = fieldVector(field.u[index] - driftX, field.v[index] - driftY, plotPeak);
+    addArrow(context, left + (i + 0.5) * cell, bottom - (j + 0.5) * cell, vector.x * arrowScale, -vector.y * arrowScale);
   }
   context.stroke();
 }
@@ -353,11 +386,11 @@ function drawHistory(theme) {
 function render() {
   if (!result || elements.results.hidden) return;
   const frame = frames[selected];
+  elements["scale-fit"].disabled = !frame.explicit && !frame.mac;
   elements.slider.value = String(selected);
   elements.slider.setAttribute("aria-valuetext", t(`Time ${timeText(frame.time)}, step ${frame.layer}`, `时间 ${timeText(frame.time)}，第 ${frame.layer} 层`));
   setText("time", `t = ${timeText(frame.time)} / ${COMPARISON_END_TIME} · n = ${frame.layer}`);
   setText("play", playing ? t("Pause", "暂停") : selected === last ? t("Play from start", "从头播放") : t("Play", "播放"));
-  let peak = 0;
   for (const method of methods) {
     const state = frame[method], outcome = result.outcomes[method];
     setText(`${method}-status`, state ? (selected === 0 ? t("Initial condition", "初始条件") : statusLabel(state.status || "bounded")) : outcomeText(outcome));
@@ -369,11 +402,14 @@ function render() {
     setText(`${method}-cfl`, decimal(state?.cfl));
     setText(`${method}-chi`, decimal(state?.advectionDiffusion));
     setText(`${method}-pressure`, state && selected > 0 ? String(state.pressureSweeps) : "—");
-    if (state) for (let i = 0; i < state.u.length; i++) peak = Math.max(peak, Math.hypot(state.u[i] - settings.driftX, state.v[i] - settings.driftY));
   }
   setText("mac-predictor", frame.mac && selected > 0 ? String(frame.mac.predictorSweeps) : "—");
-  plotPeak = Math.ceil(peak * 10) / 10 || 1;
-  setText("scale", decimal(plotPeak));
+  setText("scale", String(plotPeak));
+  const saturated = fieldPeak(frame, settings) > plotPeak;
+  setText("scale-caption", saturated
+    ? t("Velocity perturbation · fixed scale · values above the maximum saturate colors and arrows", "速度扰动 · 固定尺度 · 超限部分以最深颜色和最大箭头显示")
+    : t("Velocity perturbation · fixed color and arrow scale", "速度扰动 · 固定色标与箭头比例"));
+  elements["scale-caption"].dataset.saturated = String(saturated);
   const initialChi = result.outcomes.explicit.initialAdvectionDiffusion;
   setText("diagnostic", t(`Initial explicit χ = ${decimal(initialChi)} (${initialChi > 1 ? "above 1" : "at most 1"}). χ ≤ 1 is a sufficient condition for frozen-velocity upwind advection–diffusion; it does not by itself guarantee stability of the full pressure-coupled algorithm.`, `初始显式 χ = ${decimal(initialChi)}${initialChi > 1 ? "，超过 1" : "，不超过 1"}。χ ≤ 1 是冻结速度的迎风对流–扩散格式的充分条件，不能单独保证整个压力耦合算法稳定。`));
   const styles = getComputedStyle(root);
@@ -395,6 +431,7 @@ function chooseTimeStep(value) {
 elements.dt.addEventListener("input", () => {
   timeStep = DT_OPTIONS[Number(elements.dt.value)];
   pause(); worker?.terminate(); requestId++; result = null; elements.results.hidden = true; elements["sweep-table"].hidden = true;
+  elements["scale-fit"].disabled = true;
   sweepRows = null; sweepComplete = false; errorMessage = null;
   updateStepControls(); setText("message", t("Recalculating with the new time step…", "调整步长后重新计算…"));
   clearTimeout(inputTimer); inputTimer = setTimeout(() => chooseTimeStep(timeStep), 180);
@@ -406,6 +443,14 @@ elements.play.addEventListener("click", () => {
 });
 elements.slider.addEventListener("input", () => { pause(); selected = Number(elements.slider.value); render(); });
 elements["chart-metric"].addEventListener("change", render);
+elements["scale-apply"].addEventListener("click", () => setFieldMaximum(elements["field-max"].value));
+elements["field-max"].addEventListener("keydown", event => {
+  if (event.key === "Enter") { event.preventDefault(); setFieldMaximum(elements["field-max"].value); }
+});
+elements["scale-fit"].addEventListener("click", () => {
+  if (result) setFieldMaximum(fitFieldMaximum(frames[selected], settings));
+});
+elements["scale-default"].addEventListener("click", () => setFieldMaximum(DEFAULT_FIELD_MAX));
 for (const button of root.querySelectorAll("[data-dt]")) button.addEventListener("click", () => chooseTimeStep(Number(button.dataset.dt)));
 iterationControls = mountIterationControls(document.querySelector("#comparison-iterations"), iterationOptions, next => {
   iterationOptions = next;
@@ -429,7 +474,8 @@ mountParameterSidebar(root, {
     root.querySelector(".comparison-spatial"),
     root.querySelector("#comparison-iterations"),
     root.querySelector(".comparison-dt"),
-    root.querySelector(".comparison-chart-control")
+    root.querySelector(".comparison-chart-control"),
+    root.querySelector(".comparison-scale-control")
   ],
   content: [elements.message, elements.results, root.querySelector(".comparison-sweep")]
 });
@@ -448,6 +494,7 @@ colorScheme.addEventListener("change", render);
 window.addEventListener("pagehide", () => { pause(); worker?.terminate(); });
 window.addEventListener("pageshow", event => { if (event.persisted && (!result || !sweepComplete)) requestComparison(); });
 window.addEventListener("languagechange", () => {
+  renderScaleError();
   updateStepControls();
   updateNotes();
   if (errorMessage) { showError(errorMessage); return; }

@@ -140,14 +140,57 @@
 
 .comparison-colorbar {
   display: grid;
-  grid-template-columns: auto minmax(1rem, 1fr) auto;
+  grid-template-columns: 4.5rem minmax(1rem, 1fr) 4.5rem;
   align-items: center;
   gap: 0.4rem;
-  max-width: 18rem;
+  max-width: 26rem;
   margin: 0.6rem auto 0;
   color: var(--muted);
   font-size: 14px;
   font-variant-numeric: tabular-nums;
+}
+
+.comparison-colorbar span:first-child { text-align: right; }
+.comparison-colorbar span { overflow-wrap: anywhere; }
+.comparison-scale-caption {
+  min-height: 3.2em;
+  margin: 0.5rem 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+  text-align: center;
+}
+.comparison-scale-caption[data-saturated="true"] { color: var(--orange); }
+.comparison-scale-control { display: grid; gap: 8px; min-width: 0; font-size: 14px; }
+.comparison-scale-control input {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: 38px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 6px 12px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+}
+.comparison-scale-actions { display: flex; flex-wrap: wrap; gap: 6px; }
+.comparison-scale-actions button {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 7px 10px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+.comparison-scale-actions button:disabled { opacity: 0.45; cursor: default; }
+.comparison-scale-control :is(input, button):focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.comparison-scale-error { margin: 0; color: var(--orange); font-size: 12px; line-height: 1.6; }
+@media (max-width: 540px) {
+  .comparison-scale-control :is(input, button) { min-height: 44px; }
 }
 
 .comparison-colorbar i {
