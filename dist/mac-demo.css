@@ -243,3 +243,25 @@
     background: color-mix(in srgb, var(--mac-foreground) 80%, transparent);
   }
 }
+
+/* Controls move intact into the shared sidebar; the visualization gains the width. */
+#mac-demo.mac-sidebar-layout { max-width: none; }
+#mac-demo.mac-sidebar-layout .parameter-stage { container-type: inline-size; }
+#mac-demo.mac-sidebar-layout .parameter-sidebar :is(.mac-initial, .mac-timestep, .mac-arrow-settings, .iteration-row) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+  gap: 8px;
+  margin: 0;
+}
+#mac-demo.mac-sidebar-layout .parameter-sidebar :is(.mac-spatial, .iteration-settings) { margin: 0; }
+#mac-demo.mac-sidebar-layout .parameter-sidebar .mac-spatial { display: grid; gap: 6px; }
+#mac-demo.mac-sidebar-layout .parameter-sidebar select { width: 100%; min-width: 0; }
+#mac-demo.mac-sidebar-layout .parameter-sidebar .iteration-omega {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 80px;
+  align-items: center;
+  gap: 8px;
+}
+#mac-demo.mac-sidebar-layout .parameter-sidebar .parameter-help { min-width: 0; overflow-wrap: anywhere; }
+#mac-demo.mac-sidebar-layout .parameter-sidebar .mac-timestep > span { line-height: 1.5; }

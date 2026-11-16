@@ -3,6 +3,7 @@ import { mountConditionPicker, selectedInitialCondition } from "./condition-pick
 import { DT_OPTIONS, DEMO_END_TIME, normalizeTimeStep } from "./time-step-options.js";
 import { spatialGridSummary } from "./spatial-grid.js";
 import { readIterationOptions, writeIterationQuery, iterationLabel, mountIterationControls } from "./iteration-controls.js";
+import { mountParameterSidebar } from "./parameter-sidebar.js?v=edb979ef0040";
 
 const root = document.querySelector("#mac-demo");
 let condition = selectedInitialCondition();
@@ -439,6 +440,18 @@ window.addEventListener("popstate", () => {
 updateTimeStepInfo();
 
 arrowStyleSelect.addEventListener("change", render);
+root.classList.add("mac-sidebar-layout");
+mountParameterSidebar(root, {
+  key: "mac",
+  controls: [
+    root.querySelector("#mac-initial"),
+    root.querySelector(".mac-spatial"),
+    root.querySelector(".mac-timestep"),
+    root.querySelector("#mac-iterations"),
+    root.querySelector(".mac-arrow-settings")
+  ],
+  content: [root.querySelector(".mac-demo-layout")]
+});
 new ResizeObserver(render).observe(canvas);
 colorScheme.addEventListener("change", render);
 render();

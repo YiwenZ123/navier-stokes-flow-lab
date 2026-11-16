@@ -212,16 +212,16 @@
 .comparison-dt > input { width: 100%; min-height: 36px; accent-color: var(--accent); margin: 4px 0 0; cursor: pointer; }
 .comparison-dt-ticks { display: flex; justify-content: space-between; color: var(--muted); font-size: 12px; }
 .comparison-dt-presets { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
-.comparison-dt-presets button, .comparison-chart-heading select, .comparison-sweep-table button { border: 1px solid var(--line); background: var(--surface); color: var(--text); font: inherit; padding: 6px 12px; border-radius: 999px; cursor: pointer; }
+.comparison-dt-presets button, .comparison-chart-control select, .comparison-sweep-table button { border: 1px solid var(--line); background: var(--surface); color: var(--text); font: inherit; padding: 6px 12px; border-radius: 999px; cursor: pointer; }
 .comparison-dt-presets button[aria-pressed="true"], .comparison-sweep-table button[aria-pressed="true"] { background: var(--primary-bg); border-color: var(--primary-bg); color: var(--primary-text); }
-.comparison-dt input:focus-visible, .comparison-dt button:focus-visible, .comparison-chart-heading select:focus-visible, .comparison-sweep-table button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.comparison-dt input:focus-visible, .comparison-dt button:focus-visible, .comparison-chart-control select:focus-visible, .comparison-sweep-table button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 .comparison-message { min-height: 1.6em; margin-block: 14px; color: var(--muted); font-size: 13px; }
 .comparison-status-row td { white-space: normal; font-size: 12px; }
 .comparison-status-row th { width: 34%; }
 [data-status="growth"], [data-status="diverged"], [data-status="predictor-failed"], [data-status="pressure-failed"] { color: var(--orange); }
 .comparison-field-status { display: block; margin-top: 4px; font-size: 12px; font-weight: 400; color: var(--muted); }
 .comparison-chart-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
-.comparison-chart-heading select { font-size: 13px; font-weight: 400; max-width: 100%; border-radius: 6px; }
+.comparison-chart-control select { font-size: 14px; font-weight: 400; max-width: 100%; }
 .comparison-sweep { margin-top: 28px; padding-top: 22px; border-top: 1px solid var(--line); }
 .comparison-sweep h3 { font-size: 16px; font-weight: 600; }
 .comparison-sweep-table { margin-top: 12px; table-layout: fixed; }
@@ -239,3 +239,33 @@
   .comparison-sweep-table th:first-child { width: 59px; }
   .comparison-sweep-table td { font-size: 11px; }
 }
+
+#comparison-demo.comparison-sidebar-layout .parameter-sidebar :is(.condition-picker, .iteration-settings) { margin: 0; }
+#comparison-demo.comparison-sidebar-layout .parameter-sidebar :is(.condition-choice, .iteration-row, .comparison-chart-control) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+  gap: 8px;
+}
+#comparison-demo.comparison-sidebar-layout .parameter-sidebar :is(.condition-choice, .comparison-chart-control, .comparison-dt-heading) label {
+  font-size: 14px;
+  font-weight: 400;
+}
+#comparison-demo.comparison-sidebar-layout .parameter-sidebar select {
+  width: 100%;
+  min-width: 0;
+  min-height: 38px;
+  border-radius: 999px;
+  font-size: 14px;
+}
+#comparison-demo.comparison-sidebar-layout .parameter-sidebar .iteration-omega {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 80px;
+  align-items: center;
+  gap: 8px;
+}
+#comparison-demo.comparison-sidebar-layout .comparison-spatial { display: grid; gap: 6px; font-size: 14px; }
+#comparison-demo.comparison-sidebar-layout .parameter-sidebar .comparison-dt { padding: 0; border: 0; }
+#comparison-demo.comparison-sidebar-layout .parameter-sidebar .comparison-dt-presets button { font-size: 12px; }
+#comparison-demo.comparison-sidebar-layout .parameter-sidebar .parameter-help { min-width: 0; overflow-wrap: anywhere; }
+#comparison-demo.comparison-sidebar-layout .parameter-stage > .comparison-message { margin-top: 0; }

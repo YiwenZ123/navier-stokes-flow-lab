@@ -1,6 +1,7 @@
 import { SCHEMES, PROFILES, createSimulation } from './advection-solver.js?v=6c8206143de0';
 import { DEFAULT_CURVE, normalizeCurve } from './custom-profile.js?v=341dbc61d218';
 import { mountCurveEditor } from './curve-editor.js?v=c264f6736003';
+import { mountParameterSidebar } from './parameter-sidebar.js?v=edb979ef0040';
 import { t } from './i18n.js?v=14';
 
 const $ = id => document.getElementById(id);
@@ -285,3 +286,38 @@ new ResizeObserver(draw).observe($('adv-plot'));
 historyMedia.addEventListener('change',draw);
 document.addEventListener('visibilitychange',()=>{if(document.hidden){stop();render();}});
 reset();
+
+// Relocate the existing controls so their listeners and current values survive
+// every sidebar toggle, including a running or partially completed comparison.
+const advectionPanel = $('animation');
+const initialSettings = document.createElement('div');
+initialSettings.className = 'adv-controls';
+initialSettings.append($('adv-profile').closest('label'));
+const playbackSettings = document.createElement('div');
+playbackSettings.className = 'adv-sidebar-playback';
+advectionPanel.querySelectorAll('.adv-playback > label').forEach(node => playbackSettings.append(node));
+const parameterNodes = [
+  initialSettings,
+  $('adv-custom-panel'),
+  advectionPanel.querySelector('.adv-controls'),
+  $('adv-parameters'),
+  $('adv-parameters').nextElementSibling,
+  $('adv-profile-info').closest('details'),
+  advectionPanel.querySelector('.adv-schemes'),
+  playbackSettings,
+  advectionPanel.querySelector('.adv-experiments')
+];
+const resultNodes = [...advectionPanel.children].filter(node => !parameterNodes.includes(node) && !node.matches('.adv-heading'));
+mountParameterSidebar(advectionPanel, { controls: parameterNodes, content: resultNodes, key: 'advection' });
+
+const stencilPanel = $('flow');
+const stencilControls = stencilPanel.querySelector('.adv-inspect-controls');
+const stencilActions = document.createElement('div');
+stencilActions.className = 'adv-inspect-actions';
+stencilActions.append($('adv-inspect-step'));
+stencilPanel.insertBefore(stencilActions, $('adv-stencil'));
+mountParameterSidebar(stencilPanel, {
+  controls: [stencilControls],
+  content: [...stencilPanel.children].filter(node => node !== stencilControls && node.tagName !== 'H2'),
+  key: 'advection-stencil'
+});

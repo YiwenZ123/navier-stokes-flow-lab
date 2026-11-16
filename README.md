@@ -9,6 +9,7 @@ Interactive, browser-based CFD demonstrations for learning incompressible Navier
 ## Features
 
 - A bilingual homepage introduces the teaching modules and provides a starting point for each experiment.
+- All five teaching modules use a collapsible parameter sidebar; hiding it keeps the current calculation and settings. Wide screens start open, while compact screens start closed. The modules remember wide and compact preferences separately, except for the sandboxed explicit animation: it keeps its current visibility until a reload or layout change.
 - Explicit time-stepping animation with pressure iterations, workflow diagrams and equations.
 - Implicit MAC projection animation, including face-velocity and combined-velocity arrows.
 - Comparisons at the same physical time, with selectable time steps, initial conditions and Jacobi / Gauss–Seidel / SOR iterations.

@@ -6,7 +6,7 @@
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data: https://persistent.oaistatic.com/plugins/visualize/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src 'unsafe-inline' blob: data: https://persistent.oaistatic.com/plugins/visualize/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://persistent.oaistatic.com/plugins/visualize/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://persistent.oaistatic.com/plugins/visualize/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://persistent.oaistatic.com/plugins/visualize/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <title>explicit-ns-animation.html</title>
-<style>:root{color-scheme:light dark;background:light-dark(rgb(255 255 255), rgb(24 24 24))}html,body{margin:0}body{box-sizing:border-box;padding:1rem;background:inherit}iframe{display:block;width:100%;max-width:736px;height:calc(100vh - 2rem);margin:0 auto;border:0}</style>
+<style>:root{color-scheme:light dark;background:light-dark(rgb(255 255 255), rgb(24 24 24))}html,body{margin:0}body{box-sizing:border-box;padding:1rem;background:inherit}iframe{display:block;width:100%;max-width:none;height:calc(100vh - 2rem);margin:0 auto;border:0}</style>
 
 </head>
 <body>
@@ -3272,6 +3272,125 @@ window.addEventListener(&#x27;message&#x27;, event =&gt; {
 parent.postMessage({ type: &#x27;cfd-language-ready&#x27; }, &#x27;*&#x27;);
 
 &lt;/script&gt;
+
+&lt;style id=&quot;cfd-parameter-sidebar-style&quot;&gt;
+body.has-parameter-sidebar &gt; :is(.site-header,main,.site-footer).page-width { width:min(1360px,calc(100% - 48px)); }
+.parameter-workspace { --parameter-width:300px; position:relative; display:grid; grid-template-columns:var(--parameter-width) minmax(0,1fr); gap:16px 28px; align-items:start; min-width:0; }
+.parameter-workspace[data-expanded=&quot;false&quot;] { grid-template-columns:minmax(0,1fr); }
+.parameter-toolbar { grid-column:1/-1; display:flex; align-items:center; min-width:0; }
+.parameter-host .parameter-toggle { display:inline-flex; align-items:center; gap:9px; min-height:36px; border:1px solid var(--line,#e4e4e4); border-radius:999px; background:var(--surface,#fff); color:var(--text,#202020); padding:7px 14px; font:inherit; font-size:12px; cursor:pointer; }
+.parameter-host .parameter-toggle:hover { background:var(--paper,#f5f5f5); }
+.parameter-toggle-icon { font-size:18px; line-height:1; width:17px; text-align:center; }
+.parameter-sidebar { min-width:0; background:var(--paper,#f5f5f5); border:1px solid var(--line,#e4e4e4); border-radius:12px; padding:19px 18px 22px; }
+.parameter-sidebar-title { color:var(--text,#202020); font-size:14px; line-height:1.4; font-weight:600; margin:0 0 22px; }
+.parameter-sidebar-body { display:grid; gap:20px; min-width:0; }
+.parameter-sidebar-body &gt; * { min-width:0; max-width:100%; }
+.parameter-sidebar-body :is(select,input,button) { max-width:100%; }
+.parameter-sidebar-body select { min-width:0; }
+.parameter-sidebar-body .parameter-help { font-size:12px; line-height:1.6; }
+.parameter-sidebar-body :is(.condition-picker,.iteration-controls) { margin:0; }
+.parameter-sidebar-body .condition-picker select { width:100%; }
+.parameter-stage { min-width:0; }
+.parameter-backdrop { display:none; }
+.parameter-workspace [hidden] { display:none!important; }
+.parameter-toggle:focus-visible,.parameter-sidebar :is(input,select,button,summary):focus-visible { outline:2px solid var(--blue,#2867a4); outline-offset:3px; }
+@media(min-width:861px) { .parameter-sidebar { position:sticky; top:18px; max-height:calc(100vh - 36px); overflow:auto; overscroll-behavior:contain; scrollbar-width:thin; } }
+@media(max-width:860px) {
+  .parameter-workspace,.parameter-workspace[data-expanded=&quot;false&quot;] { grid-template-columns:minmax(0,1fr); gap:14px; }
+  .parameter-sidebar { position:absolute; z-index:12; left:0; top:50px; width:min(330px,100%); max-height:min(75vh,740px); overflow:auto; overscroll-behavior:contain; box-shadow:0 12px 40px #0003; scrollbar-width:thin; }
+  .parameter-backdrop:not([hidden]) { display:block; position:absolute; z-index:11; inset:50px 0 0; min-height:220px; border:0; border-radius:8px; background:#0002; cursor:pointer; padding:0; }
+  .parameter-stage { grid-column:1; }
+  .parameter-host .parameter-toggle { min-height:40px; }
+}
+@media(max-width:520px) { body.has-parameter-sidebar &gt; :is(.site-header,main,.site-footer).page-width { width:calc(100% - 28px); } .parameter-sidebar { padding:17px 15px 20px; } }
+&lt;/style&gt;
+&lt;style id=&quot;cfd-explicit-sidebar-adapter&quot;&gt;
+#explicit-ns-animation .parameter-workspace { --surface:var(--background); --text:var(--foreground); --line:var(--border); --paper:var(--card); }
+#explicit-ns-animation .parameter-stage { display:grid; gap:16px; }
+#explicit-ns-animation .parameter-sidebar-body &gt; :is(.ns-initial,.ns-spatial,.ns-timestep,.ns-iteration) { display:grid; gap:8px; margin:0; }
+#explicit-ns-animation .parameter-sidebar-body label { font-size:13px; line-height:1.5; }
+#explicit-ns-animation .parameter-sidebar-body select { width:100%; min-width:0; max-width:100%; }
+#explicit-ns-animation .parameter-sidebar-body .ns-omega { width:100%; }
+#explicit-ns-animation .parameter-sidebar-body .parameter-help { font-size:12px; line-height:1.6; }
+#explicit-ns-animation .parameter-sidebar-body .ns-spatial { font-size:13px; }
+#explicit-ns-animation .parameter-sidebar-body .ns-timestep &gt; span { font-size:12px; }
+&lt;/style&gt;
+&lt;script id=&quot;cfd-parameter-sidebar-script&quot;&gt;
+/** Move existing controls without replacing their nodes or touching solver state.
+ * Self-contained so the sandboxed explicit demo can embed this same function.
+ */
+function mountParameterSidebar(root, { controls = [], content = [], key = &#x27;demo&#x27; } = {}) {
+  if (root.parameterSidebar) return root.parameterSidebar;
+  const doc = root.ownerDocument, win = doc.defaultView;
+  const settings = controls.filter(Boolean), results = content.filter(Boolean);
+  const workspace = doc.createElement(&#x27;div&#x27;); workspace.className = &#x27;parameter-workspace&#x27;;
+  const toolbar = doc.createElement(&#x27;div&#x27;); toolbar.className = &#x27;parameter-toolbar&#x27;;
+  const toggle = doc.createElement(&#x27;button&#x27;); toggle.type = &#x27;button&#x27;; toggle.className = &#x27;parameter-toggle&#x27;;
+  const icon = doc.createElement(&#x27;span&#x27;); icon.className = &#x27;parameter-toggle-icon&#x27;; icon.setAttribute(&#x27;aria-hidden&#x27;, &#x27;true&#x27;);
+  const toggleText = doc.createElement(&#x27;span&#x27;); toggle.append(icon, toggleText); toolbar.append(toggle);
+  const sidebar = doc.createElement(&#x27;aside&#x27;); sidebar.className = &#x27;parameter-sidebar&#x27;; sidebar.id = &#x27;parameters-&#x27; + key;
+  const heading = doc.createElement(&#x27;h3&#x27;); heading.className = &#x27;parameter-sidebar-title&#x27;; heading.id = sidebar.id + &#x27;-title&#x27;;
+  sidebar.setAttribute(&#x27;aria-labelledby&#x27;, heading.id); toggle.setAttribute(&#x27;aria-controls&#x27;, sidebar.id);
+  const body = doc.createElement(&#x27;div&#x27;); body.className = &#x27;parameter-sidebar-body&#x27;; sidebar.append(heading, body);
+  const stage = doc.createElement(&#x27;div&#x27;); stage.className = &#x27;parameter-stage&#x27;;
+  const backdrop = doc.createElement(&#x27;button&#x27;); backdrop.type = &#x27;button&#x27;; backdrop.className = &#x27;parameter-backdrop&#x27;; backdrop.tabIndex = -1;
+  workspace.append(toolbar, backdrop, sidebar, stage);
+  const anchor = results.find(node =&gt; node.parentElement === root);
+  if (anchor) root.insertBefore(workspace, anchor); else root.append(workspace);
+  settings.forEach(node =&gt; body.append(node)); results.forEach(node =&gt; stage.append(node));
+  root.classList.add(&#x27;parameter-host&#x27;); doc.body.classList.add(&#x27;has-parameter-sidebar&#x27;);
+  const compact = win.matchMedia(&#x27;(max-width: 860px)&#x27;);
+  const storageKey = () =&gt; &#x27;cfd-parameter-sidebar-v1:&#x27; + key + (compact.matches ? &#x27;:compact&#x27; : &#x27;:wide&#x27;);
+  function readPreference() {
+    try { const value = win.localStorage.getItem(storageKey()); if (value === &#x27;open&#x27; || value === &#x27;closed&#x27;) return value === &#x27;open&#x27;; } catch { /* Opaque sandbox or blocked storage. */ }
+    return !compact.matches;
+  }
+  let expanded = readPreference();
+  function words(en, zh) { return doc.documentElement.lang.toLowerCase().startsWith(&#x27;zh&#x27;) ? zh : en; }
+  function refreshLanguage() {
+    heading.textContent = words(&#x27;Parameters&#x27;, &#x27;参数设置&#x27;);
+    toggleText.textContent = expanded ? words(&#x27;Hide parameters&#x27;, &#x27;收起参数&#x27;) : words(&#x27;Show parameters&#x27;, &#x27;展开参数&#x27;);
+    toggle.setAttribute(&#x27;aria-label&#x27;, toggleText.textContent);
+    backdrop.setAttribute(&#x27;aria-label&#x27;, words(&#x27;Close parameters&#x27;, &#x27;关闭参数面板&#x27;));
+  }
+  function render() {
+    workspace.dataset.expanded = String(expanded);
+    workspace.dataset.compact = String(compact.matches);
+    sidebar.hidden = !expanded;
+    backdrop.hidden = !expanded || !compact.matches;
+    stage.inert = expanded &amp;&amp; compact.matches;
+    toggle.setAttribute(&#x27;aria-expanded&#x27;, String(expanded));
+    icon.textContent = expanded ? &#x27;‹&#x27; : &#x27;☰&#x27;;
+    refreshLanguage();
+  }
+  function setExpanded(value, persist = true) {
+    const next = !!value;
+    if (next &amp;&amp; compact.matches &amp;&amp; stage.contains(doc.activeElement)) toggle.focus({ preventScroll: true });
+    if (!next &amp;&amp; sidebar.contains(doc.activeElement)) toggle.focus({ preventScroll: true });
+    expanded = next;
+    if (persist) try { win.localStorage.setItem(storageKey(), expanded ? &#x27;open&#x27; : &#x27;closed&#x27;); } catch {}
+    render();
+  }
+  toggle.addEventListener(&#x27;click&#x27;, () =&gt; setExpanded(!expanded));
+  backdrop.addEventListener(&#x27;click&#x27;, () =&gt; { setExpanded(false); toggle.focus({ preventScroll: true }); });
+  workspace.addEventListener(&#x27;keydown&#x27;, event =&gt; {
+    if (event.key === &#x27;Escape&#x27; &amp;&amp; expanded) { event.preventDefault(); setExpanded(false); toggle.focus({ preventScroll: true }); }
+  });
+  compact.addEventListener(&#x27;change&#x27;, () =&gt; setExpanded(readPreference(), false));
+  win.addEventListener(&#x27;languagechange&#x27;, refreshLanguage);
+  const languageObserver = new win.MutationObserver(refreshLanguage);
+  languageObserver.observe(doc.documentElement, { attributes: true, attributeFilter: [&#x27;lang&#x27;] });
+  render();
+  return root.parameterSidebar = { workspace, sidebar, body, stage, toggle, setExpanded, isExpanded: () =&gt; expanded, refreshLanguage };
+}
+
+const explicitSidebarRoot = document.getElementById(&#x27;explicit-ns-animation&#x27;);
+mountParameterSidebar(explicitSidebarRoot, {
+  controls: [&#x27;.ns-initial&#x27;, &#x27;.ns-spatial&#x27;, &#x27;.ns-timestep&#x27;, &#x27;.ns-iteration&#x27;].map(selector =&gt; explicitSidebarRoot.querySelector(selector)),
+  content: [&#x27;.ns-header&#x27;, &#x27;.ns-layout&#x27;].map(selector =&gt; explicitSidebarRoot.querySelector(selector)),
+  key: &#x27;explicit&#x27;
+});
+&lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;
 "></iframe>
@@ -3583,7 +3702,7 @@ parent.postMessage({ type: &#x27;cfd-language-ready&#x27; }, &#x27;*&#x27;);
   }
   if (parent === window) {
     const label = document.createElement('label');
-    label.style.cssText = 'display:flex;justify-content:flex-end;align-items:center;gap:8px;max-width:736px;margin:0 auto 12px;font:14px system-ui;color:inherit';
+    label.style.cssText = 'display:flex;justify-content:flex-end;align-items:center;gap:8px;max-width:1280px;margin:0 auto 12px;font:14px system-ui;color:inherit';
     labelText = document.createElement('span');
     select = document.createElement('select');
     select.style.cssText = 'font:inherit;padding:5px 12px;border-radius:20px';

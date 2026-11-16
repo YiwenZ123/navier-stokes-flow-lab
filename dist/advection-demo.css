@@ -14,6 +14,29 @@
 .adv-controls label { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-width: 0; }
 .adv-controls select { min-width: 0; }
 .adv-controls input { width: 92px; }
+.advection-panel.parameter-host { padding-inline:0; }
+.advection-panel .parameter-workspace { --parameter-width:340px; }
+.advection-panel .parameter-stage { display:grid; gap:16px; }
+.parameter-sidebar :is(.adv-controls,.adv-schemes) { grid-template-columns:minmax(0,1fr); }
+.parameter-sidebar .adv-controls label { display:grid; grid-template-columns:minmax(0,1fr); justify-content:stretch; gap:6px; }
+.parameter-sidebar .adv-controls :is(select,input) { width:100%; }
+.parameter-sidebar .adv-sidebar-playback { display:grid; gap:14px; }
+.parameter-sidebar .adv-sidebar-playback label { display:grid; gap:6px; }
+.parameter-sidebar .adv-sidebar-playback select { width:100%; }
+.parameter-sidebar .adv-scheme { padding-left:10px; }
+.parameter-sidebar .adv-experiments > span { flex-basis:100%; }
+.parameter-sidebar #adv-curve-editor .ce-editor { padding:12px 8px; }
+.parameter-sidebar #adv-curve-editor .ce-plot { height:240px; }
+.parameter-sidebar #adv-curve-editor .ce-file-row { gap:8px; }
+.parameter-sidebar #adv-curve-editor .ce-file-actions { gap:6px; }
+.parameter-sidebar #adv-curve-editor .ce-file-actions button { padding-inline:9px; font-size:12px; }
+.parameter-sidebar #adv-curve-editor .ce-options { align-items:flex-start; flex-direction:column; }
+.parameter-sidebar .adv-inspect-controls { align-items:stretch; flex-direction:column; }
+.parameter-sidebar .adv-inspect-controls label { display:grid; gap:6px; }
+.parameter-sidebar .adv-inspect-controls :is(select,input) { width:100%; }
+.adv-inspect-actions { margin-bottom:18px; }
+.adv-inspect-actions button { min-height:36px; padding:7px 12px; border:1px solid var(--line); border-radius:999px; color:var(--text); background:var(--paper); font:inherit; cursor:pointer; }
+#flow.parameter-host > h2 { margin-bottom:16px; }
 .adv-parameters { font-variant-numeric: tabular-nums; font-size: 13px; }
 .adv-custom-panel > summary { width: fit-content; cursor: pointer; padding: 4px 0; }
 .adv-custom-panel > summary:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }

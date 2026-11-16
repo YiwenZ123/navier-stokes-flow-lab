@@ -44,3 +44,16 @@
   .wave-metrics dd { font-size: 14px; }
   .wave-domain { text-align: left; }
 }
+
+#wave-demo.wave-sidebar-ready { max-width: none; }
+#wave-demo.wave-sidebar-ready .parameter-stage { display: grid; gap: 16px; }
+#wave-demo .wave-parameter-control { min-width: 0; width: 100%; }
+#wave-demo .wave-parameter-control.wave-setting,
+#wave-demo .wave-parameter-control .wave-setting { display: grid; grid-template-columns: minmax(0, 1fr); align-items: start; gap: 8px; }
+#wave-demo .wave-parameter-control.wave-controls-grid { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+#wave-demo .wave-parameter-control select { width: 100%; min-width: 0; font-size: 13px; padding-inline: 10px; }
+#wave-demo .wave-parameter-control .wave-number { width: 100%; }
+#wave-demo .wave-parameter-control input[type="number"] { flex: 1; width: 100%; min-width: 0; }
+#wave-demo .wave-parameter-control .wave-checkbox { min-height: 32px; }
+#wave-demo .wave-parameter-control .parameter-help { width: 100%; min-width: 0; }
+#wave-demo .wave-parameter-control .parameter-help-body { overflow-wrap: anywhere; }

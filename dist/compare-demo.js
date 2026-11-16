@@ -3,6 +3,7 @@ import { DT_OPTIONS, COMPARISON_END_TIME, normalizeTimeStep } from "./time-step-
 import { SPATIAL_GRID, spatialGridSummary } from "./spatial-grid.js";
 import { readIterationOptions, writeIterationQuery, iterationLabel, mountIterationControls } from "./iteration-controls.js";
 import { t, translateText } from "./i18n.js?v=14";
+import { mountParameterSidebar } from "./parameter-sidebar.js?v=edb979ef0040";
 
 const root = document.querySelector("#comparison-demo");
 const methods = ["explicit", "mac"];
@@ -26,10 +27,12 @@ let sweepRows = null;
 let errorMessage = null;
 
 root.innerHTML = `
-  <p aria-label="统一空间网格">${spatialGridSummary()}</p>
-  <details class="parameter-help"><summary aria-label="空间网格说明">说明</summary><div class="parameter-help-body">
-    <p class="comparison-note">两种方法均使用 ${SPATIAL_GRID.intervals} × ${SPATIAL_GRID.intervals} 个周期单元。</p>
-  </div></details>
+  <div class="comparison-spatial">
+    <p aria-label="统一空间网格">${spatialGridSummary()}</p>
+    <details class="parameter-help"><summary aria-label="空间网格说明">说明</summary><div class="parameter-help-body">
+      <p class="comparison-note">两种方法均使用 ${SPATIAL_GRID.intervals} × ${SPATIAL_GRID.intervals} 个周期单元。</p>
+    </div></details>
+  </div>
   <div id="comparison-iterations"></div>
   <div class="comparison-dt">
     <div class="comparison-dt-heading"><label for="comparison-dt">时间步长 Δt</label><output for="comparison-dt" data-compare="dt-label"></output></div>
@@ -41,6 +44,10 @@ root.innerHTML = `
     <details class="parameter-help"><summary aria-label="时间步长说明">说明</summary><div class="parameter-help-body">
       <p id="comparison-dt-note" class="comparison-note">每个步长都计算到同一物理时刻 t = ${COMPARISON_END_TIME}，网格与初始条件保持一致。步长越大，时间步数越少。</p>
     </div></details>
+  </div>
+  <div class="comparison-chart-control">
+    <label for="comparison-chart-metric" data-en="Chart metric" data-zh="图表指标">${t("Chart metric", "图表指标")}</label>
+    <select id="comparison-chart-metric" data-compare="chart-metric"><option value="growthFactor">扰动增长倍数</option><option value="velocityRmsError">速度 RMS 误差</option><option value="maxDivergence">最大绝对散度</option></select>
   </div>
   <p class="comparison-message" data-compare="message" role="status">正在计算…</p>
   <div data-compare="results" hidden>
@@ -66,9 +73,7 @@ root.innerHTML = `
     </table>
     <p class="comparison-note" data-compare="diagnostic"></p>
     <figure class="comparison-history">
-      <figcaption class="comparison-chart-heading"><label for="comparison-chart-metric">随物理时间变化</label>
-        <select id="comparison-chart-metric" data-compare="chart-metric"><option value="growthFactor">扰动增长倍数</option><option value="velocityRmsError">速度 RMS 误差</option><option value="maxDivergence">最大绝对散度</option></select>
-      </figcaption>
+      <figcaption class="comparison-chart-heading">随物理时间变化</figcaption>
       <div class="comparison-curves" aria-label="曲线图例"><span><i class="comparison-key-explicit" aria-hidden="true"></i>显式推进</span><span><i class="comparison-key-mac" aria-hidden="true"></i>隐式 MAC</span></div>
       <canvas class="comparison-chart" data-compare="history" role="img" aria-label="两种方法随物理时间的变化曲线"></canvas>
       <details class="parameter-help"><summary aria-label="图表说明">说明</summary><div class="parameter-help-body">
@@ -415,6 +420,18 @@ mountConditionPicker(document.querySelector("#comparison-initial"), condition, (
   }
   else updateUrl();
   requestComparison("start");
+});
+root.classList.add("comparison-sidebar-layout");
+mountParameterSidebar(root, {
+  key: "comparison",
+  controls: [
+    document.querySelector("#comparison-initial"),
+    root.querySelector(".comparison-spatial"),
+    root.querySelector("#comparison-iterations"),
+    root.querySelector(".comparison-dt"),
+    root.querySelector(".comparison-chart-control")
+  ],
+  content: [elements.message, elements.results, root.querySelector(".comparison-sweep")]
 });
 window.addEventListener("popstate", () => {
   const next = normalizeTimeStep(new URL(location.href).searchParams.get("dt"));

@@ -1,5 +1,6 @@
 import { createWaveSolver } from "./wave-solver.js?v=14";
 import { t } from "./i18n.js?v=14";
+import { mountParameterSidebar } from "./parameter-sidebar.js?v=edb979ef0040";
 
 const byId = id => document.getElementById(id);
 const scenarioSelect = byId("wave-scenario");
@@ -374,5 +375,15 @@ document.addEventListener("visibilitychange", () => {
   if (document.hidden && playing) { pause(); render(); }
 });
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", render);
+const waveRoot = byId("wave-demo");
+const sidebarControls = [...waveRoot.children].filter(node =>
+  node.matches(".wave-setting, .wave-controls-grid, #wave-geometry-help")
+);
+const sidebarContent = [...waveRoot.children].filter(node =>
+  node.matches(".wave-tank-figure, .wave-metrics, .wave-status, .wave-history-figure, #wave-model-help")
+);
+for (const control of sidebarControls) control.classList.add("wave-parameter-control");
+mountParameterSidebar(waveRoot, { controls: sidebarControls, content: sidebarContent, key: "waves" });
+waveRoot.classList.add("wave-sidebar-ready");
 new ResizeObserver(() => { if (solver) render(); }).observe(tank);
 reset();
