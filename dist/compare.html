@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="referrer" content="no-referrer">
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; script-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
-  <title>Navier–Stokes Flow Lab · Comparison</title>
-  <link rel="stylesheet" href="./guide.css?v=6d27b97e07f7">
+  <title data-en="Navier–Stokes Flow Lab · Method comparison" data-zh="Navier–Stokes Flow Lab · 两种方法对比">Navier–Stokes Flow Lab · Method comparison</title>
+  <link rel="stylesheet" href="./guide.css?v=c2ba94d1a5a6">
   <script defer src="./page-tabs.js"></script>
   <script type="module" src="./i18n.js?v=14"></script>
   <link rel="stylesheet" href="./compare-demo.css?v=98ab4d5c5d0b">
@@ -16,13 +16,18 @@
 <body>
   <header class="site-header page-width">
     <h1><a href="./">Navier–Stokes Flow Lab</a></h1>
-    <nav class="method-nav" aria-label="时间推进方法">
+    <nav class="method-nav" aria-label="Experiments" data-en-aria-label="Experiments" data-zh-aria-label="计算实验">
       <a href="./" data-en="Home" data-zh="首页">Home</a>
-      <a href="./explicit.html">显式推进</a>
-      <a href="./mac.html">隐式 MAC</a>
-      <a href="./compare.html" aria-current="page">结果对比</a>
-      <a href="./waves.html">波浪冲击</a>
-    <a href="./advection.html" data-en="1D advection" data-zh="一维对流">1D advection</a>
+      <a href="./advection.html" data-en="1D advection" data-zh="一维对流">1D advection</a>
+      <div class="method-nav-group" role="group" aria-labelledby="navier-stokes-navigation-label">
+        <span id="navier-stokes-navigation-label" class="method-nav-group-label" data-en="Navier–Stokes" data-zh="Navier–Stokes">Navier–Stokes</span>
+        <div class="method-nav-group-links">
+          <a href="./explicit.html" data-en="Explicit stepping" data-zh="显式推进法">Explicit stepping</a>
+          <a href="./mac.html" data-en="Implicit MAC projection" data-zh="隐式 MAC 投影法">Implicit MAC projection</a>
+          <a href="./compare.html" aria-current="page" data-en="Method comparison" data-zh="两种方法对比">Method comparison</a>
+        </div>
+      </div>
+      <a href="./waves.html" data-en="Wave impact" data-zh="波浪冲击">Wave impact</a>
     </nav>
   </header>
 

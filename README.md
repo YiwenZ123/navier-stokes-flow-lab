@@ -11,10 +11,10 @@ Interactive, browser-based CFD demonstrations for learning incompressible Navier
 - A bilingual homepage presents the three-dimensional incompressible Navier–Stokes equations and introduces the teaching modules with screenshots of the working experiments.
 - The homepage replays the wave lesson’s MAC dam-break simulation on a 120 × 60 grid, with water striking a fixed 0.70 m square obstacle. It uses precomputed solver frames so playback does not repeat the numerical solve.
 - All five teaching modules use a collapsible parameter sidebar; hiding it keeps the current calculation and settings. Wide screens start open, while compact screens start closed. The modules remember wide and compact preferences separately, except for the sandboxed explicit animation: it keeps its current visibility until a reload or layout change.
-- Explicit time-stepping animation with pressure iterations, workflow diagrams and equations.
-- Implicit MAC projection animation, including face-velocity and combined-velocity arrows.
-- Comparisons at the same physical time, with selectable time steps, initial conditions and Jacobi / Gauss–Seidel / SOR iterations.
-- A 2D wave-impact tank with square, circular and triangular obstacle cross-sections, adjustable size and position, and three spatial resolutions.
+- Explicit Navier–Stokes time-stepping animation with pressure iterations, workflow diagrams and equations.
+- Implicit MAC projection for Navier–Stokes, including face-velocity and combined-velocity arrows.
+- Comparison of these two Navier–Stokes solution methods at the same physical time, with selectable time steps, initial conditions and Jacobi / Gauss–Seidel / SOR iterations.
+- A Navier–Stokes wave-impact application: a 2D tank with square, circular and triangular obstacle cross-sections, adjustable size and position, and three spatial resolutions.
 - Free-surface, velocity and pressure views, pressure history, and force per unit span.
 - A one-dimensional advection lab with 10 finite-difference schemes, five built-in profiles and a custom initial-condition curve editor. Adjust the grid, CFL number and positive or negative transport velocity; compare numerical curves with the exact solution.
 - A draggable curve editor with smooth or linear interpolation, linked periodic endpoints, coordinate inputs, and undo/redo. Both schemes sample the same curve on the selected grid; editing restarts both calculations, and the curve is saved in the browser for the current site address.

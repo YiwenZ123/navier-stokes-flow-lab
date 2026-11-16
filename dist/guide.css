@@ -32,6 +32,14 @@ a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 .method-nav a { padding: 7px 16px; border-radius: 999px; color: var(--muted); text-decoration: none; }
 .method-nav a:hover { background: var(--paper); color: var(--text); }
 .method-nav a[aria-current="page"] { color: var(--primary-text); background: var(--primary-bg); }
+
+/* The pressure/velocity methods belong to one Navier–Stokes lesson family. */
+.method-nav { align-items: center; }
+.method-nav-group { display: flex; flex: 0 1 auto; flex-direction: column; align-items: flex-start; gap: 6px; min-width: 0; max-width: 100%; padding: 8px; border: 1px solid var(--line); border-radius: 16px; }
+.method-nav-group-label { padding-inline: 7px; color: var(--muted); font-size: 11px; line-height: 1.4; letter-spacing: .02em; }
+.method-nav-group-links { display: flex; flex-wrap: wrap; gap: 4px; min-width: 0; max-width: 100%; }
+.method-nav-group-links a { flex: 0 1 auto; min-width: 0; text-align: center; white-space: normal; overflow-wrap: anywhere; }
+
 .section-tabs { display: flex; gap: 24px; margin-bottom: 22px; border-bottom: 1px solid var(--line); }
 .section-tabs a { display: flex; align-items: center; min-height: 48px; border-bottom: 2px solid transparent; padding-inline: 2px; color: var(--muted); text-decoration: none; }
 .section-tabs a:hover { color: var(--text); }
@@ -124,6 +132,7 @@ html[lang="en"] .iteration-row select[data-iteration$="Method"] { width: 230px; 
   .section-tabs { gap: 14px; }
   .section-tabs a { font-size: 13px; }
   .method-nav a { flex: 1 0 auto; white-space: nowrap; font-size: 12px; padding-inline: 8px; }
+  .method-nav-group-links a { flex: 1 1 auto; white-space: normal; }
 }
 
 /* Shared source and license links, outside the animation sandboxes. */
