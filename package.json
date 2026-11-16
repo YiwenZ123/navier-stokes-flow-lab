@@ -18,9 +18,11 @@
     "test:iterations": "node tests/iterations.mjs",
     "test:stability": "node tests/stability.mjs",
     "test:waves": "node tests/waves.mjs",
-    "test": "npm run check:grid && npm run test:iterations && npm run test:stability && npm run test:waves && npm run test:advection && npm run test:custom-profile && npm run test:curve-file",
+    "test": "npm run check:grid && npm run test:iterations && npm run test:stability && npm run test:waves && npm run test:advection && npm run test:custom-profile && npm run test:curve-file && npm run test:home-wave",
     "test:advection": "node tests/advection.mjs",
     "test:custom-profile": "node tests/custom-profile.mjs",
-    "test:curve-file": "node tests/curve-file.mjs"
+    "test:curve-file": "node tests/curve-file.mjs",
+    "test:home-wave": "node tests/home-wave.mjs",
+    "generate:home-wave": "node scripts/generate-home-wave.mjs"
   }
 }

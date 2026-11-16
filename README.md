@@ -9,6 +9,7 @@ Interactive, browser-based CFD demonstrations for learning incompressible Navier
 ## Features
 
 - A bilingual homepage presents the three-dimensional incompressible Navier–Stokes equations and introduces the teaching modules with screenshots of the working experiments.
+- The homepage replays the wave lesson’s MAC dam-break simulation on a 120 × 60 grid, with water striking a fixed 0.70 m square obstacle. It uses precomputed solver frames so playback does not repeat the numerical solve.
 - All five teaching modules use a collapsible parameter sidebar; hiding it keeps the current calculation and settings. Wide screens start open, while compact screens start closed. The modules remember wide and compact preferences separately, except for the sandboxed explicit animation: it keeps its current visibility until a reload or layout change.
 - Explicit time-stepping animation with pressure iterations, workflow diagrams and equations.
 - Implicit MAC projection animation, including face-velocity and combined-velocity arrows.
@@ -52,16 +53,18 @@ npm run test:waves
 npm run test:advection
 npm run test:custom-profile
 npm run test:curve-file
+npm run test:home-wave
 npm run check:grid
 ```
 
-The tests cover iterative solvers, discrete pressure-projection identities, time-step comparisons, hydrostatic equilibrium, solid boundaries, particle collisions, wave-obstacle geometries, the one-dimensional advection schemes, and custom-curve interpolation and shared initial conditions, and validated JSON curve import/export.
+The tests cover iterative solvers, discrete pressure-projection identities, time-step comparisons, hydrostatic equilibrium, solid boundaries, particle collisions, wave-obstacle geometries, the one-dimensional advection schemes, and custom-curve interpolation and shared initial conditions, validated JSON curve import/export, and agreement of all 361 homepage replay frames with a fresh MAC solve.
 
 ## Project layout
 
 - `dist/` — the directly served application, styles and solvers. `index.html` is the homepage; `explicit.html` contains the explicit time-stepping lesson.
 - `tests/` — numerical checks using Node's built-in assertions.
 - `scripts/sync-spatial-grid.mjs` — synchronizes the shared periodic grid with the sandboxed explicit animation.
+- `scripts/generate-home-wave.mjs` — regenerates the homepage replay from the wave solver; run `npm run generate:home-wave` after changing that solver, then check `npm run test:home-wave`.
 - `licenses/` — third-party license notices.
 
 `dist/explicit-ns-animation.html` preserves the original Chinese animation. The enhanced animation is `dist/explicit-ns-presets.html`. Both retain their existing iframe sandbox and Content Security Policy.

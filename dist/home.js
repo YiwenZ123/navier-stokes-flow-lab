@@ -1,5 +1,5 @@
 import { getLanguage, t } from './i18n.js?v=14';
-import { mountHomeArt } from './home-art.js?v=e482752668db';
+import { mountHomeWave } from './home-wave.js?v=f22154b79cae';
 
 // Existing bookmarks to the original explicit lesson keep their destination.
 function preserveExplicitBookmarks() {
@@ -24,18 +24,19 @@ if (!preserveExplicitBookmarks()) {
   document.addEventListener('click', event => { if (!event.target.closest('.home-header')) closeMenu(); });
   const media = matchMedia('(min-width: 581px)');
   media.addEventListener('change', event => { if (event.matches) closeMenu(); });
-  const art = mountHomeArt(document);
+  const wave = mountHomeWave(document);
   const motion = document.getElementById('motion-toggle');
   function renderMotion() {
-    const paused = art.isPaused();
+    const paused = wave.isPaused();
     motion.setAttribute('aria-pressed', String(paused));
-    document.getElementById('motion-label').textContent = paused ? t('Play motion', '播放动效') : t('Pause motion', '暂停动效');
-    motion.querySelector('.motion-icon').textContent = paused ? '▷' : 'Ⅱ';
-    motion.setAttribute('aria-label', paused ? t('Play flow illustration', '播放流场示意动效') : t('Pause flow illustration', '暂停流场示意动效'));
+    const labels = paused ? ['Play dam-break preview', '播放溃坝预览'] : ['Pause dam-break preview', '暂停溃坝预览'];
+    motion.dataset.enAriaLabel = labels[0]; motion.dataset.zhAriaLabel = labels[1];
+    motion.setAttribute('aria-label', t(...labels));
   }
-  motion.addEventListener('click', () => { art.setPaused(!art.isPaused()); renderMotion(); });
+  motion.addEventListener('click', () => { wave.setPaused(!wave.isPaused()); renderMotion(); });
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
-  reducedMotion.addEventListener('change', () => { art.setPaused(reducedMotion.matches); renderMotion(); });
+  wave.setPaused(reducedMotion.matches);
+  reducedMotion.addEventListener('change', () => { wave.setPaused(reducedMotion.matches); renderMotion(); });
   window.addEventListener('languagechange', renderMotion);
   renderMotion();
   document.documentElement.lang = getLanguage() === 'zh' ? 'zh-CN' : 'en';

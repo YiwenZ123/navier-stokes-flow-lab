@@ -9,6 +9,7 @@
 ## 功能
 
 - 中英双语首页展示三维不可压缩 Navier–Stokes 方程，并使用实际实验截图介绍各教学模块。
+- 首页回放波浪教学使用的 MAC 溃坝计算：120 × 60 网格，水流冲击固定的 0.70 m 正方形障碍物。动画采用预先计算的求解器结果，播放时无需重复数值求解。
 - 五个教学模块统一使用可折叠参数侧栏，收起后保留计算进度和参数。宽屏默认展开，窄屏默认收起；除沙盒中的显式动画外，各模块分别记忆宽屏与窄屏偏好；显式动画在当前布局内保留展开状态，刷新或切换布局时恢复默认。
 - 显式时间推进动画、压力迭代、推进流程图和公式。
 - 隐式 MAC 投影法，可切换面速度箭头与合速度箭头。
@@ -52,16 +53,18 @@ npm run test:waves
 npm run test:advection
 npm run test:custom-profile
 npm run test:curve-file
+npm run test:home-wave
 npm run check:grid
 ```
 
-测试覆盖迭代求解、离散压力投影关系、时间步长对比、静水平衡、固壁条件、粒子碰撞、不同障碍物形状与网格，以及一维对流格式、自定义曲线插值与共享初始条件、JSON 文件校验与曲线导入/导出。
+测试覆盖迭代求解、离散压力投影关系、时间步长对比、静水平衡、固壁条件、粒子碰撞、不同障碍物形状与网格，以及一维对流格式、自定义曲线插值与共享初始条件、JSON 文件校验与曲线导入/导出，以及全部 361 帧首页回放与重新计算的 MAC 结果一致性。
 
 ## 目录
 
 - `dist/`：可直接部署的网页、样式和求解器；`index.html` 为首页，`explicit.html` 为显式推进教学页。
 - `tests/`：数值测试。
 - `scripts/sync-spatial-grid.mjs`：同步周期空间网格与沙盒内显式动画。
+- `scripts/generate-home-wave.mjs`：由波浪求解器生成首页回放；修改该求解器后运行 `npm run generate:home-wave`，再用 `npm run test:home-wave` 检查。
 - `licenses/`：第三方许可声明。
 
 `dist/explicit-ns-animation.html` 保留原始中文动画，增强版为 `dist/explicit-ns-presets.html`。两者均保留原有 iframe 沙盒与 CSP。
