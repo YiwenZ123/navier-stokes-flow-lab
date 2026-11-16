@@ -257,7 +257,8 @@ const curveEditor = mountCurveEditor($('adv-curve-editor'), {
     if (control.profile.value === 'custom') return reset(false);
   }
 });
-populate(control.profile,PROFILES,'composite');
+const requestedProfile = new URL(location.href).searchParams.get('profile');
+populate(control.profile,PROFILES,requestedProfile === 'custom' ? 'custom' : 'composite');
 selectors.forEach((select,i)=>populate(select,SCHEMES,i?'lax-wendroff':'upwind'));
 Object.values(control).forEach(node=>node.addEventListener('change',reset));
 control.cfl.addEventListener('input',()=>{

@@ -4,8 +4,11 @@ Interactive, browser-based CFD demonstrations for learning incompressible Navier
 
 [Live demo](https://navier-stoke.lovableglobe2.chatgpt.site/) · [中文说明](README.zh-CN.md) · [MIT license](LICENSE)
 
+[Explicit time stepping](https://navier-stoke.lovableglobe2.chatgpt.site/explicit.html) · [Implicit MAC](https://navier-stoke.lovableglobe2.chatgpt.site/mac.html) · [Comparison](https://navier-stoke.lovableglobe2.chatgpt.site/compare.html) · [Wave impact](https://navier-stoke.lovableglobe2.chatgpt.site/waves.html) · [1D advection](https://navier-stoke.lovableglobe2.chatgpt.site/advection.html)
+
 ## Features
 
+- A bilingual homepage introduces the teaching modules and provides a starting point for each experiment.
 - Explicit time-stepping animation with pressure iterations, workflow diagrams and equations.
 - Implicit MAC projection animation, including face-velocity and combined-velocity arrows.
 - Comparisons at the same physical time, with selectable time steps, initial conditions and Jacobi / Gauss–Seidel / SOR iterations.
@@ -27,7 +30,7 @@ cd navier-stokes-flow-lab
 python3 -m http.server 8000 --bind 127.0.0.1 --directory dist
 ```
 
-Open [http://127.0.0.1:8000/](http://127.0.0.1:8000/). Use the navigation to open the other demonstrations.
+Open the [homepage](http://127.0.0.1:8000/) and choose a teaching module. The explicit time-stepping page is now [explicit.html](http://127.0.0.1:8000/explicit.html); the other module paths remain unchanged.
 
 Serve the files over HTTP: opening an HTML file directly does not fully support the JavaScript modules and comparison worker. The explicit animation loads its pinned Floating UI and Lucide dependencies from a CDN, so that view requires network access for those resources. The other solvers run locally in the browser. Custom curves are stored per browser origin, including the port. A different local server address may start with the default curve; use JSON export/import to carry your curve across addresses or changing offline ports.
 
@@ -55,7 +58,7 @@ The tests cover iterative solvers, discrete pressure-projection identities, time
 
 ## Project layout
 
-- `dist/` — the directly served application, styles and solvers.
+- `dist/` — the directly served application, styles and solvers. `index.html` is the homepage; `explicit.html` contains the explicit time-stepping lesson.
 - `tests/` — numerical checks using Node's built-in assertions.
 - `scripts/sync-spatial-grid.mjs` — synchronizes the shared periodic grid with the sandboxed explicit animation.
 - `licenses/` — third-party license notices.

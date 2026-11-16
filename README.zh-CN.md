@@ -4,8 +4,11 @@
 
 [在线演示](https://navier-stoke.lovableglobe2.chatgpt.site/) · [English](README.md) · [MIT 协议](LICENSE)
 
+[显式推进](https://navier-stoke.lovableglobe2.chatgpt.site/explicit.html) · [隐式 MAC](https://navier-stoke.lovableglobe2.chatgpt.site/mac.html) · [结果对比](https://navier-stoke.lovableglobe2.chatgpt.site/compare.html) · [波浪冲击](https://navier-stoke.lovableglobe2.chatgpt.site/waves.html) · [一维对流](https://navier-stoke.lovableglobe2.chatgpt.site/advection.html)
+
 ## 功能
 
+- 中英双语首页，介绍教学模块并提供各实验的入口。
 - 显式时间推进动画、压力迭代、推进流程图和公式。
 - 隐式 MAC 投影法，可切换面速度箭头与合速度箭头。
 - 同一物理时刻的结果对比，支持时间步长、初始条件及 Jacobi / 高斯–塞德尔 / SOR 选项。
@@ -27,7 +30,7 @@ cd navier-stokes-flow-lab
 python3 -m http.server 8000 --bind 127.0.0.1 --directory dist
 ```
 
-在浏览器中打开 [http://127.0.0.1:8000/](http://127.0.0.1:8000/)，通过导航切换演示。
+在浏览器中打开[首页](http://127.0.0.1:8000/)，选择教学模块。显式推进现位于 [explicit.html](http://127.0.0.1:8000/explicit.html)，其他模块路径保持不变。
 
 请通过 HTTP 服务访问；直接双击 HTML 文件不能完整运行 JavaScript 模块与后台计算。显式动画通过 CDN 加载固定版本的 Floating UI 和 Lucide，因此该视图加载这些资源时需要联网。其他求解器在浏览器本地运行。 自定义曲线按浏览器站点地址（包括端口）保存，改变本地服务地址后可能回到默认曲线；可用 JSON 导出/导入携带曲线，恢复到新的站点地址或离线端口。
 
@@ -55,7 +58,7 @@ npm run check:grid
 
 ## 目录
 
-- `dist/`：可直接部署的网页、样式和求解器。
+- `dist/`：可直接部署的网页、样式和求解器；`index.html` 为首页，`explicit.html` 为显式推进教学页。
 - `tests/`：数值测试。
 - `scripts/sync-spatial-grid.mjs`：同步周期空间网格与沙盒内显式动画。
 - `licenses/`：第三方许可声明。
