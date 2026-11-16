@@ -21,7 +21,7 @@
   <section class="hero page-width" aria-labelledby="hero-title">
     <p class="eyebrow" data-en="Navier–Stokes Flow Lab" data-zh="Navier–Stokes 流体力学实验室">Navier–Stokes Flow Lab</p>
     <h1 id="hero-title" data-en="3D Navier–Stokes equations" data-zh="三维 Navier–Stokes 方程">3D Navier–Stokes equations</h1>
-    <p class="hero-equation-context" data-en="Incompressible flow · constant density and viscosity · zero body force" data-zh="不可压缩流动 · 密度与黏度恒定 · 体力为零">Incompressible flow · constant density and viscosity · zero body force</p>
+    <p class="hero-equation-context" data-en="Incompressible flow · constant density and viscosity · including body forces" data-zh="不可压缩流动 · 密度与黏度恒定 · 包含体力">Incompressible flow · constant density and viscosity · including body forces</p>
     <div class="hero-equations" role="group" aria-labelledby="hero-title" aria-describedby="hero-equation-key">
       <div class="hero-equation">
         <span class="hero-equation-label" data-en="x momentum" data-zh="x 向动量">x momentum</span>
@@ -39,6 +39,7 @@
               <mo>+</mo><mfrac><mrow><msup><mo>∂</mo><mn>2</mn></msup><mi>u</mi></mrow><mrow><mo>∂</mo><msup><mi>y</mi><mn>2</mn></msup></mrow></mfrac>
               <mo>+</mo><mfrac><mrow><msup><mo>∂</mo><mn>2</mn></msup><mi>u</mi></mrow><mrow><mo>∂</mo><msup><mi>z</mi><mn>2</mn></msup></mrow></mfrac>
             <mo>)</mo></mrow>
+            <mo>+</mo><msub><mi>f</mi><mi>x</mi></msub>
           </math>
         </div>
       </div>
@@ -58,6 +59,7 @@
               <mo>+</mo><mfrac><mrow><msup><mo>∂</mo><mn>2</mn></msup><mi>v</mi></mrow><mrow><mo>∂</mo><msup><mi>y</mi><mn>2</mn></msup></mrow></mfrac>
               <mo>+</mo><mfrac><mrow><msup><mo>∂</mo><mn>2</mn></msup><mi>v</mi></mrow><mrow><mo>∂</mo><msup><mi>z</mi><mn>2</mn></msup></mrow></mfrac>
             <mo>)</mo></mrow>
+            <mo>+</mo><msub><mi>f</mi><mi>y</mi></msub>
           </math>
         </div>
       </div>
@@ -77,6 +79,7 @@
               <mo>+</mo><mfrac><mrow><msup><mo>∂</mo><mn>2</mn></msup><mi>w</mi></mrow><mrow><mo>∂</mo><msup><mi>y</mi><mn>2</mn></msup></mrow></mfrac>
               <mo>+</mo><mfrac><mrow><msup><mo>∂</mo><mn>2</mn></msup><mi>w</mi></mrow><mrow><mo>∂</mo><msup><mi>z</mi><mn>2</mn></msup></mrow></mfrac>
             <mo>)</mo></mrow>
+            <mo>+</mo><msub><mi>f</mi><mi>z</mi></msub>
           </math>
         </div>
       </div>
@@ -92,7 +95,7 @@
         </div>
       </div>
     </div>
-    <p id="hero-equation-key" class="hero-equation-key" data-en="u, v, w are the velocity components, p is pressure, ρ is density, and ν is kinematic viscosity." data-zh="u、v、w 为速度分量，p 为压力，ρ 为密度，ν 为运动黏度。">u, v, w are the velocity components, p is pressure, ρ is density, and ν is kinematic viscosity.</p>
+    <p id="hero-equation-key" class="hero-equation-key" data-en="u, v, w are velocity components; p is pressure, ρ is density, and ν is kinematic viscosity. f is body force per unit mass (m/s²), such as gravitational acceleration; subscripts x, y, z indicate its components." data-zh="u、v、w 为速度分量，p 为压力，ρ 为密度，ν 为运动黏度。f 为单位质量体力（m/s²），例如重力加速度；下标 x、y、z 表示方向。">u, v, w are velocity components; p is pressure, ρ is density, and ν is kinematic viscosity. f is body force per unit mass (m/s²), such as gravitational acceleration; subscripts x, y, z indicate its components.</p>
     <a class="pill pill-dark" href="#experiments"><span data-en="Explore the experiments" data-zh="探索计算实验">Explore the experiments</span><span aria-hidden="true">↓</span></a>
     <div class="quick-links" aria-label="Quick starts" data-en-aria-label="Quick starts" data-zh-aria-label="快速开始"><a href="./advection.html?profile=custom"><span data-en="Draw a waveform" data-zh="画一条初始曲线">Draw a waveform</span><span aria-hidden="true">↗</span></a><a href="./compare.html"><span data-en="Compare NS methods" data-zh="比较 NS 求解方法">Compare NS methods</span><span aria-hidden="true">↗</span></a><a href="./waves.html"><span data-en="Make a wave" data-zh="模拟波浪冲击">Make a wave</span><span aria-hidden="true">↗</span></a></div>
   </section>
