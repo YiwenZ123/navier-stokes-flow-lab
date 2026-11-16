@@ -7,7 +7,7 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self'; style-src 'self'; script-src 'self'; frame-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
   <meta name="description" content="An interactive lab for computational fluid dynamics. Explore advection, Navier–Stokes time stepping, pressure projection and wave impact.">
   <title>Navier–Stokes Flow Lab</title>
-  <link rel="stylesheet" href="./home.css?v=4a398f354c10">
+  <link rel="stylesheet" href="./home.css?v=2606095667a9">
   <script type="module" src="./home.js?v=83cfff293592"></script>
 </head>
 <body>
@@ -20,8 +20,79 @@
 <main id="main">
   <section class="hero page-width" aria-labelledby="hero-title">
     <p class="eyebrow" data-en="Navier–Stokes Flow Lab" data-zh="Navier–Stokes 流体力学实验室">Navier–Stokes Flow Lab</p>
-    <h1 id="hero-title"><span data-en="Fluid dynamics," data-zh="让流体力学，">Fluid dynamics,</span><br><span data-en="in your hands." data-zh="在你手中流动。">in your hands.</span></h1>
-    <p class="hero-description" data-en="Turn equations into motion. Change the conditions, follow each step, and discover how a flow takes shape." data-zh="让方程变成看得见的运动。改变条件，跟随每一步计算，探索流动如何形成。">Turn equations into motion. Change the conditions, follow each step, and discover how a flow takes shape.</p>
+    <h1 id="hero-title" data-en="3D Navier–Stokes equations" data-zh="三维 Navier–Stokes 方程">3D Navier–Stokes equations</h1>
+    <p class="hero-equation-context" data-en="Incompressible flow · constant density and viscosity · zero body force" data-zh="不可压缩流动 · 密度与黏度恒定 · 体力为零">Incompressible flow · constant density and viscosity · zero body force</p>
+    <div class="hero-equations" role="group" aria-labelledby="hero-title" aria-describedby="hero-equation-key">
+      <div class="hero-equation">
+        <span class="hero-equation-label" data-en="x momentum" data-zh="x 向动量">x momentum</span>
+        <div class="hero-equation-terms">
+          <math class="hero-equation-lhs">
+            <mfrac><mrow><mo>∂</mo><mi>u</mi></mrow><mrow><mo>∂</mo><mi>t</mi></mrow></mfrac>
+            <mo>+</mo><mi>u</mi><mo>&#x2062;</mo><mfrac><mrow><mo>∂</mo><mi>u</mi></mrow><mrow><mo>∂</mo><mi>x</mi></mrow></mfrac>
+            <mo>+</mo><mi>v</mi><mo>&#x2062;</mo><mfrac><mrow><mo>∂</mo><mi>u</mi></mrow><mrow><mo>∂</mo><mi>y</mi></mrow></mfrac>
+            <mo>+</mo><mi>w</mi><mo>&#x2062;</mo><mfrac><mrow><mo>∂</mo><mi>u</mi></mrow><mrow><mo>∂</mo><mi>z</mi></mrow></mfrac>
+          </math>
+          <math class="hero-equation-rhs">
+            <mo>=</mo><mo>−</mo><mfrac><mn>1</mn><mi>ρ</mi></mfrac><mo>&#x2062;</mo><mfrac><mrow><mo>∂</mo><mi>p</mi></mrow><mrow><mo>∂</mo><mi>x</mi></mrow></mfrac>
+            <mo>+</mo><mi>ν</mi><mo>&#x2062;</mo><mrow><mo>(</mo>
+              <mfrac><mrow><msup><mo>∂</mo><mn>2</mn></msup><mi>u</mi></mrow><mrow><mo>∂</mo><msup><mi>x</mi><mn>2</mn></msup></mrow></mfrac>
+              <mo>+</mo><mfrac><mrow><msup><mo>∂</mo><mn>2</mn></msup><mi>u</mi></mrow><mrow><mo>∂</mo><msup><mi>y</mi><mn>2</mn></msup></mrow></mfrac>
+              <mo>+</mo><mfrac><mrow><msup><mo>∂</mo><mn>2</mn></msup><mi>u</mi></mrow><mrow><mo>∂</mo><msup><mi>z</mi><mn>2</mn></msup></mrow></mfrac>
+            <mo>)</mo></mrow>
+          </math>
+        </div>
+      </div>
+      <div class="hero-equation">
+        <span class="hero-equation-label" data-en="y momentum" data-zh="y 向动量">y momentum</span>
+        <div class="hero-equation-terms">
+          <math class="hero-equation-lhs">
+            <mfrac><mrow><mo>∂</mo><mi>v</mi></mrow><mrow><mo>∂</mo><mi>t</mi></mrow></mfrac>
+            <mo>+</mo><mi>u</mi><mo>&#x2062;</mo><mfrac><mrow><mo>∂</mo><mi>v</mi></mrow><mrow><mo>∂</mo><mi>x</mi></mrow></mfrac>
+            <mo>+</mo><mi>v</mi><mo>&#x2062;</mo><mfrac><mrow><mo>∂</mo><mi>v</mi></mrow><mrow><mo>∂</mo><mi>y</mi></mrow></mfrac>
+            <mo>+</mo><mi>w</mi><mo>&#x2062;</mo><mfrac><mrow><mo>∂</mo><mi>v</mi></mrow><mrow><mo>∂</mo><mi>z</mi></mrow></mfrac>
+          </math>
+          <math class="hero-equation-rhs">
+            <mo>=</mo><mo>−</mo><mfrac><mn>1</mn><mi>ρ</mi></mfrac><mo>&#x2062;</mo><mfrac><mrow><mo>∂</mo><mi>p</mi></mrow><mrow><mo>∂</mo><mi>y</mi></mrow></mfrac>
+            <mo>+</mo><mi>ν</mi><mo>&#x2062;</mo><mrow><mo>(</mo>
+              <mfrac><mrow><msup><mo>∂</mo><mn>2</mn></msup><mi>v</mi></mrow><mrow><mo>∂</mo><msup><mi>x</mi><mn>2</mn></msup></mrow></mfrac>
+              <mo>+</mo><mfrac><mrow><msup><mo>∂</mo><mn>2</mn></msup><mi>v</mi></mrow><mrow><mo>∂</mo><msup><mi>y</mi><mn>2</mn></msup></mrow></mfrac>
+              <mo>+</mo><mfrac><mrow><msup><mo>∂</mo><mn>2</mn></msup><mi>v</mi></mrow><mrow><mo>∂</mo><msup><mi>z</mi><mn>2</mn></msup></mrow></mfrac>
+            <mo>)</mo></mrow>
+          </math>
+        </div>
+      </div>
+      <div class="hero-equation">
+        <span class="hero-equation-label" data-en="z momentum" data-zh="z 向动量">z momentum</span>
+        <div class="hero-equation-terms">
+          <math class="hero-equation-lhs">
+            <mfrac><mrow><mo>∂</mo><mi>w</mi></mrow><mrow><mo>∂</mo><mi>t</mi></mrow></mfrac>
+            <mo>+</mo><mi>u</mi><mo>&#x2062;</mo><mfrac><mrow><mo>∂</mo><mi>w</mi></mrow><mrow><mo>∂</mo><mi>x</mi></mrow></mfrac>
+            <mo>+</mo><mi>v</mi><mo>&#x2062;</mo><mfrac><mrow><mo>∂</mo><mi>w</mi></mrow><mrow><mo>∂</mo><mi>y</mi></mrow></mfrac>
+            <mo>+</mo><mi>w</mi><mo>&#x2062;</mo><mfrac><mrow><mo>∂</mo><mi>w</mi></mrow><mrow><mo>∂</mo><mi>z</mi></mrow></mfrac>
+          </math>
+          <math class="hero-equation-rhs">
+            <mo>=</mo><mo>−</mo><mfrac><mn>1</mn><mi>ρ</mi></mfrac><mo>&#x2062;</mo><mfrac><mrow><mo>∂</mo><mi>p</mi></mrow><mrow><mo>∂</mo><mi>z</mi></mrow></mfrac>
+            <mo>+</mo><mi>ν</mi><mo>&#x2062;</mo><mrow><mo>(</mo>
+              <mfrac><mrow><msup><mo>∂</mo><mn>2</mn></msup><mi>w</mi></mrow><mrow><mo>∂</mo><msup><mi>x</mi><mn>2</mn></msup></mrow></mfrac>
+              <mo>+</mo><mfrac><mrow><msup><mo>∂</mo><mn>2</mn></msup><mi>w</mi></mrow><mrow><mo>∂</mo><msup><mi>y</mi><mn>2</mn></msup></mrow></mfrac>
+              <mo>+</mo><mfrac><mrow><msup><mo>∂</mo><mn>2</mn></msup><mi>w</mi></mrow><mrow><mo>∂</mo><msup><mi>z</mi><mn>2</mn></msup></mrow></mfrac>
+            <mo>)</mo></mrow>
+          </math>
+        </div>
+      </div>
+      <div class="hero-equation">
+        <span class="hero-equation-label" data-en="Continuity" data-zh="连续性方程">Continuity</span>
+        <div class="hero-equation-terms">
+          <math>
+            <mfrac><mrow><mo>∂</mo><mi>u</mi></mrow><mrow><mo>∂</mo><mi>x</mi></mrow></mfrac>
+            <mo>+</mo><mfrac><mrow><mo>∂</mo><mi>v</mi></mrow><mrow><mo>∂</mo><mi>y</mi></mrow></mfrac>
+            <mo>+</mo><mfrac><mrow><mo>∂</mo><mi>w</mi></mrow><mrow><mo>∂</mo><mi>z</mi></mrow></mfrac>
+            <mo>=</mo><mn>0</mn>
+          </math>
+        </div>
+      </div>
+    </div>
+    <p id="hero-equation-key" class="hero-equation-key" data-en="u, v, w are the velocity components, p is pressure, ρ is density, and ν is kinematic viscosity." data-zh="u、v、w 为速度分量，p 为压力，ρ 为密度，ν 为运动黏度。">u, v, w are the velocity components, p is pressure, ρ is density, and ν is kinematic viscosity.</p>
     <a class="pill pill-dark" href="#experiments"><span data-en="Explore the experiments" data-zh="探索计算实验">Explore the experiments</span><span aria-hidden="true">↓</span></a>
     <div class="quick-links" aria-label="Quick starts" data-en-aria-label="Quick starts" data-zh-aria-label="快速开始"><a href="./advection.html?profile=custom"><span data-en="Draw a waveform" data-zh="画一条初始曲线">Draw a waveform</span><span aria-hidden="true">↗</span></a><a href="./compare.html"><span data-en="Compare stability" data-zh="比较数值稳定性">Compare stability</span><span aria-hidden="true">↗</span></a><a href="./waves.html"><span data-en="Make a wave" data-zh="模拟波浪冲击">Make a wave</span><span aria-hidden="true">↗</span></a></div>
   </section>
