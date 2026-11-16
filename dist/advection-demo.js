@@ -1,6 +1,6 @@
 import { SCHEMES, PROFILES, createSimulation } from './advection-solver.js?v=6c8206143de0';
 import { DEFAULT_CURVE, normalizeCurve } from './custom-profile.js?v=341dbc61d218';
-import { mountCurveEditor } from './curve-editor.js?v=1ec4eaffdc48';
+import { mountCurveEditor } from './curve-editor.js?v=c264f6736003';
 import { t } from './i18n.js?v=14';
 
 const $ = id => document.getElementById(id);
@@ -99,7 +99,7 @@ function reset(refreshLabels = true) {
   curveEditor.setSampleCount(+control.N.value);
   // Empty or out-of-range values are rejected instead of silently changing CFL.
   parametersValid = control.cfl.checkValidity() && control.cfl.value !== '';
-  if (!parametersValid) { render(); if (refreshLabels) control.cfl.reportValidity(); return; }
+  if (!parametersValid) { render(); if (refreshLabels) control.cfl.reportValidity(); return false; }
   // Snapshot once so both solvers start from the same curve definition.
   const params = { profile: control.profile.value, N: +control.N.value, a: +control.a.value, cfl: +control.cfl.value, ...(custom ? { customCurve: curveEditor.getValue() } : {}) };
   sims = selectors.map(select => createSimulation({ ...params, scheme: select.value }));
@@ -109,6 +109,8 @@ function reset(refreshLabels = true) {
   if (refreshLabels) refreshSelectionText();
   else if (custom) updateCustomDescription();
   render();
+  curveEditor.simulationRestarted();
+  return true;
 }
 
 const targetSteps = () => Math.ceil(2 * +$('adv-circuits').value / (Math.abs(sims[0].a) * sims[0].dt) - 1e-10);
@@ -252,7 +254,7 @@ const curveEditor = mountCurveEditor($('adv-curve-editor'), {
   sampleCount: +control.N.value,
   onChange(value) {
     rememberCurve(value);
-    if (control.profile.value === 'custom') reset(false);
+    if (control.profile.value === 'custom') return reset(false);
   }
 });
 populate(control.profile,PROFILES,'composite');

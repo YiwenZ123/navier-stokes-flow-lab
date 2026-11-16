@@ -13,6 +13,7 @@ Interactive, browser-based CFD demonstrations for learning incompressible Navier
 - Free-surface, velocity and pressure views, pressure history, and force per unit span.
 - A one-dimensional advection lab with 10 finite-difference schemes, five built-in profiles and a custom initial-condition curve editor. Adjust the grid, CFL number and positive or negative transport velocity; compare numerical curves with the exact solution.
 - A draggable curve editor with smooth or linear interpolation, linked periodic endpoints, coordinate inputs, and undo/redo. Both schemes sample the same curve on the selected grid; editing restarts both calculations, and the curve is saved in the browser for the current site address.
+- Export custom curves as JSON and import them on another device or site address. The file stores control points, interpolation and endpoint linking; import restarts both schemes at t = 0 while keeping the selected schemes, grid and time step.
 - Advection error and mass diagnostics, a single-step stencil inspector, and CSV export.
 - English and Chinese interfaces; English is the default.
 
@@ -28,7 +29,7 @@ python3 -m http.server 8000 --bind 127.0.0.1 --directory dist
 
 Open [http://127.0.0.1:8000/](http://127.0.0.1:8000/). Use the navigation to open the other demonstrations.
 
-Serve the files over HTTP: opening an HTML file directly does not fully support the JavaScript modules and comparison worker. The explicit animation loads its pinned Floating UI and Lucide dependencies from a CDN, so that view requires network access for those resources. The other solvers run locally in the browser. Custom curves are stored per browser origin, including the port. A different local server address may start with the default curve.
+Serve the files over HTTP: opening an HTML file directly does not fully support the JavaScript modules and comparison worker. The explicit animation loads its pinned Floating UI and Lucide dependencies from a CDN, so that view requires network access for those resources. The other solvers run locally in the browser. Custom curves are stored per browser origin, including the port. A different local server address may start with the default curve; use JSON export/import to carry your curve across addresses or changing offline ports.
 
 ## Tests
 
@@ -46,10 +47,11 @@ npm run test:stability
 npm run test:waves
 npm run test:advection
 npm run test:custom-profile
+npm run test:curve-file
 npm run check:grid
 ```
 
-The tests cover iterative solvers, discrete pressure-projection identities, time-step comparisons, hydrostatic equilibrium, solid boundaries, particle collisions, wave-obstacle geometries, the one-dimensional advection schemes, and custom-curve interpolation and shared initial conditions.
+The tests cover iterative solvers, discrete pressure-projection identities, time-step comparisons, hydrostatic equilibrium, solid boundaries, particle collisions, wave-obstacle geometries, the one-dimensional advection schemes, and custom-curve interpolation and shared initial conditions, and validated JSON curve import/export.
 
 ## Project layout
 

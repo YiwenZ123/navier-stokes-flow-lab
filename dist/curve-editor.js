@@ -1,4 +1,5 @@
 import { DEFAULT_CURVE, normalizeCurve, makeSlopes, interpolate } from './custom-profile.js?v=341dbc61d218';
+import { MAX_CURVE_FILE_BYTES, serializeCurve, parseCurveFile } from './curve-file.js?v=880406b75cc2';
 import { t } from './i18n.js?v=14';
 
 const presets = {
@@ -11,11 +12,12 @@ const clone = value => JSON.parse(JSON.stringify(value));
 const clamp = (value, low, high) => Math.max(low, Math.min(high, value));
 const gap = .035, maximum = 18;
 
-/** A point editor; only mathematical curve changes invoke onChange. */
+/** A point editor; mathematical changes and successful imports invoke onChange. */
 export function mountCurveEditor(root, { value = DEFAULT_CURVE, onChange = () => {}, sampleCount = 200 } = {}) {
   const initial = normalizeCurve(value);
   let state = { ...initial, selected: Math.floor(initial.points.length / 2), samples: false, preset: 'custom' };
   let undo = [], redo = [], drag = null, geometry = null;
+  let fileMessage = null, importSequence = 0, importing = false;
   let gridCount = validateCount(sampleCount);
   const getValue = () => normalizeCurve({ points: state.points, mode: state.mode, periodic: state.periodic });
   let lastNotified = JSON.stringify(getValue());
@@ -37,26 +39,56 @@ export function mountCurveEditor(root, { value = DEFAULT_CURVE, onChange = () =>
       </div>
       <div class="ce-options"><label class="ce-check"><input data-ce="periodic" type="checkbox"><span data-ce="periodic-label"></span></label><label class="ce-check"><input data-ce="samples" type="checkbox"><span data-ce="samples-label"></span></label></div>
       <p class="ce-status" data-ce="status" role="status" aria-live="polite"></p>
+      <div class="ce-file-row"><span data-ce="file-label"></span><div class="ce-file-actions"><button type="button" data-ce="export"></button><button type="button" data-ce="import"></button></div></div>
+      <input data-ce="file" type="file" accept=".json,application/json" hidden>
+      <p class="ce-file-message" data-ce="file-message" role="status" aria-live="polite" hidden></p>
+      <details><summary data-ce="save-summary"></summary><p class="ce-note" data-ce="save-help"></p></details>
       <details data-ce="periodic-details"><summary data-ce="periodic-summary"></summary><div class="ce-continuation" data-ce="continuation"><svg data-ce="continuation-svg" role="img"></svg></div><p class="ce-note" data-ce="boundary-note"></p></details>
       <details><summary data-ce="help-summary"></summary><p class="ce-note" data-ce="help"></p></details>
     </section>`;
   const find = name => root.querySelector(`[data-ce="${name}"]`);
   const snapshot = () => clone(state);
   function validateCount(count) { return Number.isInteger(count) && count >= 8 && count <= 1000 ? count : 200; }
-  function notify() {
+  function notify(force = false) {
     const curve = getValue(), signature = JSON.stringify(curve);
-    if (signature === lastNotified) return;
+    if (signature === lastNotified && !force) return;
     lastNotified = signature;
-    onChange(curve);
+    setFileMessage(null);
+    return onChange(curve);
   }
-  function commit(before, preserveCoordinates = false) {
-    if (JSON.stringify(before) === JSON.stringify(state)) return;
+  function commit(before, preserveCoordinates = false, forceNotify = false) {
+    if (JSON.stringify(before) === JSON.stringify(state) && !forceNotify) return;
     // Selection-only actions never create numerical history or notify the parent.
     const beforeCurve = JSON.stringify({ points: before.points, mode: before.mode, periodic: before.periodic });
     if (beforeCurve !== JSON.stringify(getValue())) {
       undo.push(before); if (undo.length > 60) undo.shift(); redo = [];
     }
-    render(preserveCoordinates); notify();
+    render(preserveCoordinates); return notify(forceNotify);
+  }
+  function setFileMessage(key, error = false) {
+    fileMessage = key ? { key, error } : null;
+    renderFileMessage();
+  }
+  function renderFileMessage() {
+    const messages = {
+      exported: ['Curve JSON downloaded. You can import it here next time.', '曲线 JSON 已下载，下次可在此导入。'],
+      imported: ['Curve imported. Both schemes restarted at t = 0.', '曲线已导入，两种格式已同时从 t = 0 重算。'],
+      pending: ['Curve imported. Enter a valid CFL to restart both schemes at t = 0.', '曲线已导入。请输入有效的 CFL，两种格式将同时从 t = 0 重算。'],
+      reading: ['Reading curve file…', '正在读取曲线文件…'],
+      json: ['Cannot import: this file is not valid JSON. Your current curve is unchanged.', '无法导入：文件不是有效的 JSON。当前曲线保持不变。'],
+      format: ['Cannot import: choose a version 1 curve JSON exported by this editor.', '无法导入：请选择本编辑器导出的第 1 版曲线 JSON 文件。'],
+      curve: ['Cannot import: curve points or settings are invalid. Your current curve is unchanged.', '无法导入：控制点或曲线设置无效。当前曲线保持不变。'],
+      size: ['Cannot import: the file exceeds 64 KB. Your current curve is unchanged.', '无法导入：文件超过 64 KB。当前曲线保持不变。'],
+      changed: ['Import cancelled because the curve changed while the file was being read. Import again to replace it.', '读取文件期间曲线发生了变化，已取消导入。如需替换，请重新导入。'],
+      read: ['The file could not be read. Please select it again. Your current curve is unchanged.', '无法读取文件，请重新选择。当前曲线保持不变。'],
+      download: ['The download could not be started. Please try again.', '无法开始下载，请重试。']
+    };
+    const message = find('file-message');
+    message.hidden = !fileMessage;
+    message.classList.toggle('ce-warning', !!fileMessage?.error);
+    message.textContent = fileMessage ? t(...messages[fileMessage.key]) : '';
+    find('import').disabled = importing;
+    find('file').disabled = importing;
   }
   function svgNode(tag, attributes, text) {
     const node = document.createElementNS('http://www.w3.org/2000/svg', tag);
@@ -138,6 +170,9 @@ export function mountCurveEditor(root, { value = DEFAULT_CURVE, onChange = () =>
       title: ['Initial-condition curve','初始条件曲线'], hint: ['Click to add · drag to reshape','点击加点 · 拖动调形'],
       'preset-label': ['Starting shape','起始波形'], quantity: ['Initial value u₀(x)','初始值 u₀(x)'],
       add: ['Add point','加点'], delete: ['Delete point','删除点'], undo: ['Undo','撤销'], redo: ['Redo','重做'],
+      export: ['Export curve','导出曲线'], import: ['Import curve','导入曲线'], 'file-label': ['Curve file · JSON','曲线文件 · JSON'],
+      'save-summary': ['Saving and restoring curves','保存与恢复曲线'],
+      'save-help': ['Export saves all control-point coordinates, interpolation mode and endpoint linking in a JSON file. Import restores the curve for both schemes and restarts at t = 0; it can be undone. Grid size, CFL and scheme selections stay as currently set. Keep the JSON to use the same curve on another device or in the offline version. This file contains the initial curve, not simulation results.', '导出的 JSON 保存全部控制点坐标、插值方式与首尾联动设置。导入后，两种格式使用同一曲线并从 t = 0 重算，可撤销导入。网格、CFL 与格式选择沿用当前设置。保存 JSON 后，可在其他设备或本地版中恢复曲线。文件保存初始曲线，不包含计算结果。'],
       'periodic-label': ['Link endpoints','首尾联动'], 'periodic-summary': ['Periodic connection preview','周期连接预览'],
       'help-summary': ['How to edit','操作说明'],
       help: ['Drag round points to reshape the curve; square points have fixed x coordinates. Use arrow keys for fine adjustments (Shift for larger steps), or Delete to remove an interior point. Smooth mode uses shape-preserving interpolation; linear mode creates corners. Changing the curve restarts both schemes at t = 0.', '拖动圆点调整波形；方点为横坐标固定的端点。选中点后用方向键微调（Shift 加大步幅），Delete 删除内点。平滑模式采用保形插值，折线用于构造尖角。修改曲线后，两种格式会同时从 t = 0 重算。']
@@ -152,6 +187,7 @@ export function mountCurveEditor(root, { value = DEFAULT_CURVE, onChange = () =>
     find('modes').setAttribute('aria-label', t('Interpolation mode','插值方式'));
     find('x').setAttribute('aria-label', t('Control point x coordinate','控制点横坐标x'));
     find('y').setAttribute('aria-label', t('Control point initial value','控制点初始值u0'));
+    find('file').setAttribute('aria-label', t('Import initial-condition JSON file','导入初始条件 JSON 文件'));
     find('svg').setAttribute('aria-label', t('Editable initial-condition curve. Horizontal axis: x; vertical axis: dimensionless u0.','可编辑的初始条件曲线，横轴为空间位置x，纵轴为无量纲初始值u0。'));
     find('continuation-svg').setAttribute('aria-label', t('Three periodic copies of the curve; dashed lines mark the domain seams.','初始条件向左右延拓三个周期，虚线标出区间接缝。'));
     render();
@@ -176,6 +212,7 @@ export function mountCurveEditor(root, { value = DEFAULT_CURVE, onChange = () =>
     find('boundary-note').textContent = state.periodic
       ? (state.mode === 'smooth' ? t('Smooth mode matches both endpoint values and slopes.','平滑模式同时匹配首尾高度与斜率。') : t('Endpoint values match; linear segments may have different slopes.','首尾高度相同，折线连接允许斜率跳变。'))
       : t('Endpoints are independent. A height difference produces a jump where the curve repeats periodically.','首尾可独立编辑；延拓到下一周期时，高度差会形成间断。');
+    renderFileMessage();
     draw();
   }
   function movePoint(index, x, y) {
@@ -231,6 +268,46 @@ export function mountCurveEditor(root, { value = DEFAULT_CURVE, onChange = () =>
     const before = snapshot(); state.points.splice(state.selected,1); state.selected = Math.min(state.selected,state.points.length-2); state.preset = 'custom'; commit(before);
     find('handles').children[state.selected]?.focus({preventScroll:true});
   }
+  find('export').addEventListener('click', () => {
+    let url;
+    try {
+      const blob = new Blob([serializeCurve(getValue())], { type: 'application/json' });
+      url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'initial-condition-' + new Date().toISOString().replace(/[:.]/g, '-') + '.json';
+      document.body.append(link); link.click(); link.remove();
+      setFileMessage('exported');
+    } catch { setFileMessage('download', true); }
+    finally { if (url) setTimeout(() => URL.revokeObjectURL(url), 1000); }
+  });
+  find('import').addEventListener('click', () => find('file').click());
+  find('file').addEventListener('change', async () => {
+    const file = find('file').files?.[0];
+    if (!file) return;
+    const sequence = ++importSequence, beforeRead = JSON.stringify(getValue());
+    importing = true; setFileMessage('reading');
+    try {
+      if (file.size > MAX_CURVE_FILE_BYTES) { setFileMessage('size', true); return; }
+      const text = await file.text();
+      if (sequence !== importSequence) return;
+      const curve = parseCurveFile(text);
+      if (JSON.stringify(getValue()) !== beforeRead) { setFileMessage('changed', true); return; }
+      // Apply only after the whole file is validated, as one undoable edit.
+      if (drag) endDrag({ pointerId: drag.pointerId });
+      const before = snapshot();
+      state = { ...state, ...curve, selected: Math.floor(curve.points.length / 2), preset: 'custom' };
+      const restarted = commit(before, false, true);
+      setFileMessage(restarted === false ? 'pending' : 'imported');
+    } catch (error) {
+      const code = ['json', 'format', 'curve', 'size'].includes(error?.code) ? error.code : 'read';
+      setFileMessage(code, true);
+    } finally {
+      if (sequence === importSequence) {
+        importing = false; find('file').value = ''; renderFileMessage();
+      }
+    }
+  });
   find('handles').addEventListener('click', event => {
     const button = event.target.closest('.ce-handle'); if (button) { state.selected = +button.dataset.index; render(); }
   });
@@ -282,6 +359,7 @@ export function mountCurveEditor(root, { value = DEFAULT_CURVE, onChange = () =>
   refreshLanguage();
   return {
     getValue,
+    simulationRestarted() { if (fileMessage?.key === 'pending') setFileMessage('imported'); },
     setSampleCount(count) { const next = validateCount(count); if (next !== gridCount) { gridCount = next; render(); } },
     refreshLanguage,
     cancelDrag

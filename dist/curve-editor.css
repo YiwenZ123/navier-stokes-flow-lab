@@ -68,3 +68,8 @@
 #adv-curve-editor button.ce-handle[aria-pressed="true"] { background: transparent; border: 0; color: var(--ce-ink); }
 #adv-curve-editor .ce-plot svg > :is(path, line, text, circle) { pointer-events: none; }
 #adv-curve-editor .ce-warning { color: var(--orange); }
+#adv-curve-editor .ce-file-row { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px 16px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--ce-line); }
+#adv-curve-editor .ce-file-row > span { font-size: 12px; color: var(--ce-muted); }
+#adv-curve-editor .ce-file-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+#adv-curve-editor .ce-file-message { margin-top: 10px; font-size: 12px; line-height: 1.5; }
+#adv-curve-editor [hidden] { display: none !important; }
