@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; script-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+  <title data-en="Navier–Stokes Flow Lab · Method comparison" data-zh="Navier–Stokes Flow Lab · 两种方法对比">Navier–Stokes Flow Lab · Method comparison</title>
+  <link rel="stylesheet" href="./guide.css?v=c2ba94d1a5a6">
+  <script defer src="./page-tabs.js"></script>
+  <script type="module" src="./i18n.js?v=14"></script>
+  <link rel="stylesheet" href="./compare-demo.css?v=ff65b32d21fc">
+  <link rel="stylesheet" href="./parameter-sidebar.css?v=6549589aa856">
+  <script type="module" src="./compare-demo.js?v=bd0435d05515"></script>
+</head>
+<body>
+  <header class="site-header page-width">
+    <h1><a href="./">Navier–Stokes Flow Lab</a></h1>
+    <nav class="method-nav" aria-label="Experiments" data-en-aria-label="Experiments" data-zh-aria-label="计算实验">
+      <a href="./" data-en="Home" data-zh="首页">Home</a>
+      <a href="./advection.html" data-en="1D advection" data-zh="一维对流">1D advection</a>
+      <div class="method-nav-group" role="group" aria-labelledby="navier-stokes-navigation-label">
+        <span id="navier-stokes-navigation-label" class="method-nav-group-label" data-en="Navier–Stokes" data-zh="Navier–Stokes">Navier–Stokes</span>
+        <div class="method-nav-group-links">
+          <a href="./explicit.html" data-en="Explicit stepping" data-zh="显式推进法">Explicit stepping</a>
+          <a href="./mac.html" data-en="Implicit MAC projection" data-zh="隐式 MAC 投影法">Implicit MAC projection</a>
+          <a href="./compare.html" aria-current="page" data-en="Method comparison" data-zh="两种方法对比">Method comparison</a>
+        </div>
+      </div>
+      <a href="./waves.html" data-en="Wave impact" data-zh="波浪冲击">Wave impact</a>
+    </nav>
+  </header>
+
+  <main class="page-width">
+    <nav class="section-tabs" aria-label="页面内容" data-section-tabs>
+      <a href="#comparison">结果对比</a>
+      <a href="#setup">算例与指标</a>
+    </nav>
+    <section id="comparison" class="study-section" aria-labelledby="comparison-title">
+      <h2 id="comparison-title">时间步长与稳定性</h2>
+      <details class="parameter-help intro"><summary aria-label="对比说明">对比说明</summary><div class="parameter-help-body">
+        <p>改变 Δt，观察两种方法在同一物理时刻的误差、扰动增长与离散散度。下方扫描同时比较多个步长。</p>
+      </div></details>
+      <div id="comparison-initial"></div>
+      <div id="comparison-demo"></div>
+      <noscript><p>启用 JavaScript 即可计算并查看对比结果。</p></noscript>
+    </section>
+
+    <section id="setup" class="study-section" aria-labelledby="setup-title">
+      <h2 id="setup-title">算例与指标</h2>
+      <p class="intro">两套方法使用同一种初始流场，在 [0, 2π) × [0, 2π) 的周期区域上推进。所选流场均有解析演化解，可逐层比较速度误差。</p>
+
+      <article class="formula">
+        <h3>当前初始流场：<span id="comparison-condition-label"></span></h3>
+        <p id="comparison-condition-description"></p>
+        <div class="condition-formula" id="comparison-condition-formula"></div>
+        <p>在「结果对比」中切换初始流场，这里的定义与结果同步更新。</p>
+      </article>
+
+      <article class="formula">
+        <h3>统一的计算条件</h3>
+        <p><span id="comparison-settings-grid"></span>，<span id="comparison-settings-time"></span>。密度 <var>ρ</var> = 1，运动黏度 <var>ν</var> = 0.05。背景流速为 (0.60, 0.55)，扰动由所选初始流场给定。</p>
+        <p id="comparison-settings-iterations"></p>
+        <p>每步的压力迭代都从零开始，可选择加权 Jacobi（权重 2/3）、Gauss–Seidel 或 SOR，以最大绝对残差 ≤ 10<sup>−4</sup> 为停止条件。周期压力方程的右端去掉空间平均值，压力取零均值。切换方法会同时重算当前结果与全部时间步长扫描。</p>
+      </article>
+
+      <article class="formula">
+        <h3>如何判断稳定性</h3>
+        <p>扰动是速度减去背景流速 (0.60, 0.55)。把每一时刻的扰动 RMS 除以初始扰动 RMS，可观察扰动是否被放大。均匀流的初始扰动为零，增长倍数不定义。</p>
+        <div class="equations"><math display="block"><mi>G</mi><mo>(</mo><mi>t</mi><mo>)</mo><mo>=</mo><mfrac><msqrt><mrow><mo>⟨</mo><msup><mrow><mo>(</mo><mi>u</mi><mo>−</mo><mi>U</mi><mo>)</mo></mrow><mn>2</mn></msup><mo>⟩</mo><mo>+</mo><mo>⟨</mo><msup><mrow><mo>(</mo><mi>v</mi><mo>−</mo><mi>V</mi><mo>)</mo></mrow><mn>2</mn></msup><mo>⟩</mo></mrow></msqrt><msub><mi>A</mi><mn>0</mn></msub></mfrac></math></div>
+        <p><var>A</var><sub>0</sub> 是各自网格上的初始扰动 RMS。本页以 2 倍作为“明显增长”提示，以 20 倍或非有限数作为停止阈值。这是便于观察的判据，不是一般稳定性定理。“未见明显增长”也不代表误差很小。</p>
+        <p>压力迭代或隐式预测达到迭代上限时，另行报告“迭代未收敛”。它与时间离散本身的不稳定不同。计算停止后保留已有曲线，后续时间不补造结果。</p>
+      </article>
+
+      <article class="formula">
+        <h3>CFL 与显式对流–扩散限制</h3>
+        <div class="equations"><math display="block"><mi>C</mi><mo>=</mo><mfrac><mrow><mi>Δ</mi><mi>t</mi></mrow><mi>h</mi></mfrac><mo>(</mo><munder><mo>max</mo><mrow><mi>i</mi><mo>,</mo><mi>j</mi></mrow></munder><mo>|</mo><mi>u</mi><mo>|</mo><mo>+</mo><munder><mo>max</mo><mrow><mi>i</mi><mo>,</mo><mi>j</mi></mrow></munder><mo>|</mo><mi>v</mi><mo>|</mo><mo>)</mo><mo>,</mo><mspace width="1em"/><mi>χ</mi><mo>=</mo><mi>C</mi><mo>+</mo><mfrac><mrow><mn>4</mn><mi>ν</mi><mi>Δ</mi><mi>t</mi></mrow><msup><mi>h</mi><mn>2</mn></msup></mfrac></math></div>
+        <p>对冻结速度的二维一阶迎风对流与中心差分扩散，χ ≤ 1 是显式更新系数非负的充分条件。这里用两个方向最大速度的和作为保守估计；超过 1 表示该充分条件不再满足，不意味着当前流场一定立即发散。</p>
+        <p>对比中的显式方法按速度正负选择迎风方向。两种方法的压力耦合与网格布置不同，完整稳定性还受这些因素影响，因此应同时观察扰动增长、误差和散度。</p>
+        <p>后向 Euler 对线性扩散允许更大的稳定步长，但稳定性与精度需要分别判断。本页的大步长计算可能产生较强的数值耗散或相位误差；非线性预测迭代也可能不收敛。不能把这一线性结论直接当作整套 Navier–Stokes 算法的无条件稳定保证。<a href="https://hplgit.github.io/fdm-book/doc/pub/diffu/html/._diffu-solarized001.html" target="_blank" rel="noopener noreferrer">参考：有限差分教材中的扩散时间推进分析</a>。</p>
+      </article>
+
+      <article class="formula">
+        <h3>速度均方根误差</h3>
+        <p>在各方法实际存放速度的位置与解析解比较。显式方法的两个分量都在单元中心，MAC 的两个分量分别在对应的单元面。下式的尖括号表示在对应网格点上取平均。</p>
+        <div class="equations">
+          <math display="block">
+            <msub><mi>e</mi><mtext>RMS</mtext></msub><mo>=</mo>
+            <msqrt><mrow>
+              <msub><mrow><mo>⟨</mo><msup><mrow><mo>(</mo><mi>u</mi><mo>−</mo><msub><mi>u</mi><mtext>解析</mtext></msub><mo>)</mo></mrow><mn>2</mn></msup><mo>⟩</mo></mrow><mi>u</mi></msub>
+              <mo>+</mo>
+              <msub><mrow><mo>⟨</mo><msup><mrow><mo>(</mo><mi>v</mi><mo>−</mo><msub><mi>v</mi><mtext>解析</mtext></msub><mo>)</mo></mrow><mn>2</mn></msup><mo>⟩</mo></mrow><mi>v</mi></msub>
+            </mrow></msqrt>
+          </math>
+        </div>
+        <p>速度误差综合反映了时间离散、网格布置和压力耦合的影响。</p>
+      </article>
+
+      <article class="formula">
+        <h3>最大离散散度与迭代量</h3>
+        <p>显式方法在单元中心用中心差分计算散度。其压力方程的五点拉普拉斯与中心差分散度和梯度的复合不同，所以压力方程收敛后，推进所得的速度仍可能有离散散度。</p>
+        <p>MAC 在单元中心计算相邻面通量之差。它的压力算子等于离散散度与梯度的复合，因此投影后最大离散散度由压力残差乘以 Δ<var>t</var>/<var>ρ</var> 给出，差别在舍入误差量级。</p>
+        <p>迭代量按当前时间步统计。两种方法都求解压力方程，隐式 MAC 还要迭代求预测速度。</p>
+      </article>
+    </section>
+  </main>
+  <footer class="site-footer page-width" aria-label="Source code and license" data-en-aria-label="Source code and license" data-zh-aria-label="源代码与许可协议">
+    <div class="site-footer-links">
+      <a href="https://github.com/YiwenZ123/navier-stokes-flow-lab" target="_blank" rel="noopener noreferrer" data-en="GitHub repository" data-zh="GitHub 仓库">GitHub repository</a>
+      <a href="./LICENSE.txt" target="_blank" rel="license noopener" data-en="MIT License" data-zh="MIT 协议">MIT License</a>
+      <span>© 2026 YiwenZ123</span>
+    </div>
+    <details class="parameter-help">
+      <summary data-en="License details" data-zh="协议说明">License details</summary>
+      <div class="parameter-help-body">
+        <p data-en="Project code is released under the MIT License. You may use, copy, modify and redistribute it, including commercially, provided the copyright and license notices are retained. The software is provided as is, without warranty." data-zh="项目代码采用 MIT 协议。保留版权与许可声明后，可使用、复制、修改和再分发，包括商业用途。软件按原样提供，不附带担保。">Project code is released under the MIT License. You may use, copy, modify and redistribute it, including commercially, provided the copyright and license notices are retained. The software is provided as is, without warranty.</p>
+        <p><span data-en="Third-party components retain their own licenses. " data-zh="第三方组件保留各自的许可协议。">Third-party components retain their own licenses. </span><a href="https://github.com/YiwenZ123/navier-stokes-flow-lab/blob/main/THIRD_PARTY_NOTICES.md" target="_blank" rel="noopener noreferrer" data-en="Third-party notices" data-zh="第三方许可声明">Third-party notices</a></p>
+      </div>
+    </details>
+  </footer>
+</body>
+</html>

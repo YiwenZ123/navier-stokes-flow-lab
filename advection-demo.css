@@ -1,0 +1,100 @@
+.advection-panel { padding: 14px 16px; display: grid; gap: 16px; }
+.adv-heading, .adv-buttons, .adv-playback, .adv-experiments, .adv-inspect-controls { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 12px; }
+.adv-heading { justify-content: space-between; }
+.adv-heading h2 { font-size: 20px; font-weight: 600; line-height: 1.4; }
+.adv-subtitle { color: var(--muted); margin-top: 4px; }
+:is(.advection-panel, .adv-inspect-controls) :is(button, select, input[type="number"]) { min-height: 36px; padding: 7px 12px; border: 1px solid var(--line); border-radius: 999px; color: var(--text); background: var(--paper); font: inherit; max-width: 100%; }
+:is(.advection-panel, .adv-inspect-controls) button { cursor: pointer; }
+:is(.advection-panel, .adv-inspect-controls) button:disabled { cursor: default; opacity: .45; }
+:is(.advection-panel, .adv-inspect-controls) :is(button, select, input):focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+.advection-panel .adv-primary { color: var(--primary-text); background: var(--primary-bg); border-color: var(--primary-bg); }
+.adv-equation { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 20px; padding: 12px 0; border-block: 1px solid var(--line); font: 18px/1.6 "Cambria Math", serif; }
+.adv-equation span { color: var(--muted); font-size: 16px; }
+.adv-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 20px; }
+.adv-controls label { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-width: 0; }
+.adv-controls select { min-width: 0; }
+.adv-controls input { width: 92px; }
+.advection-panel.parameter-host { padding-inline:0; }
+.advection-panel .parameter-workspace { --parameter-width:340px; }
+.advection-panel .parameter-stage { display:grid; gap:16px; }
+.parameter-sidebar :is(.adv-controls,.adv-schemes) { grid-template-columns:minmax(0,1fr); }
+.parameter-sidebar .adv-controls label { display:grid; grid-template-columns:minmax(0,1fr); justify-content:stretch; gap:6px; }
+.parameter-sidebar .adv-controls :is(select,input) { width:100%; }
+.parameter-sidebar .adv-sidebar-playback { display:grid; gap:14px; }
+.parameter-sidebar .adv-sidebar-playback label { display:grid; gap:6px; }
+.parameter-sidebar .adv-sidebar-playback select { width:100%; }
+.parameter-sidebar .adv-scheme { padding-left:10px; }
+.parameter-sidebar .adv-experiments > span { flex-basis:100%; }
+.parameter-sidebar #adv-curve-editor .ce-editor { padding:12px 8px; }
+.parameter-sidebar #adv-curve-editor .ce-plot { height:240px; }
+.parameter-sidebar #adv-curve-editor .ce-file-row { gap:8px; }
+.parameter-sidebar #adv-curve-editor .ce-file-actions { gap:6px; }
+.parameter-sidebar #adv-curve-editor .ce-file-actions button { padding-inline:9px; font-size:12px; }
+.parameter-sidebar #adv-curve-editor .ce-options { align-items:flex-start; flex-direction:column; }
+.parameter-sidebar .adv-inspect-controls { align-items:stretch; flex-direction:column; }
+.parameter-sidebar .adv-inspect-controls label { display:grid; gap:6px; }
+.parameter-sidebar .adv-inspect-controls :is(select,input) { width:100%; }
+.adv-inspect-actions { margin-bottom:18px; }
+.adv-inspect-actions button { min-height:36px; padding:7px 12px; border:1px solid var(--line); border-radius:999px; color:var(--text); background:var(--paper); font:inherit; cursor:pointer; }
+#flow.parameter-host > h2 { margin-bottom:16px; }
+.adv-parameters { font-variant-numeric: tabular-nums; font-size: 13px; }
+.adv-custom-panel > summary { width: fit-content; cursor: pointer; padding: 4px 0; }
+.adv-custom-panel > summary:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+.adv-custom-panel > .parameter-help { margin-top: 10px; }
+.adv-schemes { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.adv-scheme { min-width: 0; padding-left: 12px; border-left: 3px solid var(--blue); }
+.adv-scheme.adv-b { border-left-color: var(--orange); }
+.adv-scheme label { display: block; margin-bottom: 5px; font-size: 12px; color: var(--muted); }
+.adv-scheme select { width: 100%; }
+.adv-scheme p { margin-top: 6px; font-size: 12px; line-height: 1.5; }
+.adv-scheme p[data-caution="true"] { color: var(--orange); }
+.adv-experiments { font-size: 12px; gap: 6px; }
+.adv-experiments > span { color: var(--muted); margin-right: 4px; }
+.adv-experiments button { min-height: 30px; padding: 3px 10px; }
+.adv-figure { margin: 0; min-width: 0; }
+.adv-figure figcaption { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 16px; font-size: 12px; }
+.adv-legend { display: flex; flex-wrap: wrap; gap: 6px 16px; }
+.adv-legend span { display: inline-flex; gap: 5px; align-items: center; }
+.adv-legend i { display: inline-block; width: 18px; border-top: 2px solid var(--blue); }
+.adv-legend .adv-line-b { border-color: var(--orange); }
+.adv-legend .adv-line-exact { border-color: var(--text); border-top-style: dashed; }
+#adv-plot { display: block; width: 100%; height: 300px; margin-top: 8px; }
+.adv-chart-note { color: var(--muted); font-size: 12px; min-height: 19px; }
+.adv-playback { font-size: 12px; }
+.adv-playback label, .adv-inspect-controls label { display: inline-flex; align-items: center; gap: 8px; }
+.adv-playback select { min-height: 32px; padding: 5px 9px; }
+.adv-status { min-height: 22px; font-size: 13px; }
+.adv-table-wrap { overflow-x: auto; }
+.adv-results { width: 100%; border-collapse: collapse; font-size: 12px; font-variant-numeric: tabular-nums; }
+.adv-results :is(th, td) { text-align: right; padding: 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+.adv-results :is(th, td):first-child { text-align: left; padding-left: 0; }
+.adv-results th { font-weight: 400; color: var(--muted); }
+.adv-results td strong { display: block; font-size: 11px; font-weight: 400; color: var(--orange); }
+.adv-sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.adv-inspect-controls { margin: 20px 0; font-size: 13px; }
+.adv-inspect-controls input { width: 84px; }
+.adv-stencil { padding: 16px 0 20px; }
+.adv-stencil h3 { font-size: 16px; font-weight: 600; }
+.adv-stencil-grid { display: grid; grid-template-columns: repeat(5,minmax(0,1fr)); gap: 5px; margin: 12px 0; }
+.adv-stencil-grid div { padding: 10px 4px; text-align: center; background: var(--paper); border: 1px solid var(--line); border-radius: 6px; font-size: 12px; }
+.adv-stencil-grid div[data-center="true"] { border-color: var(--blue); }
+.adv-stencil-grid strong { display: block; font-weight: 500; font-variant-numeric: tabular-nums; }
+.adv-stencil p { margin-top: 8px; font-size: 13px; }
+.adv-formula-text { display: block; overflow-x: auto; white-space: pre; padding: 14px; margin: 10px 0; background: var(--paper); border-radius: 6px; font: 14px/1.9 "Cambria Math", "STIX Two Math", ui-monospace, monospace; color: var(--text); }
+.adv-formula-meta { display: flex; flex-wrap: wrap; gap: 4px 18px; font-size: 12px; margin-top: 8px; }
+.adv-flow { margin-top: 20px; }
+.adv-flow > li { grid-template-columns: 1fr; }
+@media (max-width: 600px) {
+  .adv-controls { grid-template-columns: 1fr; }
+}
+@media (max-width: 420px) {
+  .advection-panel { padding: 8px 0; gap: 14px; }
+  .adv-heading { align-items: flex-start; gap: 12px; }
+  .adv-heading h2 { font-size: 18px; }
+  .adv-schemes { gap: 10px; }
+  .adv-scheme { padding-left: 8px; }
+  .adv-scheme select { font-size: 12px; padding-inline: 7px; }
+  #adv-plot { height: 250px; }
+  .adv-stencil-grid { gap: 3px; }
+  .adv-stencil-grid div { font-size: 10px; padding-inline: 1px; }
+}

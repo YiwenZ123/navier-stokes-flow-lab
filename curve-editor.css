@@ -1,0 +1,75 @@
+#adv-curve-editor { --ce-bg: var(--surface); --ce-paper: var(--paper); --ce-ink: var(--text); --ce-muted: var(--muted); --ce-line: var(--line); --ce-blue: var(--blue); --ce-active: var(--primary-bg); --ce-on-active: var(--primary-text); --ce-fill: color-mix(in srgb, var(--blue) 5%, transparent); min-width: 0; font: inherit; color: var(--ce-ink); }
+#adv-curve-editor * { box-sizing: border-box; }
+#adv-curve-editor .ce-editor { max-width: 800px; margin: auto; padding: 18px; background: var(--ce-bg); border: 1px solid var(--ce-line); border-radius: 12px; }
+#adv-curve-editor h3, #adv-curve-editor p { margin: 0; }
+#adv-curve-editor h3 { font-size: 17px; line-height: 1.4; font-weight: 600; }
+#adv-curve-editor .ce-heading { padding-right: 0; }
+#adv-curve-editor .ce-heading p { margin-top: 4px; font-size: 13px; color: var(--ce-muted); }
+#adv-curve-editor .ce-toolbar { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px 16px; margin: 20px 0 14px; }
+#adv-curve-editor :is(button,select,input) { font: inherit; color: var(--ce-ink); }
+#adv-curve-editor :is(button,select,input[type="number"]) { border: 1px solid var(--ce-line); background: var(--ce-paper); border-radius: 999px; min-height: 36px; padding: 6px 12px; }
+#adv-curve-editor button { cursor: pointer; }
+#adv-curve-editor button:disabled { opacity: .4; cursor: default; }
+#adv-curve-editor :is(button,input,select):focus-visible { outline: 2px solid var(--ce-blue); outline-offset: 3px; }
+#adv-curve-editor button[aria-pressed="true"] { background: var(--ce-active); color: var(--ce-on-active); border-color: var(--ce-active); }
+#adv-curve-editor .ce-field, #adv-curve-editor .ce-group, #adv-curve-editor .ce-ops { display: inline-flex; align-items: center; flex-wrap: wrap; gap: 6px 10px; }
+#adv-curve-editor .ce-field > span { color: var(--ce-muted); font-size: 12px; }
+#adv-curve-editor .ce-group { gap: 5px; }
+#adv-curve-editor .ce-group button { min-width: 60px; }
+#adv-curve-editor .ce-caption { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px 16px; font-size: 12px; margin-bottom: 4px; }
+#adv-curve-editor .ce-caption > span:last-child { color: var(--ce-muted); }
+#adv-curve-editor .ce-plot { position: relative; width: 100%; height: 310px; touch-action: none; user-select: none; }
+#adv-curve-editor .ce-plot svg, #adv-curve-editor .ce-continuation svg { display: block; width: 100%; height: 100%; overflow: visible; }
+#adv-curve-editor .ce-plot svg { cursor: crosshair; }
+#adv-curve-editor .ce-handles { position: absolute; inset: 0; pointer-events: none; }
+#adv-curve-editor button.ce-handle { position: absolute; transform: translate(-50%,-50%); min-height: 0; width: 26px; height: 26px; padding: 0; border: 0; background: transparent; border-radius: 50%; touch-action: none; pointer-events: auto; cursor: grab; }
+#adv-curve-editor button.ce-handle:active { cursor: grabbing; }
+#adv-curve-editor button.ce-handle::before { content: ''; display: block; width: 9px; height: 9px; margin: auto; background: var(--ce-bg); border: 1.7px solid var(--ce-blue); border-radius: 50%; }
+#adv-curve-editor button.ce-handle[data-selected="true"]::before { width: 11px; height: 11px; background: var(--ce-blue); }
+#adv-curve-editor button.ce-handle[data-endpoint="true"]::before { border-radius: 2px; }
+#adv-curve-editor .ce-edit-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px 16px; padding-top: 14px; border-top: 1px solid var(--ce-line); }
+#adv-curve-editor .ce-coordinates { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+#adv-curve-editor .ce-coordinates label { display: inline-flex; align-items: center; gap: 7px; }
+#adv-curve-editor input[type="number"] { width: 86px; font-variant-numeric: tabular-nums; padding-right: 5px; }
+#adv-curve-editor input:disabled { opacity: .55; }
+#adv-curve-editor .ce-point-name { font-size: 12px; min-width: 100px; }
+#adv-curve-editor .ce-options { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px 18px; margin-top: 16px; font-size: 12px; }
+#adv-curve-editor .ce-check { display: inline-flex; align-items: center; gap: 7px; cursor: pointer; }
+#adv-curve-editor .ce-check input { accent-color: var(--ce-blue); width: 15px; height: 15px; margin: 0; }
+#adv-curve-editor .ce-status { font-size: 12px; color: var(--ce-muted); margin-top: 12px; min-height: 20px; font-variant-numeric: tabular-nums; }
+#adv-curve-editor details { color: var(--ce-muted); font-size: 12px; margin-top: 12px; }
+#adv-curve-editor summary { cursor: pointer; width: fit-content; }
+#adv-curve-editor .ce-continuation { height: 100px; margin-top: 12px; }
+#adv-curve-editor .ce-grid { stroke: var(--ce-line); stroke-width: 1; }
+#adv-curve-editor .ce-text { fill: var(--ce-muted); font: 11px system-ui,sans-serif; }
+#adv-curve-editor .ce-path { stroke: var(--ce-blue); stroke-width: 2.2; fill: none; }
+#adv-curve-editor .ce-area { fill: var(--ce-fill); stroke: none; pointer-events: none; }
+#adv-curve-editor .ce-cross { stroke: var(--ce-blue); stroke-width: 1; opacity: .35; stroke-dasharray: 3 4; pointer-events: none; }
+#adv-curve-editor .ce-sample { fill: var(--ce-blue); opacity: .5; pointer-events: none; }
+#adv-curve-editor .ce-repeated { stroke: var(--ce-muted); stroke-width: 1.5; fill: none; opacity: .6; }
+#adv-curve-editor .ce-note { color: var(--ce-muted); padding-top: 5px; }
+#adv-curve-editor .ce-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+@media (max-width: 520px) {
+  #adv-curve-editor .ce-editor { padding: 16px 12px; }
+  #adv-curve-editor h3 { font-size: 16px; }
+  #adv-curve-editor .ce-plot { height: 270px; }
+  #adv-curve-editor .ce-point-name { flex-basis: 100%; }
+  #adv-curve-editor .ce-edit-row { gap: 12px; }
+  #adv-curve-editor .ce-ops { width: 100%; }
+  #adv-curve-editor .ce-toolbar { margin-top: 16px; }
+}
+@media (pointer: coarse) {
+  #adv-curve-editor :is(button,select,input[type="number"]) { min-height: 44px; }
+  #adv-curve-editor button.ce-handle { width: 38px; height: 38px; min-height: 38px; }
+  #adv-curve-editor .ce-check { min-height: 38px; }
+  #adv-curve-editor input[type="number"] { font-size: 16px; }
+}
+
+#adv-curve-editor button.ce-handle[aria-pressed="true"] { background: transparent; border: 0; color: var(--ce-ink); }
+#adv-curve-editor .ce-plot svg > :is(path, line, text, circle) { pointer-events: none; }
+#adv-curve-editor .ce-warning { color: var(--orange); }
+#adv-curve-editor .ce-file-row { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px 16px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--ce-line); }
+#adv-curve-editor .ce-file-row > span { font-size: 12px; color: var(--ce-muted); }
+#adv-curve-editor .ce-file-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+#adv-curve-editor .ce-file-message { margin-top: 10px; font-size: 12px; line-height: 1.5; }
+#adv-curve-editor [hidden] { display: none !important; }
