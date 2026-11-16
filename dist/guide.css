@@ -124,3 +124,11 @@ html[lang="en"] .iteration-row select[data-iteration$="Method"] { width: 230px; 
   .section-tabs a { font-size: 13px; }
   .method-nav a { flex: 1 0 auto; white-space: nowrap; font-size: 12px; padding-inline: 8px; }
 }
+
+/* Shared source and license links, outside the animation sandboxes. */
+.site-footer { padding-block: 18px 28px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
+.site-footer-links { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 18px; }
+.site-footer-links a { color: var(--text); }
+.site-footer > .parameter-help { margin-top: 10px; font-size: 13px; }
+.site-footer .parameter-help-body { max-width: 70ch; }
+.site-footer .parameter-help-body p + p { margin-top: 8px; }
