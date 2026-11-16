@@ -1,0 +1,3609 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data: https://persistent.oaistatic.com/plugins/visualize/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src 'unsafe-inline' blob: data: https://persistent.oaistatic.com/plugins/visualize/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://persistent.oaistatic.com/plugins/visualize/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://persistent.oaistatic.com/plugins/visualize/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://persistent.oaistatic.com/plugins/visualize/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<title>explicit-ns-animation.html</title>
+<style>:root{color-scheme:light dark;background:light-dark(rgb(255 255 255), rgb(24 24 24))}html,body{margin:0}body{box-sizing:border-box;padding:1rem;background:inherit}iframe{display:block;width:100%;max-width:736px;height:calc(100vh - 2rem);margin:0 auto;border:0}</style>
+
+</head>
+<body>
+<iframe id="codex-visualization" sandbox="allow-scripts" scrolling="no" referrerpolicy="no-referrer" title="explicit-ns-animation.html" data-srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;meta name=&quot;referrer&quot; content=&quot;no-referrer&quot;&gt;
+&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;default-src &#x27;none&#x27;; script-src &#x27;unsafe-inline&#x27; &#x27;unsafe-eval&#x27; &#x27;wasm-unsafe-eval&#x27; blob: data: https://persistent.oaistatic.com/plugins/visualize/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src &#x27;unsafe-inline&#x27; blob: data: https://persistent.oaistatic.com/plugins/visualize/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://persistent.oaistatic.com/plugins/visualize/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://persistent.oaistatic.com/plugins/visualize/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://persistent.oaistatic.com/plugins/visualize/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src &#x27;none&#x27;; object-src &#x27;none&#x27;; base-uri &#x27;none&#x27;; form-action &#x27;none&#x27;&quot;&gt;
+&lt;title&gt;explicit-ns-animation.html&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;script type=&quot;application/json&quot; id=&quot;codex-visualization-widget-state&quot;&gt;__CODEX_VISUALIZATION_WIDGET_STATE__&lt;/script&gt;
+&lt;script&gt;(() =&gt; {
+  const root = document.documentElement;
+  const mediaQuery = globalThis.matchMedia(&quot;(prefers-color-scheme: dark)&quot;);
+  const apply = Reflect.apply;
+  const isArray = Array.isArray;
+  const hasOwn = Object.hasOwn;
+  const parentWindow = globalThis.parent;
+  const stringify = JSON.stringify;
+  const parse = JSON.parse;
+  const encode = TextEncoder.prototype.encode.bind(new TextEncoder());
+  const initialStateElement = document.getElementById(
+    &quot;codex-visualization-widget-state&quot;,
+  );
+  const initialGlobals = parse(initialStateElement?.textContent ?? &quot;{}&quot;);
+  initialStateElement?.remove();
+  /** @type {Record&lt;string, unknown&gt; | null} */
+  let state = initialGlobals.widgetState ?? null;
+  const statePersistence = initialGlobals.statePersistence ?? &quot;none&quot;;
+  let nextStateRequestId = 0;
+  /** @type {Map&lt;number, { resolve: () =&gt; void; reject: (error: Error) =&gt; void; timeout: ReturnType&lt;typeof globalThis.setTimeout&gt;; serializedState: string }&gt;} */
+  const pendingStateWrites = new Map();
+  const persistenceError = () =&gt;
+    Object.assign(
+      new Error(&quot;The host could not persist the widget state update&quot;),
+      {
+        code: -32000,
+        data: { code: &quot;widget_state_persistence_failed&quot;, retryable: false },
+      },
+    );
+  /**
+   * @param {object} prototype
+   * @param {string} property
+   */
+  const getPrototypeGetter = (prototype, property) =&gt; {
+    // oxlint-disable-next-line typescript/unbound-method -- invoked through captured Reflect.apply
+    const getter = Object.getOwnPropertyDescriptor(prototype, property)?.get;
+    if (getter == null) {
+      throw new Error(`Missing ${property} getter`);
+    }
+    return getter;
+  };
+  const getMessageData = getPrototypeGetter(MessageEvent.prototype, &quot;data&quot;);
+  const getMessagePorts = getPrototypeGetter(MessageEvent.prototype, &quot;ports&quot;);
+  const getMessageSource = getPrototypeGetter(MessageEvent.prototype, &quot;source&quot;);
+  // oxlint-disable-next-line typescript/unbound-method -- captured before the untrusted fragment runs
+  const addHostMessageListener = MessagePort.prototype.addEventListener;
+  // oxlint-disable-next-line typescript/unbound-method -- captured before the untrusted fragment runs
+  const postHostMessage = MessagePort.prototype.postMessage;
+  // oxlint-disable-next-line typescript/unbound-method -- captured before the untrusted fragment runs
+  const startHostPort = MessagePort.prototype.start;
+  // oxlint-disable-next-line typescript/unbound-method -- captured before the untrusted fragment runs
+  const stopMessagePropagation = Event.prototype.stopImmediatePropagation;
+  /** @type {MessagePort | null} */
+  let hostPort = null;
+  const postToHost = (type, payload) =&gt; {
+    if (hostPort != null) {
+      apply(postHostMessage, hostPort, [{ type, ...payload }]);
+    }
+  };
+  const openExternal = ({ href }) =&gt; {
+    if (globalThis.navigator.userActivation?.isActive === true) {
+      postToHost(&quot;open-external&quot;, { href });
+    }
+  };
+  const sendFollowUpMessage = ({ context, prompt, title }) =&gt; {
+    if (globalThis.navigator.userActivation?.isActive === true) {
+      postToHost(&quot;follow-up&quot;, { context, prompt, title });
+    }
+    return Promise.resolve();
+  };
+  /**
+   * @param {Record&lt;string, unknown&gt; | ((previous: Record&lt;string, unknown&gt; | null) =&gt; Record&lt;string, unknown&gt;)} next
+   * @returns {Promise&lt;void&gt;}
+   */
+  const setWidgetState = async (next) =&gt; {
+    const nextState = typeof next === &quot;function&quot; ? next(state) : next;
+    if (
+      nextState == null ||
+      typeof nextState !== &quot;object&quot; ||
+      isArray(nextState)
+    ) {
+      throw new TypeError(&quot;Widget state must be a JSON object&quot;);
+    }
+    const inputState = stringify(
+      nextState,
+      (_key, /** @type {unknown} */ value) =&gt; {
+        if (
+          typeof value === &quot;undefined&quot; ||
+          typeof value === &quot;function&quot; ||
+          typeof value === &quot;symbol&quot; ||
+          (typeof value === &quot;number&quot; &amp;&amp; !Number.isFinite(value))
+        ) {
+          throw new TypeError(&quot;Widget state must be a JSON object&quot;);
+        }
+        return value;
+      },
+    );
+    const parsedState = parse(inputState);
+    if (
+      parsedState == null ||
+      typeof parsedState !== &quot;object&quot; ||
+      isArray(parsedState)
+    ) {
+      throw new TypeError(&quot;Widget state must be a JSON object&quot;);
+    }
+    const storedState = {
+      modelContent: null,
+      privateContent: null,
+      ...parsedState,
+    };
+    const serializedState = stringify(storedState);
+    if (encode(serializedState).length &gt; 16 * 1024) {
+      throw new TypeError(
+        &quot;Widget state must be a JSON object of at most 16 KiB&quot;,
+      );
+    }
+    if (
+      hasOwn(storedState, &quot;imageIds&quot;) &amp;&amp;
+      (!isArray(storedState.imageIds) ||
+        storedState.imageIds.some(
+          (/** @type {unknown} */ id) =&gt; typeof id !== &quot;string&quot;,
+        ))
+    ) {
+      throw new TypeError(&quot;Widget state imageIds must be an array of strings&quot;);
+    }
+    if (storedState.imageIds?.length &gt; 0) {
+      throw Object.assign(
+        new TypeError(&quot;Visualization state does not support image attachments&quot;),
+        { code: -32602, data: { code: &quot;images_unsupported&quot; } },
+      );
+    }
+    state = storedState;
+    globalThis.openai.widgetState = state;
+    globalThis.dispatchEvent(
+      new CustomEvent(&quot;openai:set_globals&quot;, {
+        detail: { globals: { widgetState: state } },
+      }),
+    );
+    if (statePersistence === &quot;none&quot;) {
+      throw persistenceError();
+    }
+    const id = ++nextStateRequestId;
+    return new Promise((resolve, reject) =&gt; {
+      const timeout = globalThis.setTimeout(() =&gt; {
+        pendingStateWrites.delete(id);
+        reject(persistenceError());
+      }, 30_000);
+      pendingStateWrites.set(id, { resolve, reject, timeout, serializedState });
+      postToHost(&quot;widget-state-write&quot;, { id, state: serializedState });
+    });
+  };
+  const bindingElement = document.getElementById(&quot;codex-visualization-bindings&quot;);
+  const mockElement = document.getElementById(&quot;codex-connector-mocks&quot;);
+  const connectorGlobals = {};
+  if (bindingElement != null || mockElement != null) {
+    const bindings = parse(bindingElement?.textContent ?? &quot;{}&quot;);
+    bindingElement?.remove();
+    const values = new Map();
+    for (const [name, binding] of Object.entries(bindings)) {
+      if (binding.type === &quot;json&quot;) values.set(name, structuredClone(binding.value));
+    }
+    const pending = [bindings];
+    while (pending.length) {
+      const object = pending.pop();
+      Object.freeze(object);
+      for (const child of Object.values(object)) {
+        if (child !== null &amp;&amp; typeof child === &quot;object&quot;) pending.push(child);
+      }
+    }
+    if (mockElement != null) {
+      const mocks = Object.entries(parse(mockElement.textContent));
+      mockElement.remove();
+      connectorGlobals.visualizationData = {
+        updates: mocks.map(([name, value]) =&gt; ({
+          name,
+          revision: 1,
+          state: &quot;ready&quot;,
+          value: { type: &quot;json&quot;, value },
+        })),
+      };
+      for (const [name, value] of mocks) values.set(name, value);
+    }
+    connectorGlobals.visualization = {
+      get bindings() {
+        return bindings;
+      },
+      /** @param {string} name @param {(value: unknown) =&gt; void} callback */
+      onData(name, callback) {
+        if (typeof callback !== &quot;function&quot;) {
+          throw new TypeError(&quot;onData requires a callback&quot;);
+        }
+        try {
+          callback(values.get(name));
+        } catch (error) {
+          // oxlint-disable-next-line no-console -- Keep authored callback failures local.
+          console.error(&quot;Live visualization data callback failed&quot;, error);
+        }
+        // A static preview delivers the current value once per subscription.
+        return () =&gt; {};
+      },
+    };
+  }
+  const syncTheme = () =&gt; {
+    const theme = mediaQuery.matches ? &quot;dark&quot; : &quot;light&quot;;
+    root.dataset.theme = theme;
+    globalThis.openai = {
+      ...globalThis.openai,
+      ...connectorGlobals,
+      openExternal,
+      sendFollowUpMessage,
+      setWidgetState,
+      theme,
+      visualizationStyleVariables: {},
+      visualizationTheme: theme,
+      widgetState: state,
+      statePersistence,
+      stateModelContext: &quot;none&quot;,
+    };
+    globalThis.dispatchEvent(
+      new CustomEvent(&quot;openai:set_globals&quot;, {
+        detail: { globals: globalThis.openai },
+      }),
+    );
+  };
+  const sendHeight = () =&gt; {
+    postToHost(&quot;height&quot;, {
+      height: Math.ceil(
+        Math.max(
+          document.body.scrollHeight,
+          document.body.getBoundingClientRect().height,
+        ),
+      ),
+    });
+  };
+
+  globalThis.addEventListener(
+    &quot;message&quot;,
+    (event) =&gt; {
+      const data = apply(getMessageData, event, []);
+      const ports = apply(getMessagePorts, event, []);
+      const source = apply(getMessageSource, event, []);
+      if (
+        hostPort != null ||
+        source !== parentWindow ||
+        typeof data !== &quot;object&quot; ||
+        data?.type !== &quot;codex-visualization-initialize&quot; ||
+        !isArray(ports) ||
+        ports.length !== 1
+      ) {
+        return;
+      }
+      apply(stopMessagePropagation, event, []);
+      const nextHostPort = ports[0];
+      try {
+        apply(addHostMessageListener, nextHostPort, [
+          &quot;message&quot;,
+          (event) =&gt; {
+            const data = apply(getMessageData, event, []);
+            if (typeof data === &quot;object&quot; &amp;&amp; data?.type === &quot;measure&quot;) {
+              sendHeight();
+            } else if (
+              typeof data === &quot;object&quot; &amp;&amp;
+              data?.type === &quot;widget-state-result&quot;
+            ) {
+              /** @type {unknown} */
+              const id = data.id;
+              if (typeof id !== &quot;number&quot;) {
+                return;
+              }
+              const pending = pendingStateWrites.get(id);
+              if (pending != null) {
+                pendingStateWrites.delete(id);
+                globalThis.clearTimeout(pending.timeout);
+                if (data.ok === true) {
+                  pending.resolve();
+                } else {
+                  pending.reject(persistenceError());
+                }
+              }
+            }
+          },
+        ]);
+        apply(startHostPort, nextHostPort, []);
+      } catch {
+        return;
+      }
+      hostPort = nextHostPort;
+      for (const [id, { serializedState }] of pendingStateWrites) {
+        postToHost(&quot;widget-state-write&quot;, { id, state: serializedState });
+      }
+      sendHeight();
+    },
+    { capture: true },
+  );
+  document.currentScript?.remove();
+  mediaQuery.addEventListener(&quot;change&quot;, syncTheme);
+  globalThis.addEventListener(&quot;click&quot;, (event) =&gt; {
+    if (event.defaultPrevented) {
+      return;
+    }
+    let element = null;
+    if (event.target instanceof globalThis.Element) {
+      element = event.target;
+    } else if (event.target instanceof globalThis.Node) {
+      element = event.target.parentElement;
+    }
+    const link = element?.closest(&quot;a[href]&quot;);
+    const href = link?.getAttribute(&quot;href&quot;);
+    if (href == null) {
+      return;
+    }
+    if (href.startsWith(&quot;#&quot;)) {
+      let id;
+      try {
+        id = decodeURIComponent(href.slice(1));
+      } catch {
+        return;
+      }
+      const target = id.length === 0 ? root : document.getElementById(id);
+      if (
+        target == null ||
+        globalThis.navigator.userActivation?.isActive !== true
+      ) {
+        return;
+      }
+      event.preventDefault();
+      postToHost(&quot;scroll-to&quot;, {
+        top: target.getBoundingClientRect().top + globalThis.scrollY,
+      });
+      return;
+    }
+    event.preventDefault();
+    openExternal({ href });
+  });
+  new ResizeObserver(sendHeight).observe(document.body);
+  syncTheme();
+})();
+&lt;/script&gt;
+&lt;style&gt;:root {
+  color-scheme: light dark;
+  background-color: var(
+    --background,
+    var(--color-background-primary, light-dark(rgb(255 255 255), rgb(24 24 24)))
+  ) !important;
+
+  /* Agent-facing contract; keep in sync with SKILL.md. */
+  --background: var(
+    --color-background-primary,
+    light-dark(rgb(255 255 255), rgb(24 24 24))
+  );
+  --foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --card: color-mix(in oklab, var(--foreground) 5%, var(--background));
+  --card-foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --popover: var(
+    --color-background-secondary,
+    light-dark(rgb(255 255 255), rgb(45 45 45))
+  );
+  --popover-foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --primary: var(
+    --color-text-info,
+    light-dark(rgb(51 156 255), rgb(131 195 255))
+  );
+  --primary-foreground: var(
+    --color-text-inverse,
+    light-dark(rgb(255 255 255), rgb(13 13 13))
+  );
+  --secondary: var(
+    --color-background-secondary,
+    light-dark(rgb(255 255 255 / 96%), rgb(54 54 54 / 96%))
+  );
+  --secondary-foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --muted: color-mix(in srgb, var(--foreground) 10%, transparent);
+  --muted-foreground: var(
+    --color-text-secondary,
+    light-dark(rgb(26 28 31 / 49.4%), rgb(255 255 255 / 49.8%))
+  );
+  --accent: var(
+    --color-background-info,
+    light-dark(rgb(229 242 255), rgb(13 39 63))
+  );
+  --accent-foreground: var(
+    --color-text-info,
+    light-dark(rgb(51 156 255), rgb(131 195 255))
+  );
+  --destructive: var(
+    --color-text-warning,
+    light-dark(rgb(226 85 7), rgb(255 133 73))
+  );
+  --border: var(
+    --color-border-secondary,
+    light-dark(rgb(26 28 31 / 8%), rgb(255 255 255 / 8.2%))
+  );
+  --input: var(
+    --color-border-primary,
+    light-dark(
+      rgb(26 28 31 / 11.8%),
+      color-mix(in oklab, rgb(0 0 0) 10%, transparent)
+    )
+  );
+  --ring: var(
+    --color-ring-primary,
+    light-dark(rgb(51 156 255), rgb(131 195 255 / 76%))
+  );
+  --font-size-base: var(--font-text-md-size, 16px);
+  --blue: light-dark(rgb(51 156 255), rgb(51 156 255));
+  --orange: light-dark(rgb(226 85 7), rgb(251 106 34));
+  --green: light-dark(rgb(0 162 64), rgb(64 201 119));
+  --red: light-dark(rgb(224 46 42), rgb(255 103 100));
+  --purple: light-dark(rgb(146 79 247), rgb(173 123 249));
+  --yellow: light-dark(rgb(255 195 0), rgb(255 210 64));
+  --viz-series-1: var(--primary);
+  --viz-series-2: light-dark(rgb(243 136 59), rgb(245 154 86));
+  --viz-series-3: light-dark(rgb(93 201 119), rgb(116 213 139));
+  --viz-series-4: light-dark(rgb(235 119 177), rgb(240 143 192));
+  --viz-series-5: light-dark(rgb(155 121 236), rgb(170 145 239));
+  --viz-series-6: light-dark(rgb(58 185 177), rgb(90 203 194));
+
+  /* Internal implementation variables; not part of the agent contract. */
+  --font-sans:
+    -apple-system-body, ui-sans-serif, -apple-system, system-ui, &quot;Segoe UI&quot;,
+    Helvetica, &quot;Apple Color Emoji&quot;, Arial, sans-serif, &quot;Segoe UI Emoji&quot;,
+    &quot;Segoe UI Symbol&quot;;
+  --font-mono:
+    ui-monospace, SFMono-Regular, &quot;SF Mono&quot;, Menlo, Consolas, &quot;Liberation Mono&quot;,
+    monospace;
+  --font-size-normal: max(11px, var(--font-size-base));
+  --font-size-tooltip: calc(var(--font-size-base) - 1px);
+  --font-size-small: max(11px, calc(var(--font-size-base) - 2px));
+  --font-size-h1: calc(var(--font-size-normal) * 1.7142857143);
+  --font-size-h2: calc(var(--font-size-normal) * 1.4285714286);
+  --font-size-h3: calc(var(--font-size-normal) * 1.2857142857);
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --icon-size: 16px;
+  --line-height-normal: calc(var(--font-size-normal) * 1.5);
+  --line-height-tooltip: calc(var(--font-size-tooltip) * 1.4285714286);
+  --line-height-small: calc(var(--font-size-small) + 4px);
+  --corner-shape: round;
+  --radius: var(--border-radius-lg, 8px);
+  --radius-sm: calc(var(--radius) * 0.5);
+  --radius-md: calc(var(--radius) * 0.75);
+  --radius-lg: var(--radius);
+  --radius-2xl: calc(var(--radius) * 2);
+  --radius-full: 9999px;
+  --shadow-sm: 0 1px 2px -1px rgb(0 0 0 / 8%);
+  --checkmark-image: url(&quot;data:image/svg+xml,%3Csvg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; viewBox=&#x27;0 0 17 17&#x27;%3E%3Cpath d=&#x27;M12.8961 3.64101C13.1297 3.41418 13.4984 3.37523 13.7779 3.56581C14.0571 3.75635 14.1554 4.11331 14.0299 4.41347L13.9615 4.53847L7.71151 13.7045C7.59411 13.8767 7.4063 13.9877 7.19881 14.0072C6.99136 14.0267 6.78564 13.9533 6.63826 13.806L2.88826 10.056L2.79842 9.9457C2.6192 9.67407 2.64927 9.30496 2.88826 9.06581C3.12738 8.82669 3.49647 8.79676 3.76815 8.97597L3.8785 9.06581L7.03084 12.2182L12.8053 3.74941L12.8961 3.64101Z&#x27;/%3E%3C/svg%3E&quot;);
+
+  /* Legacy aliases; not part of the current agent contract. */
+  --viz-bg: transparent;
+  --viz-panel: var(--card);
+  --viz-border: var(--border);
+  --viz-text: var(--foreground);
+  --viz-muted: var(--muted-foreground);
+  --viz-accent: var(--primary);
+  --viz-accent-text: var(--primary-foreground);
+  --viz-accent-bg: var(--accent);
+  --viz-font-size: var(--font-size-base);
+  --viz-warning: var(--destructive);
+}
+
+:root[data-theme=&quot;light&quot;] {
+  color-scheme: light;
+}
+
+:root[data-theme=&quot;dark&quot;] {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html &gt; body {
+  /* Preserve MCP aliases for older inline renderers without creating :root cycles. */
+  --color-background-primary: var(
+    --background,
+    light-dark(rgb(255 255 255), rgb(24 24 24))
+  );
+  --color-text-primary: var(
+    --foreground,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --color-border-secondary: var(
+    --border,
+    light-dark(rgb(26 28 31 / 8%), rgb(255 255 255 / 8.2%))
+  );
+
+  margin: 0;
+  padding: var(--visualize-paint-gutter, 0px);
+  color: var(--foreground);
+  background: transparent !important;
+  font-family: var(--font-sans) !important;
+  -webkit-font-smoothing: antialiased;
+  font-size: var(--font-size-base);
+  line-height: calc(var(--font-size-base) * 1.625);
+  font-weight: var(--font-weight-normal);
+}
+
+.cursor-interaction {
+  cursor: var(--cursor-interaction, pointer);
+}
+
+a {
+  color: color-mix(in srgb, var(--viz-accent) 80%, var(--viz-text) 20%);
+  cursor: var(--cursor-interaction, pointer);
+  text-decoration: none;
+  text-underline-offset: 2px;
+  font-weight: inherit;
+}
+
+a:is(:hover, :focus-visible) {
+  text-decoration-line: underline;
+  text-decoration-style: dashed;
+  text-decoration-thickness: 0.5px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin-block: 0;
+}
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+li,
+.table {
+  font-family: var(--font-sans);
+}
+
+h1 {
+  font-size: calc(var(--font-size-base) * 1.5);
+  line-height: 1.3333333333;
+}
+
+h2 {
+  font-size: calc(var(--font-size-base) * 1.25);
+  line-height: 1.4;
+}
+h3 {
+  font-size: calc(var(--font-size-base) * 1.125);
+  line-height: 1.5555555556;
+}
+h4 {
+  font-size: var(--font-size-base);
+  line-height: 1.5;
+}
+h5,
+h6 {
+  font-size: var(--font-size-base);
+  line-height: calc(var(--font-size-base) * 1.625);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+b,
+strong,
+th {
+  font-weight: 600;
+}
+
+code:not(pre code) {
+  display: inline;
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+  corner-shape: var(--corner-shape);
+  background: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  overflow-wrap: anywhere;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  word-break: break-word;
+}
+pre,
+pre code {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 20px;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.table {
+  width: 100%;
+  color: var(--foreground);
+  font: inherit;
+  text-align: start;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: calc(var(--font-size-base) * 0.875);
+  line-height: calc(var(--font-size-base) * 1.625);
+  font-family: var(--font-sans);
+}
+
+.table :is(th, td) {
+  padding-block: 10px;
+  padding-inline: 0 24px;
+  overflow-wrap: anywhere;
+  border-bottom: 1px solid var(--border);
+  text-align: start;
+  vertical-align: top;
+  border-bottom-color: color-mix(in srgb, var(--foreground) 5%, transparent);
+}
+.table :is(th, td):not(:last-child) {
+  padding-inline-end: calc(var(--font-size-base) * 1.5);
+}
+
+.table-responsive &gt; .table :is(th, td) {
+  overflow-wrap: break-word;
+}
+
+.table :is(th, td):last-child {
+  padding-inline-end: 0;
+}
+
+.table :is(caption, thead th) {
+  font-weight: 600;
+}
+
+.table thead :is(th, td) {
+  border-bottom-color: var(--border-strong, var(--input));
+  padding-block: calc(var(--font-size-base) / 2);
+  line-height: var(--font-size-base);
+}
+
+.table tbody tr:last-child :is(th, td) {
+  border-bottom: 0;
+}
+.table tbody :is(th, td) {
+  padding-block: calc(var(--font-size-base) * 0.625);
+}
+
+.table.table-sm :is(th, td) {
+  padding-block: 8px;
+}
+
+.table.table-sm :is(th, td):not(:last-child) {
+  padding-inline-end: 16px;
+}
+
+.table :is(.text-end, [align=&quot;right&quot;]) {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
+.table :is(.text-center, [align=&quot;center&quot;]) {
+  text-align: center;
+}
+
+.table .text-nowrap {
+  white-space: nowrap;
+}
+
+#widget {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  padding: 0;
+  background: transparent !important;
+}
+
+.card {
+  min-width: 0;
+  padding: 12px;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  border-radius: var(--radius-2xl);
+  corner-shape: var(--corner-shape);
+  color: var(--card-foreground);
+  background: var(--card);
+}
+
+.widget {
+  min-width: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--radius-lg);
+  corner-shape: var(--corner-shape);
+  box-shadow: 0 0 0 0.5px var(--border-strong, var(--border));
+  color: var(--foreground);
+  background: var(--background);
+}
+
+#widget &gt; :not(.card, .widget, .progress) {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.tooltip {
+  position: fixed;
+  z-index: 50;
+  top: 0;
+  left: 0;
+  width: max-content;
+  max-width: min(
+    20rem,
+    var(--tooltip-available-width, calc(100vw - 10px)),
+    calc(100vw - 10px)
+  );
+  max-height: min(
+    var(--tooltip-available-height, calc(100vh - 10px)),
+    calc(100vh - 10px)
+  );
+  border: 1px solid var(--border);
+  corner-shape: var(--corner-shape);
+  overflow-wrap: break-word;
+  white-space: normal;
+  pointer-events: none;
+  user-select: none;
+  font-family: var(--font-sans);
+  padding: 5px 12px;
+  border-color: color-mix(
+    in oklab,
+    light-dark(var(--primary-foreground), var(--foreground)) 5%,
+    transparent
+  );
+  border-radius: var(--radius-2xl);
+  color: light-dark(var(--primary-foreground), var(--foreground));
+  background: light-dark(var(--foreground), var(--popover));
+  box-shadow: 0 8px 18px rgb(15 23 42 / 20%);
+  letter-spacing: -0.15px;
+  font-size: calc(var(--font-size-base) * 14 / 16);
+  font-size: round(nearest, calc(var(--font-size-base) * 14 / 16), 1px);
+  font-weight: 600;
+  line-height: 18px;
+  text-align: center;
+}
+
+.viz-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(max(180px, 24%), 1fr));
+  gap: 10px;
+}
+
+.viz-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.viz-stat-value {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+.viz-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+hr {
+  width: 100%;
+  height: 1px;
+  margin-block: 6px;
+  border: 0;
+  background: var(--border);
+}
+
+.nav {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 4px;
+}
+
+.progress {
+  display: flex;
+  height: 8px;
+  margin-block: calc((var(--line-height-normal, 1.5em) - 8px) / 2);
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--muted);
+}
+
+.progress-bar:only-child {
+  border-radius: var(--radius-full);
+}
+
+.progress-bar {
+  height: 100%;
+  flex-shrink: 0;
+  border: 0;
+  background: var(--viz-series-1);
+}
+
+.viz-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  color: color-mix(in srgb, var(--foreground) 40%, var(--muted-foreground));
+  background: color-mix(in srgb, var(--foreground) 5%, transparent);
+  font-family: var(--font-sans);
+  font-size: calc(var(--font-size-base) * 14 / 16);
+  font-size: round(nearest, calc(var(--font-size-base) * 14 / 16), 1px);
+  font-weight: var(--font-weight-normal);
+  line-height: 1;
+}
+
+small,
+.text-small {
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-small);
+}
+
+.text-muted {
+  color: var(--muted-foreground);
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.viz-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.viz-controls &gt; .form-label {
+  display: grid;
+  min-width: min(100%, 260px);
+  flex: 1 1 280px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 2px 12px;
+  margin-bottom: 0;
+}
+
+.viz-controls &gt; .form-label &gt; :is(.form-control, .form-range, .form-select) {
+  grid-column: 1 / -1;
+}
+
+.btn,
+.nav-link,
+.form-check-input,
+.form-control,
+.form-range,
+.form-select {
+  font: inherit;
+}
+
+/* Match inline alignment without overriding a containing flex or grid layout. */
+.btn,
+.nav-link,
+.form-control,
+.form-select,
+.form-range,
+.form-check {
+  vertical-align: middle;
+}
+
+.btn,
+.nav-link {
+  --btn-size: calc(12px + 2 * var(--control-spacing, 12px));
+  appearance: button;
+  display: inline-flex;
+  inline-size: fit-content;
+  max-inline-size: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin: 0;
+  padding: 0 8px;
+  -webkit-app-region: no-drag;
+  border: 1px solid var(--input);
+  corner-shape: var(--corner-shape);
+  cursor: var(--cursor-interaction, pointer);
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-font-smoothing: inherit;
+  font-family: var(--font-sans);
+  height: fit-content;
+  min-height: var(--btn-size);
+  padding-inline: var(--control-spacing, 12px);
+  border-color: transparent;
+  border-radius: var(--radius-full);
+  color: var(--foreground);
+  background: color-mix(in srgb, var(--foreground) 5%, transparent);
+  font-size: calc(var(--font-size-base) * 14 / 16);
+  font-size: round(nearest, calc(var(--font-size-base) * 14 / 16), 1px);
+  font-weight: var(--font-weight-normal);
+  line-height: 18px;
+}
+
+.btn {
+  border-color: var(--border);
+  color: var(--secondary-foreground);
+  background: var(--secondary);
+}
+
+/* Codex Button size=&quot;compact&quot;; appearance stays with the button variant. */
+.btn-sm {
+  --btn-size: 24px;
+  padding-inline: 8px;
+  font-size: calc(var(--font-size-base) * 12 / 16);
+  font-size: round(nearest, calc(var(--font-size-base) * 12 / 16), 1px);
+  line-height: 16px;
+}
+
+.btn:is(.btn-block, .viz-tile) {
+  inline-size: 100%;
+}
+
+.btn.viz-tile {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+a.btn {
+  cursor: var(--cursor-interaction, pointer);
+  text-decoration: none;
+}
+
+.btn:not(:disabled):hover {
+  background: light-dark(
+    color-mix(in srgb, var(--foreground) 5.5%, transparent),
+    color-mix(in srgb, var(--foreground) 8%, transparent)
+  );
+}
+
+.nav-link:not(:disabled):not([aria-disabled=&quot;true&quot;]):hover {
+  background: color-mix(in srgb, var(--foreground) 10%, transparent);
+}
+
+.btn-primary {
+  border-color: var(--border);
+  color: var(--primary-foreground);
+  background: var(--foreground);
+  background-clip: border-box;
+}
+
+.btn-primary .text-muted {
+  color: color-mix(in srgb, var(--primary-foreground) 50%, transparent);
+}
+
+.btn-primary:not(:disabled):hover {
+  background: color-mix(in srgb, var(--foreground) 80%, transparent);
+  background-clip: border-box;
+}
+
+.btn-ghost {
+  border-color: transparent;
+  color: var(--muted-foreground);
+  background: transparent;
+}
+
+.btn-ghost:not(:disabled):hover {
+  color: var(--muted-foreground);
+  background: light-dark(
+    color-mix(in srgb, var(--foreground) 5.5%, transparent),
+    color-mix(in srgb, var(--foreground) 8%, transparent)
+  );
+}
+
+.nav-pills .nav-link {
+  min-width: 0;
+  border-color: transparent;
+  color: var(--muted-foreground);
+  background: transparent;
+}
+
+.nav-justified .nav-link {
+  flex: 1 1 0;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+.nav-pills .nav-link.active {
+  color: var(--foreground);
+  background: var(--muted);
+}
+
+/* Shared preview chrome; product styles stay inside each variant. */
+.viz-dotted-background {
+  background-image: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--foreground) 14%, transparent) 0.8px,
+    transparent 0.8px
+  );
+  background-position: center;
+  background-size: 16px 16px;
+}
+
+.viz-carousel {
+  position: relative;
+  min-width: 0;
+}
+
+.viz-carousel:has(&gt; .viz-carousel-controls) {
+  min-height: calc(60px + var(--viz-carousel-picker-height, 0px));
+  padding-bottom: 60px;
+}
+
+.viz-carousel &gt; [data-variant][hidden] {
+  display: none !important;
+}
+
+.viz-carousel &gt; [data-variant] {
+  isolation: isolate;
+}
+
+.viz-carousel-controls {
+  --viz-carousel-hover: light-dark(
+    color-mix(in srgb, var(--foreground) 5.4%, transparent),
+    color-mix(in srgb, var(--foreground) 7.8%, transparent)
+  );
+  position: absolute;
+  z-index: 2;
+  bottom: 8px;
+  left: 50%;
+  display: flex;
+  width: max-content;
+  /* Leave room for the host&#x27;s design-controls launcher at the trailing edge. */
+  max-width: calc(100% - 96px);
+  align-items: center;
+  gap: 0;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-sans);
+  /* Match the settings dropdown chrome independently of the content font size. */
+  font-size: 13px;
+  font-weight: var(--font-weight-normal);
+  line-height: 18px;
+  transform: translateX(-50%);
+  user-select: none;
+}
+
+/* Keep authored mockup button styles out of the shared carousel chrome. */
+.viz-carousel-controls button,
+.viz-carousel-picker &gt; summary {
+  display: flex !important;
+  height: auto !important;
+  min-height: 30px;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 4px;
+  padding: 0 6px !important;
+  -webkit-app-region: no-drag;
+  border: 0 !important;
+  border-radius: 14px !important;
+  color: inherit !important;
+  background: transparent !important;
+  font: inherit !important;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.viz-carousel-controls &gt; button,
+.viz-carousel-picker &gt; summary {
+  position: relative;
+  isolation: isolate;
+}
+
+.viz-carousel-controls &gt; button {
+  --icon-size: 16px;
+  width: 30px !important;
+  padding: 0 !important;
+}
+
+.viz-carousel-picker &gt; summary {
+  padding-inline: 12px !important;
+}
+
+.viz-carousel-controls .viz-carousel-caret {
+  width: 14px;
+  height: 14px;
+  flex: none;
+  margin: 0;
+  color: inherit;
+  transform: rotate(180deg);
+}
+
+.viz-carousel-controls &gt; button &gt; svg,
+.viz-carousel-controls .viz-carousel-caret,
+.viz-carousel-count {
+  opacity: 0.5;
+}
+
+.viz-carousel-controls &gt; button::before,
+.viz-carousel-picker &gt; summary::before {
+  position: absolute;
+  z-index: -1;
+  inset: 3px;
+  border-radius: 12px;
+  content: &quot;&quot;;
+  pointer-events: none;
+}
+
+.viz-carousel-controls &gt; button:hover::before,
+.viz-carousel-picker &gt; summary:hover::before {
+  background: var(--viz-carousel-hover);
+}
+
+.viz-carousel-controls &gt; button,
+.viz-carousel-controls [data-lucide],
+.viz-carousel-controls .lucide {
+  flex-shrink: 0;
+}
+
+.viz-carousel-picker {
+  min-width: 0;
+}
+
+.viz-carousel-picker &gt; summary {
+  min-width: 0;
+  list-style: none;
+}
+
+.viz-carousel-picker &gt; summary::-webkit-details-marker {
+  display: none;
+}
+
+.viz-carousel-count {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.viz-carousel-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.viz-carousel-options {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 4px);
+  left: 0;
+  display: flex;
+  max-height: 240px;
+  flex-direction: column;
+  gap: 2px;
+  overflow: auto;
+  padding: 4px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--background);
+  box-shadow: 0 4px 12px light-dark(rgb(0 0 0 / 6%), rgb(0 0 0 / 25%));
+}
+
+.viz-carousel-options &gt; button {
+  border-radius: max(0px, calc(var(--radius-lg) - 5px)) !important;
+  width: 100% !important;
+  min-height: 28px;
+  justify-content: flex-start !important;
+  padding: 4px 8px !important;
+  font-size: var(--font-size-small) !important;
+  text-align: start;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.viz-carousel-options &gt; [aria-current=&quot;true&quot;],
+.viz-carousel-options &gt; button:hover {
+  background: var(--viz-carousel-hover) !important;
+}
+
+.btn:disabled,
+.nav-link:disabled,
+.nav-link[aria-disabled=&quot;true&quot;] {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+[data-lucide] {
+  stroke-width: 1.6;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--foreground);
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+  padding: 0 8px;
+  outline: none;
+  border: 1px solid var(--input);
+  corner-shape: var(--corner-shape);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  height: calc(12px + 2 * var(--control-spacing, 12px));
+  min-height: calc(12px + 2 * var(--control-spacing, 12px));
+  padding-inline: calc(4px + var(--control-spacing, 12px) / 2);
+  border-color: var(--input);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--popover) 96%, transparent);
+  font-size: calc(var(--font-size-base) * 14 / 16);
+  font-size: round(nearest, calc(var(--font-size-base) * 14 / 16), 1px);
+  font-weight: var(--font-weight-normal);
+  line-height: 1.4285714286;
+}
+.form-control:is(
+  [type=&quot;file&quot;],
+  [type=&quot;date&quot;],
+  [type=&quot;datetime-local&quot;],
+  [type=&quot;month&quot;],
+  [type=&quot;week&quot;],
+  [type=&quot;color&quot;]
+) {
+  height: calc(12px + 2 * var(--control-spacing, 12px));
+  min-height: calc(12px + 2 * var(--control-spacing, 12px));
+  line-height: 18px;
+}
+.form-control:is(
+  [type=&quot;date&quot;],
+  [type=&quot;datetime-local&quot;],
+  [type=&quot;month&quot;],
+  [type=&quot;week&quot;]
+) {
+  padding-inline: var(--control-spacing, 12px);
+}
+
+.form-control::placeholder {
+  color: var(--muted-foreground);
+}
+
+.form-control[type=&quot;file&quot;] {
+  overflow: hidden;
+  cursor: var(--cursor-interaction, pointer);
+  padding: 0;
+}
+
+.form-control[type=&quot;file&quot;]::file-selector-button {
+  padding: 0 8px;
+  border: 0;
+  border-right: 1px solid var(--input);
+  color: var(--secondary-foreground);
+  background: var(--secondary);
+  cursor: inherit;
+  font: inherit;
+  min-height: calc(10px + 2 * var(--control-spacing, 12px));
+  padding-inline: var(--control-spacing, 12px);
+  margin-inline-end: var(--control-spacing, 12px);
+}
+
+.form-control[type=&quot;file&quot;]:not(:disabled):hover::file-selector-button {
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.form-control-color[type=&quot;color&quot;] {
+  width: 40px;
+  height: calc(12px + 2 * var(--control-spacing, 12px));
+  padding: 3px;
+  cursor: var(--cursor-interaction, pointer);
+}
+
+.form-control-color[type=&quot;color&quot;]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.form-control-color[type=&quot;color&quot;]::-webkit-color-swatch {
+  border: 0;
+  border-radius: calc(var(--radius-lg) - 4px);
+  corner-shape: var(--corner-shape);
+}
+
+textarea.form-control {
+  height: auto;
+  resize: vertical;
+  min-height: 96px;
+  padding: 8px 10px;
+}
+
+.form-control:focus-visible {
+  border-color: var(--ring);
+  box-shadow: none;
+}
+.form-control:disabled {
+  color: var(--muted-foreground);
+  background: color-mix(in srgb, var(--foreground) 5%, transparent);
+  opacity: 1;
+}
+.form-control[aria-invalid=&quot;true&quot;] {
+  border-color: var(--red);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--red) 20%, transparent);
+}
+
+.form-control:disabled,
+.form-select:disabled {
+  cursor: not-allowed;
+}
+
+.form-select {
+  appearance: none;
+  display: block;
+  width: 100%;
+  height: fit-content;
+  min-height: calc(12px + 2 * var(--control-spacing, 12px));
+  margin: 0;
+  /* The secondary icon role is 14px at compact density and 16px at web density. */
+  --icon-size: calc(10px + var(--control-spacing, 12px) / 2);
+  /* Settings dropdowns retain a 12px inset and a 4px text-to-chevron gap. */
+  padding: 0 calc(16px + var(--icon-size)) 0 12px;
+  outline: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  corner-shape: var(--corner-shape);
+  color: var(--foreground);
+  background-color: var(--secondary);
+  background-image:
+    linear-gradient(
+      45deg,
+      transparent calc(50% - 0.6px),
+      var(--muted-foreground) calc(50% - 0.6px) calc(50% + 0.6px),
+      transparent calc(50% + 0.6px)
+    ),
+    linear-gradient(
+      135deg,
+      transparent calc(50% - 0.6px),
+      var(--muted-foreground) calc(50% - 0.6px) calc(50% + 0.6px),
+      transparent calc(50% + 0.6px)
+    );
+  background-position:
+    calc(100% - 12px - var(--icon-size) / 2) 50%,
+    calc(100% - 12px - var(--icon-size) * 0.18) 50%;
+  background-repeat: no-repeat;
+  background-size: calc(var(--icon-size) * 0.32) calc(var(--icon-size) * 0.32);
+  cursor: var(--cursor-interaction, default);
+  font-size: calc(var(--font-size-base) * 14 / 16);
+  font-size: round(nearest, calc(var(--font-size-base) * 14 / 16), 1px);
+  font-weight: var(--font-weight-normal);
+  line-height: 18px;
+}
+
+.form-select :is(option, optgroup) {
+  color: var(--popover-foreground);
+  background-color: var(--popover);
+}
+
+.form-select :is(option, optgroup):disabled {
+  color: var(--muted-foreground);
+}
+
+.form-select:not(:disabled):hover {
+  background-color: light-dark(
+    color-mix(in srgb, var(--foreground) 5.5%, transparent),
+    color-mix(in srgb, var(--foreground) 8%, transparent)
+  );
+}
+
+.form-select:focus-visible {
+  box-shadow: 0 0 0 2px var(--ring);
+}
+.form-select:disabled {
+  opacity: 0.4;
+}
+
+.form-check {
+  display: flex;
+  min-height: calc(12px + 2 * var(--control-spacing, 12px));
+  align-items: center;
+  gap: 6px;
+}
+
+.form-check-input {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  flex: 0 0 auto;
+  margin: 0;
+  border: 1px solid var(--input);
+  color: var(--primary-foreground);
+  background-color: transparent;
+  cursor: var(--cursor-interaction, default);
+  transition:
+    background-color 150ms,
+    border-color 150ms,
+    box-shadow 150ms;
+}
+
+.form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;] {
+  corner-shape: round;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  width: calc(10px + var(--control-spacing, 12px) / 2);
+  height: calc(10px + var(--control-spacing, 12px) / 2);
+  border-color: var(--border-strong, var(--input));
+  border-radius: calc(var(--radius-sm) / 2);
+  background-color: transparent;
+  color: var(--foreground);
+}
+
+.form-check:not(.form-switch)
+  .form-check-input:not(:disabled):not(:checked):hover {
+  background-color: var(--card);
+}
+
+.form-check:not(.form-switch)
+  .form-check-input[type=&quot;checkbox&quot;]:is(:checked, :indeterminate) {
+  border-color: var(--border-strong, var(--input));
+  background-color: color-mix(in srgb, var(--popover) 96%, transparent);
+}
+
+.form-check:not(.form-switch)
+  .form-check-input[type=&quot;checkbox&quot;]:checked::before {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--primary-foreground);
+  content: &quot;&quot;;
+  mask: var(--checkmark-image) center / 12px 12px no-repeat;
+  background-color: var(--foreground);
+}
+.form-check:not(.form-switch)
+  .form-check-input[type=&quot;checkbox&quot;]:indeterminate::before {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 65%;
+  height: 6.65%;
+  margin: auto;
+  border-radius: var(--radius-full);
+  background: var(--foreground);
+  mask: none;
+  content: &quot;&quot;;
+}
+
+.form-check-input[type=&quot;radio&quot;] {
+  border-radius: var(--radius-full);
+  width: 16px;
+  height: 16px;
+  border: 0;
+  box-shadow: inset 0 0 0 1px var(--input);
+}
+
+.form-check-input[type=&quot;radio&quot;]:checked {
+  border: 0;
+  background: radial-gradient(
+    circle,
+    var(--primary-foreground) 0 3px,
+    var(--foreground) 3px
+  );
+  box-shadow: none;
+}
+
+.form-check:not(.form-switch) .form-check-input:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+.form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;]:focus-visible {
+  border-color: var(--ring);
+  outline: none;
+  box-shadow: 0 0 0 2px var(--ring);
+}
+
+.form-check:not(.form-switch) .form-check-input:disabled {
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.form-check:not(.form-switch) .form-check-input:disabled + .form-check-label {
+  cursor: not-allowed;
+}
+.form-check:not(.form-switch) .form-check-input[type=&quot;radio&quot;]:disabled,
+.form-check:not(.form-switch)
+  .form-check-input[type=&quot;radio&quot;]:disabled
+  + .form-check-label {
+  opacity: 0.5;
+}
+
+.form-switch .form-check-input:disabled,
+.form-switch .form-check-input:disabled + .form-check-label {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.form-check-label {
+  color: var(--foreground);
+  cursor: var(--cursor-interaction, default);
+}
+
+.form-switch .form-check-input {
+  position: relative;
+  width: 32px;
+  height: 20px;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--muted);
+  box-shadow: none;
+  transition: background-color 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.form-switch .form-check-input::before {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 16px;
+  height: 16px;
+  box-sizing: border-box;
+  border: 1px solid light-dark(var(--primary-foreground), var(--foreground));
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-sm);
+  content: &quot;&quot;;
+  transform: translate(2px, -50%);
+  transition: transform 200ms cubic-bezier(0, 0, 0.2, 1);
+  border-color: #fff;
+  background: #fff;
+}
+
+.form-switch .form-check-input:checked {
+  background: var(--blue);
+}
+
+.form-switch .form-check-input:checked::before {
+  transform: translate(14px, -50%);
+}
+
+.form-switch .form-check-input:focus-visible {
+  box-shadow: 0 0 0 2px var(--ring);
+  outline: none;
+}
+
+.form-range {
+  appearance: none;
+  display: block;
+  width: 100%;
+  flex: 1;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  accent-color: var(--primary);
+  height: calc(12px + 2 * var(--control-spacing, 12px));
+  min-height: calc(12px + 2 * var(--control-spacing, 12px));
+  outline: none;
+  border-radius: var(--radius-full);
+  color: var(--foreground);
+  background: transparent;
+}
+
+.form-range::-webkit-slider-runnable-track {
+  background: var(--form-range-track, var(--border));
+  height: 2px;
+  border-radius: var(--radius-full);
+}
+
+.form-range::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  margin-top: -9px;
+  border-color: transparent;
+  background: currentColor;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Outline the native track and thumb, preserving the larger input hit area. */
+.form-range:focus-visible::-webkit-slider-runnable-track {
+  outline: 2px auto Highlight;
+  outline-color: -webkit-focus-ring-color;
+}
+
+.form-range::-moz-range-track {
+  background: var(--form-range-track, var(--border));
+  height: 2px;
+  border-radius: var(--radius-full);
+}
+
+.form-range::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  border-color: transparent;
+  background: currentColor;
+  box-shadow: var(--shadow-sm);
+}
+
+.form-range:focus-visible::-moz-range-thumb {
+  outline: 2px solid Highlight;
+  outline-offset: 2px;
+}
+
+.form-range:disabled {
+  opacity: 1;
+  cursor: default;
+}
+
+.btn:not(.btn-primary, .viz-tile):is(
+  [aria-pressed=&quot;true&quot;],
+  [aria-selected=&quot;true&quot;],
+  .is-selected
+) {
+  border-color: transparent;
+  color: var(--primary-foreground);
+  background: var(--blue);
+}
+
+.btn.viz-tile:is([aria-pressed=&quot;true&quot;], [aria-selected=&quot;true&quot;], .is-selected) {
+  border-color: var(--primary);
+  box-shadow: inset 0 0 0 1px var(--primary);
+}
+
+.btn:focus-visible,
+.nav-link:focus-visible {
+  outline-offset: 2px;
+  outline: none;
+  box-shadow: 0 0 0 2px var(--ring);
+}
+
+.viz-carousel-controls :is(button, summary):focus-visible {
+  outline: 2px solid var(--ring) !important;
+  outline-offset: 2px !important;
+}
+
+/* Web recipes are the default, including on renderers without inline style queries. */
+@supports (border-radius: if(style(--corner-shape: round): 1px; else: 2px)) {
+  /* Match the host&#x27;s proportional text-sm scale at every text preference. */
+  .tooltip,
+  .viz-badge,
+  .btn,
+  .nav-link,
+  .form-control,
+  .form-select {
+    font-size: if(
+      style(--corner-shape: round): round(
+          nearest,
+          calc(var(--font-size-base) * 14 / 16),
+          1px
+        );
+        else: round(nearest, calc(var(--font-size-base) * 13 / 14), 1px)
+    );
+  }
+
+  .btn-sm {
+    font-size: if(
+      style(--corner-shape: round): round(
+          nearest,
+          calc(var(--font-size-base) * 12 / 16),
+          1px
+        );
+        else: round(nearest, calc(var(--font-size-base) * 12 / 14), 1px)
+    );
+  }
+
+  .btn,
+  .nav-link,
+  .form-select {
+    border-radius: if(
+      style(--corner-shape: round): var(--radius-full); else: var(--radius-lg)
+    );
+  }
+
+  .form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;] {
+    border-radius: if(
+      style(--corner-shape: round): calc(var(--radius-sm) / 2);
+        else: calc(var(--radius-lg) * 0.4)
+    );
+  }
+
+  .tooltip {
+    font-weight: if(
+      style(--corner-shape: round): 600; else: var(--font-weight-normal)
+    );
+  }
+}
+
+@media (pointer: coarse) {
+  .viz-carousel:has(&gt; .viz-carousel-controls) {
+    min-height: calc(76px + var(--viz-carousel-picker-height, 0px));
+    padding-bottom: 76px;
+  }
+
+  .btn,
+  .nav-link,
+  .viz-carousel-controls button,
+  .viz-carousel-picker &gt; summary,
+  .form-control,
+  .form-select {
+    --btn-size: 44px;
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  /* Keep small-screen WebKit from zooming when a text field receives focus. */
+  .form-control,
+  .form-select {
+    font-size: max(16px, calc(var(--font-size-base) * 14 / 16));
+    font-size: max(
+      16px,
+      round(nearest, calc(var(--font-size-base) * 14 / 16), 1px)
+    );
+  }
+  .form-control:is(
+    [type=&quot;file&quot;],
+    [type=&quot;date&quot;],
+    [type=&quot;datetime-local&quot;],
+    [type=&quot;month&quot;],
+    [type=&quot;week&quot;],
+    [type=&quot;time&quot;],
+    [type=&quot;color&quot;]
+  ) {
+    height: 44px;
+    min-height: 44px;
+    font-size: max(16px, calc(var(--font-size-base) * 14 / 16));
+    font-size: max(
+      16px,
+      round(nearest, calc(var(--font-size-base) * 14 / 16), 1px)
+    );
+  }
+
+  .form-control[type=&quot;file&quot;]::file-selector-button {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .form-control-color[type=&quot;color&quot;] {
+    width: 44px;
+    height: 44px;
+  }
+
+  .form-control:is(
+    [type=&quot;date&quot;],
+    [type=&quot;datetime-local&quot;],
+    [type=&quot;month&quot;],
+    [type=&quot;time&quot;],
+    [type=&quot;week&quot;]
+  ) {
+    min-width: 0;
+    max-width: 100%;
+    padding-block: 8px;
+  }
+
+  .form-check {
+    min-height: 44px;
+    padding-inline: 15px;
+  }
+
+  .form-check-input {
+    position: relative;
+  }
+
+  .form-check-input::after {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 44px;
+    height: 44px;
+    content: &quot;&quot;;
+    transform: translate(-50%, -50%);
+  }
+
+  .form-check-label {
+    display: inline-flex;
+    min-width: 44px;
+    min-height: 44px;
+    align-items: center;
+  }
+
+  .form-range {
+    height: 44px;
+    touch-action: pan-y;
+  }
+}
+
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+#widget &gt; svg {
+  width: 100%;
+}
+
+/* Model-authored chart rules can otherwise stretch icons after these styles load. */
+svg.lucide {
+  display: block;
+  width: var(--icon-size) !important;
+  height: var(--icon-size) !important;
+  flex: none;
+  margin: 0 !important;
+  stroke-width: 1.6;
+}
+
+.text-warning,
+.text-destructive {
+  color: var(--destructive);
+}
+
+html&gt;body{padding:0}&lt;/style&gt;
+&lt;style id=&quot;codex-visualization-host-theme&quot;&gt;:root {}&lt;/style&gt;
+&lt;script&gt;
+(() =&gt; {
+  // Host colors are defaults; later authored styles can give the same names
+  // their own meaning (for example, --muted as a chart&#x27;s label color).
+  const hostStyles = document.getElementById(&quot;codex-visualization-host-theme&quot;);
+  const hostStyle = hostStyles.sheet.cssRules[0].style;
+  // Typography, geometry and interaction cursors still follow the host.
+  const styleForProperty = (property) =&gt;
+    /^--(?:font-|radius|corner-shape$|control-spacing$|cursor-interaction$|icon-size$|visualize-paint-gutter$)/.test(property)
+      ? document.documentElement.style
+      : hostStyle;
+  const initialGlobals =
+    globalThis.__codexVisualizationInitialGlobals ?? globalThis.openai;
+  delete globalThis.__codexVisualizationInitialGlobals;
+  if (initialGlobals?.statePersistence != null) {
+    globalThis.openai ??= {};
+    globalThis.openai.statePersistence = initialGlobals.statePersistence;
+    globalThis.openai.stateModelContext = initialGlobals.stateModelContext ?? &quot;none&quot;;
+  }
+  if (!true) {
+    return;
+  }
+  let appliedProperties = [];
+  const applyHostStyleVariables = (styleVariables) =&gt; {
+    if (styleVariables == null || typeof styleVariables !== &quot;object&quot;) {
+      return;
+    }
+    for (const property of appliedProperties) {
+      styleForProperty(property).removeProperty(property);
+    }
+    appliedProperties = [];
+    for (const [property, value] of Object.entries(styleVariables)) {
+      if (property.startsWith(&quot;--&quot;) &amp;&amp; typeof value === &quot;string&quot;) {
+        styleForProperty(property).setProperty(property, value);
+        appliedProperties.push(property);
+      }
+    }
+  };
+
+  const syncHostStyles = (globals) =&gt; {
+    applyHostStyleVariables(globals?.visualizationStyleVariables);
+    const sandboxDocument = globalThis.frameElement?.ownerDocument;
+    if (sandboxDocument != null &amp;&amp; globals?.visualizationTheme != null) {
+      let colorSchemeMeta = sandboxDocument.querySelector(
+        &#x27;meta[name=&quot;color-scheme&quot;]&#x27;,
+      );
+      if (colorSchemeMeta == null) {
+        colorSchemeMeta = sandboxDocument.createElement(&quot;meta&quot;);
+        colorSchemeMeta.name = &quot;color-scheme&quot;;
+        sandboxDocument.head.appendChild(colorSchemeMeta);
+      }
+      colorSchemeMeta.content = globals.visualizationTheme;
+      sandboxDocument.documentElement.style.colorScheme =
+        globals.visualizationTheme;
+      // Paint the host surface behind transparent saved visualization documents.
+      sandboxDocument.documentElement.style.backgroundColor =
+        hostStyle.getPropertyValue(&quot;--background&quot;);
+    }
+  };
+
+  syncHostStyles(initialGlobals);
+  globalThis.addEventListener(&quot;openai:set_globals&quot;, (event) =&gt; {
+    syncHostStyles(event.detail?.globals);
+  });
+})();
+&lt;/script&gt;
+
+
+
+
+
+
+
+&lt;section id=&quot;explicit-ns-animation&quot; aria-label=&quot;二维不可压缩流动的显式时间推进动画&quot;&gt;
+  &lt;header class=&quot;ns-header&quot;&gt;
+    &lt;h2&gt;显式时间推进&lt;/h2&gt;
+    &lt;div class=&quot;ns-controls&quot;&gt;
+      &lt;button type=&quot;button&quot; class=&quot;btn btn-primary&quot; data-play&gt;播放&lt;/button&gt;
+      &lt;button type=&quot;button&quot; class=&quot;btn&quot; data-step&gt;单步&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/header&gt;
+
+  &lt;div class=&quot;ns-initial&quot;&gt;
+    &lt;label for=&quot;ns-preset&quot;&gt;初始条件&lt;/label&gt;
+    &lt;select id=&quot;ns-preset&quot; class=&quot;form-select&quot; aria-describedby=&quot;ns-initial-formula ns-boundary-note&quot;&gt;
+      &lt;option value=&quot;taylor-green&quot;&gt;平移涡 · 原始条件&lt;/option&gt;
+      &lt;option value=&quot;weak-vortex&quot;&gt;平移涡 · 弱扰动&lt;/option&gt;
+      &lt;option value=&quot;strong-vortex&quot;&gt;平移涡 · 强扰动&lt;/option&gt;
+      &lt;option value=&quot;multi-vortex&quot;&gt;多涡 · 小尺度&lt;/option&gt;
+      &lt;option value=&quot;horizontal-shear&quot;&gt;水平正弦剪切流&lt;/option&gt;
+      &lt;option value=&quot;vertical-shear&quot;&gt;竖直正弦剪切流&lt;/option&gt;
+      &lt;option value=&quot;uniform&quot;&gt;均匀流&lt;/option&gt;
+    &lt;/select&gt;
+    &lt;details class=&quot;parameter-help&quot;&gt;
+      &lt;summary aria-label=&quot;初始条件说明&quot;&gt;说明&lt;/summary&gt;
+      &lt;div class=&quot;parameter-help-body&quot;&gt;
+        &lt;p id=&quot;ns-initial-formula&quot; class=&quot;text-small&quot; data-initial-formula&gt;&lt;/p&gt;
+        &lt;p id=&quot;ns-boundary-note&quot; class=&quot;text-small&quot;&gt;区域 [0, 2π]²；边界速度和压力由对应解析解给定。切换后从第 0 层重新计算。&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/details&gt;
+  &lt;/div&gt;
+
+  &lt;div class=&quot;ns-spatial&quot; aria-label=&quot;空间网格&quot;&gt;
+    &lt;p data-spatial-step&gt;&lt;/p&gt;
+    &lt;details class=&quot;parameter-help&quot;&gt;
+      &lt;summary aria-label=&quot;空间网格说明&quot;&gt;说明&lt;/summary&gt;
+      &lt;div class=&quot;parameter-help-body&quot;&gt;
+        &lt;p class=&quot;ns-spatial-note&quot; data-spatial-nodes&gt;&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/details&gt;
+  &lt;/div&gt;
+
+  &lt;div class=&quot;ns-timestep&quot;&gt;
+    &lt;label for=&quot;ns-dt&quot;&gt;时间步长 Δt&lt;/label&gt;
+    &lt;select id=&quot;ns-dt&quot; class=&quot;form-select&quot; aria-describedby=&quot;ns-step-note&quot;&gt;
+      &lt;option value=&quot;0.025&quot;&gt;0.025&lt;/option&gt;&lt;option value=&quot;0.03&quot;&gt;0.03&lt;/option&gt;
+      &lt;option value=&quot;0.05&quot;&gt;0.05&lt;/option&gt;&lt;option value=&quot;0.06&quot; selected&gt;0.06（默认）&lt;/option&gt;
+      &lt;option value=&quot;0.1&quot;&gt;0.10&lt;/option&gt;&lt;option value=&quot;0.15&quot;&gt;0.15&lt;/option&gt;
+      &lt;option value=&quot;0.2&quot;&gt;0.20&lt;/option&gt;&lt;option value=&quot;0.3&quot;&gt;0.30&lt;/option&gt;
+      &lt;option value=&quot;0.4&quot;&gt;0.40&lt;/option&gt;&lt;option value=&quot;0.6&quot;&gt;0.60&lt;/option&gt;
+      &lt;option value=&quot;1.2&quot;&gt;1.20&lt;/option&gt;
+    &lt;/select&gt;
+    &lt;span class=&quot;text-small&quot; data-step-plan&gt;&lt;/span&gt;
+    &lt;details class=&quot;parameter-help&quot;&gt;
+      &lt;summary aria-label=&quot;时间步长说明&quot;&gt;说明&lt;/summary&gt;
+      &lt;div class=&quot;parameter-help-body&quot;&gt;
+        &lt;p id=&quot;ns-step-note&quot; class=&quot;text-small&quot;&gt;固定终点 T = 1.20。调节后重算；长时间稳定性比较请打开「结果对比」。&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/details&gt;
+  &lt;/div&gt;
+
+  &lt;div class=&quot;ns-iteration&quot;&gt;
+    &lt;label for=&quot;ns-pressure-method&quot;&gt;压力迭代&lt;/label&gt;
+    &lt;select id=&quot;ns-pressure-method&quot; class=&quot;form-select&quot; aria-describedby=&quot;ns-iteration-note&quot;&gt;
+      &lt;option value=&quot;jacobi&quot;&gt;Jacobi（默认）&lt;/option&gt;
+      &lt;option value=&quot;gauss-seidel&quot;&gt;Gauss–Seidel&lt;/option&gt;
+      &lt;option value=&quot;sor&quot;&gt;SOR&lt;/option&gt;
+    &lt;/select&gt;
+    &lt;span class=&quot;ns-omega&quot; hidden&gt;
+      &lt;label for=&quot;ns-pressure-omega&quot;&gt;松弛因子 ω&lt;/label&gt;
+      &lt;select id=&quot;ns-pressure-omega&quot; class=&quot;form-select&quot; aria-describedby=&quot;ns-iteration-note&quot;&gt;
+        &lt;option value=&quot;1&quot;&gt;1.0&lt;/option&gt;&lt;option value=&quot;1.1&quot;&gt;1.1&lt;/option&gt;&lt;option value=&quot;1.2&quot;&gt;1.2&lt;/option&gt;
+        &lt;option value=&quot;1.3&quot;&gt;1.3&lt;/option&gt;&lt;option value=&quot;1.5&quot; selected&gt;1.5&lt;/option&gt;
+        &lt;option value=&quot;1.7&quot;&gt;1.7&lt;/option&gt;&lt;option value=&quot;1.9&quot;&gt;1.9&lt;/option&gt;
+      &lt;/select&gt;
+    &lt;/span&gt;
+    &lt;details class=&quot;parameter-help&quot;&gt;
+      &lt;summary aria-label=&quot;压力迭代说明&quot;&gt;说明&lt;/summary&gt;
+      &lt;div class=&quot;parameter-help-body&quot;&gt;
+        &lt;p id=&quot;ns-iteration-note&quot; class=&quot;text-small&quot; data-iteration-note&gt;&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/details&gt;
+  &lt;/div&gt;
+
+  &lt;div class=&quot;ns-layout&quot;&gt;
+    &lt;figure class=&quot;ns-figure&quot;&gt;
+      &lt;figcaption&gt;&lt;strong data-field&gt;&lt;/strong&gt;&lt;span class=&quot;text-small&quot;&gt;箭头 · 速度&lt;/span&gt;&lt;/figcaption&gt;
+      &lt;canvas role=&quot;img&quot; aria-label=&quot;二维网格。底色取四角节点标量的平均值；箭头位于节点，方向和长度表示该节点的速度。&quot;&gt;&lt;/canvas&gt;
+      &lt;div class=&quot;ns-legend text-small tabular-nums&quot; aria-label=&quot;底色数值范围&quot;&gt;
+        &lt;span data-low&gt;&lt;/span&gt;&lt;span class=&quot;ns-gradient&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;span data-high&gt;&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/figure&gt;
+
+    &lt;div class=&quot;ns-status&quot;&gt;
+      &lt;div class=&quot;ns-time tabular-nums&quot;&gt;&lt;strong data-layer&gt;&lt;/strong&gt;&lt;span data-time&gt;&lt;/span&gt;&lt;/div&gt;
+      &lt;progress class=&quot;ns-progress&quot; max=&quot;20&quot; value=&quot;0&quot; aria-label=&quot;已推进的物理时间步&quot;&gt;&lt;/progress&gt;
+      &lt;ol class=&quot;ns-stages&quot; aria-label=&quot;每个时间步的计算顺序&quot;&gt;
+        &lt;li&gt;计算压力方程右端 &lt;span class=&quot;text-small&quot;&gt;式（6）&lt;/span&gt;&lt;/li&gt;
+        &lt;li data-pressure-stage&gt;Jacobi 压力迭代&lt;/li&gt;
+        &lt;li&gt;压力收敛&lt;/li&gt;
+        &lt;li&gt;显式更新速度 &lt;span class=&quot;text-small&quot;&gt;式（4）（5）&lt;/span&gt;&lt;/li&gt;
+      &lt;/ol&gt;
+      &lt;dl class=&quot;ns-values tabular-nums&quot;&gt;
+        &lt;div&gt;&lt;dt&gt;压力迭代 &lt;i&gt;k&lt;/i&gt;&lt;/dt&gt;&lt;dd data-sweeps&gt;—&lt;/dd&gt;&lt;/div&gt;
+        &lt;div&gt;&lt;dt&gt;压力最大残差&lt;/dt&gt;&lt;dd data-residual&gt;—&lt;/dd&gt;&lt;/div&gt;
+        &lt;div&gt;&lt;dt&gt;速度最大离散散度&lt;/dt&gt;&lt;dd data-divergence&gt;—&lt;/dd&gt;&lt;/div&gt;
+      &lt;/dl&gt;
+      &lt;p class=&quot;ns-message text-small&quot; role=&quot;status&quot; data-message&gt;&lt;/p&gt;
+      &lt;p class=&quot;ns-diagnostic text-small&quot; data-diagnostic&gt;&lt;/p&gt;
+      &lt;span class=&quot;ns-color-probe&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/section&gt;
+
+&lt;style&gt;
+  #explicit-ns-animation { display: grid; gap: 12px; color: var(--foreground); }
+  #explicit-ns-animation .ns-header,
+  #explicit-ns-animation .ns-controls,
+  #explicit-ns-animation figcaption,
+  #explicit-ns-animation .ns-time { display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px 12px; }
+  #explicit-ns-animation .ns-header,
+  #explicit-ns-animation figcaption,
+  #explicit-ns-animation .ns-time { justify-content: space-between; }
+  #explicit-ns-animation .ns-initial { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 12px; margin-bottom: 4px; }
+  #explicit-ns-animation .ns-initial label { font-size: 14px; }
+  #explicit-ns-animation .ns-initial select { width: min(100%, 240px); min-height: 36px; font-size: 14px; }
+  #explicit-ns-animation .ns-initial p { flex-basis: 100%; margin: 0; color: var(--muted-foreground); line-height: 1.5; }
+  #explicit-ns-animation .ns-spatial { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 12px; font-size: 14px; line-height: 21px; }
+  #explicit-ns-animation .ns-spatial p { margin: 0; }
+  #explicit-ns-animation .ns-spatial-note { color: var(--muted-foreground); }
+  #explicit-ns-animation .ns-timestep { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 12px; }
+  #explicit-ns-animation .ns-timestep label { font-size: 14px; }
+  #explicit-ns-animation .ns-timestep select { width: 132px; min-height: 36px; font-size: 14px; }
+  #explicit-ns-animation .ns-timestep &gt; span { color: var(--muted-foreground); }
+  #explicit-ns-animation .ns-timestep p { flex-basis: 100%; margin: 0; color: var(--muted-foreground); line-height: 1.5; }
+  #explicit-ns-animation .ns-iteration,
+  #explicit-ns-animation .ns-omega { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 12px; }
+  #explicit-ns-animation .ns-omega[hidden] { display: none; }
+  #explicit-ns-animation .ns-iteration label { font-size: 14px; }
+  #explicit-ns-animation .ns-iteration select { width: 196px; min-height: 36px; font-size: 14px; }
+  #explicit-ns-animation .ns-omega select { width: 88px; }
+  #explicit-ns-animation .ns-iteration p { flex-basis: 100%; margin: 0; color: var(--muted-foreground); line-height: 1.5; }
+  #explicit-ns-animation .parameter-help { margin: 0; min-width: 0; color: var(--muted-foreground); font-size: 14px; line-height: 21px; }
+  #explicit-ns-animation .parameter-help[open] { flex-basis: 100%; }
+  #explicit-ns-animation .parameter-help &gt; summary { width: fit-content; padding: 2px 4px; border-radius: 4px; cursor: pointer; }
+  #explicit-ns-animation .parameter-help &gt; summary:hover { color: var(--foreground); }
+  #explicit-ns-animation .parameter-help &gt; summary:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+  #explicit-ns-animation .parameter-help-body { margin-top: 6px; }
+  #explicit-ns-animation .parameter-help-body p + p { margin-top: 6px; }
+  #explicit-ns-animation .ns-diagnostic { margin: 0; color: var(--muted-foreground); line-height: 1.5; }
+  #explicit-ns-animation .ns-layout { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); gap: 18px; align-items: start; }
+  #explicit-ns-animation .ns-figure { margin: 0; min-width: 0; }
+  #explicit-ns-animation canvas { display: block; width: 100%; aspect-ratio: 1; }
+  #explicit-ns-animation .ns-legend { display: grid; align-items: center; grid-template-columns: auto minmax(0, 1fr) auto; gap: 8px; margin-inline: 6%; }
+  #explicit-ns-animation .ns-gradient { height: 8px; border-radius: 4px; background: linear-gradient(90deg, color-mix(in srgb, var(--blue) 72%, var(--background)), var(--background), color-mix(in srgb, var(--orange) 72%, var(--background))); }
+  #explicit-ns-animation .ns-status { min-width: 0; display: grid; gap: 12px; }
+  #explicit-ns-animation .ns-progress { width: 100%; height: 6px; accent-color: var(--primary); }
+  #explicit-ns-animation .ns-stages { display: grid; gap: 3px; margin: 0; padding: 0; list-style: none; }
+  #explicit-ns-animation .ns-stages li { border-inline-start: 2px solid var(--border); padding: 5px 9px; }
+  #explicit-ns-animation .ns-stages li[aria-current] { border-color: var(--primary); background: var(--accent); color: var(--accent-foreground); font-weight: 500; }
+  #explicit-ns-animation .ns-stages span, #explicit-ns-animation .ns-message { color: var(--muted-foreground); }
+  #explicit-ns-animation .ns-values { display: grid; gap: 6px; margin: 0; }
+  #explicit-ns-animation .ns-values div { display: flex; flex-wrap: wrap; gap: 2px 8px; justify-content: space-between; }
+  #explicit-ns-animation .ns-values dd { margin: 0; }
+  #explicit-ns-animation .ns-message { min-height: 1.5em; }
+  #explicit-ns-animation .ns-color-probe { display: none; }
+  @media (max-width: 575px) {
+    #explicit-ns-animation .ns-layout { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+    #explicit-ns-animation .ns-status { grid-row: 1; gap: 8px; }
+    #explicit-ns-animation .ns-stages { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+&lt;/style&gt;
+
+&lt;script&gt;
+(() =&gt; {
+  &#x27;use strict&#x27;;
+
+  // Keep this sandboxed copy synchronized with spatial-grid.js.
+  const spatialGrid = { intervals: 18, length: 6.283185307179586 };
+  const size = spatialGrid.intervals + 1;
+  const finalTime = 1.2;
+  const timeStepOptions = [0.025, 0.03, 0.05, 0.06, 0.1, 0.15, 0.2, 0.3, 0.4, 0.6, 1.2];
+  let dt = 0.06;
+  let pressureMethod = &#x27;jacobi&#x27;;
+  let pressureOmega = 1.5;
+  const pressureMethods = { jacobi: &#x27;Jacobi&#x27;, &#x27;gauss-seidel&#x27;: &#x27;Gauss–Seidel&#x27;, sor: &#x27;SOR&#x27; };
+  const pressureOmegaOptions = [1, 1.1, 1.2, 1.3, 1.5, 1.7, 1.9];
+  let endLayer = Math.round(finalTime / dt);
+  const density = 1;
+  const viscosity = 0.025;
+  const driftX = 0.92;
+  const driftY = 0.78;
+  const initialConditions = [
+    { id: &#x27;taylor-green&#x27;, kind: &#x27;vortex&#x27;, amplitude: 0.52, wave: 1 },
+    { id: &#x27;weak-vortex&#x27;, kind: &#x27;vortex&#x27;, amplitude: 0.25, wave: 1 },
+    { id: &#x27;strong-vortex&#x27;, kind: &#x27;vortex&#x27;, amplitude: 0.70, wave: 1 },
+    { id: &#x27;multi-vortex&#x27;, kind: &#x27;vortex&#x27;, amplitude: 0.35, wave: 2 },
+    { id: &#x27;horizontal-shear&#x27;, kind: &#x27;shear&#x27;, axis: &#x27;x&#x27;, amplitude: 0.50, wave: 1 },
+    { id: &#x27;vertical-shear&#x27;, kind: &#x27;shear&#x27;, axis: &#x27;y&#x27;, amplitude: 0.50, wave: 1 },
+    { id: &#x27;uniform&#x27;, kind: &#x27;uniform&#x27;, amplitude: 0, wave: 1 }
+  ];
+  let initialCondition = initialConditions[0];
+  const length = spatialGrid.length;
+  const h = length / spatialGrid.intervals;
+  const hSquared = h * h;
+  const tolerance = 0.001;
+  const sweepLimit = 1800;
+  let pressureScale = 0.15;
+  let sourceScale = 0.55;
+
+  const field = () =&gt; new Float64Array(size * size);
+  const at = (i, j) =&gt; j * size + i;
+  const onBoundary = (i, j) =&gt; i === 0 || j === 0 || i === size - 1 || j === size - 1;
+  const u = field();
+  const v = field();
+  const nextU = field();
+  const nextV = field();
+  const source = field();
+  let pressure = field();
+  let nextPressure = field();
+  let layer, pressureLayer, sweep, residual, divergence, phase, timer;
+  let initialPerturbationRms, perturbationRatio, transportIndicator, failureMessage;
+
+  function eachInterior(visit) {
+    for (let j = 1; j &lt; size - 1; j++) {
+      for (let i = 1; i &lt; size - 1; i++) visit(at(i, j));
+    }
+  }
+
+  function exactValues(i, j, time, amplitude) {
+    const wave = initialCondition.wave;
+    const x = wave * (i * h - driftX * time);
+    const y = wave * (j * h - driftY * time);
+    if (initialCondition.kind === &#x27;shear&#x27;) {
+      return initialCondition.axis === &#x27;x&#x27;
+        ? { u: driftX + amplitude * Math.sin(y), v: driftY, p: 0 }
+        : { u: driftX, v: driftY + amplitude * Math.sin(x), p: 0 };
+    }
+    return {
+      u: driftX + amplitude * Math.sin(x) * Math.cos(y),
+      v: driftY - amplitude * Math.cos(x) * Math.sin(y),
+      p: density * amplitude ** 2 * (Math.cos(2 * x) + Math.cos(2 * y)) / 4
+    };
+  }
+
+  function prescribedValues(time, boundaryOnly, write) {
+    const decayRate = initialCondition.kind === &#x27;shear&#x27; ? 1 : 2;
+    const amplitude = initialCondition.amplitude * Math.exp(-decayRate * initialCondition.wave ** 2 * viscosity * time);
+    for (let j = 0; j &lt; size; j++) {
+      for (let i = 0; i &lt; size; i++) {
+        if (!boundaryOnly || onBoundary(i, j)) write(at(i, j), exactValues(i, j, time, amplitude));
+      }
+    }
+  }
+
+  const derivativeX = (q, a) =&gt; (q[a + 1] - q[a - 1]) / (2 * h);
+  const derivativeY = (q, a) =&gt; (q[a + size] - q[a - size]) / (2 * h);
+  const neighborSum = (q, a) =&gt; q[a - 1] + q[a + 1] + q[a - size] + q[a + size];
+  const laplacian = (q, a) =&gt; (neighborSum(q, a) - 4 * q[a]) / hSquared;
+
+  function maxDivergence() {
+    let maximum = 0;
+    eachInterior(a =&gt; { maximum = Math.max(maximum, Math.abs(derivativeX(u, a) + derivativeY(v, a))); });
+    return maximum;
+  }
+
+  function maxResidual() {
+    let maximum = 0;
+    eachInterior(a =&gt; { maximum = Math.max(maximum, Math.abs(laplacian(pressure, a) - source[a])); });
+    return maximum;
+  }
+
+  function velocityMetrics(horizontal = u, vertical = v) {
+    let sum = 0;
+    let maximumTransport = 0;
+    let finite = true;
+    let reversed = false;
+    eachInterior(a =&gt; {
+      finite = finite &amp;&amp; Number.isFinite(horizontal[a]) &amp;&amp; Number.isFinite(vertical[a]);
+      reversed = reversed || horizontal[a] &lt; 0 || vertical[a] &lt; 0;
+      sum += (horizontal[a] - driftX) ** 2 + (vertical[a] - driftY) ** 2;
+      maximumTransport = Math.max(maximumTransport, Math.abs(horizontal[a]) + Math.abs(vertical[a]));
+    });
+    return {
+      rms: Math.sqrt(sum / ((size - 2) ** 2)), finite, reversed,
+      indicator: dt * maximumTransport / h + 4 * viscosity * dt / hSquared
+    };
+  }
+
+  function reset() {
+    layer = 0;
+    pressureLayer = 0;
+    sweep = 0;
+    residual = null;
+    phase = &#x27;initial&#x27;;
+    failureMessage = &#x27;&#x27;;
+    pressure.fill(0);
+    nextPressure.fill(0);
+    source.fill(0);
+    pressureScale = initialCondition.kind === &#x27;vortex&#x27; ? Math.max(0.05, Math.ceil(initialCondition.amplitude ** 2 / 2 / 0.05) * 0.05) : 0.05;
+    sourceScale = initialCondition.kind === &#x27;vortex&#x27; ? Math.max(0.05, Math.ceil(2 * initialCondition.amplitude ** 2 * initialCondition.wave ** 2 / 0.05) * 0.05) : 0.05;
+    prescribedValues(0, false, (a, exact) =&gt; { u[a] = exact.u; v[a] = exact.v; });
+    setPressureBoundary();
+    divergence = maxDivergence();
+    const metrics = velocityMetrics();
+    initialPerturbationRms = metrics.rms;
+    perturbationRatio = initialPerturbationRms &gt; 1e-12 ? 1 : null;
+    transportIndicator = metrics.indicator;
+  }
+
+  function setPressureBoundary() {
+    prescribedValues(layer * dt, true, (a, exact) =&gt; {
+      pressure[a] = exact.p;
+      nextPressure[a] = exact.p;
+    });
+  }
+
+  function buildSource() {
+    eachInterior(a =&gt; {
+      const ux = derivativeX(u, a);
+      const uy = derivativeY(u, a);
+      const vx = derivativeX(v, a);
+      const vy = derivativeY(v, a);
+      source[a] = -density * (ux * ux + 2 * uy * vx + vy * vy);
+    });
+    pressureLayer = layer;
+    setPressureBoundary();
+    sweep = 0;
+    residual = maxResidual();
+    phase = &#x27;source&#x27;;
+  }
+
+  function pressureSweep() {
+    if (pressureMethod === &#x27;jacobi&#x27;) {
+      // A separate array keeps every neighbor at the previous iteration.
+      eachInterior(a =&gt; { nextPressure[a] = (neighborSum(pressure, a) - hSquared * source[a]) / 4; });
+      [pressure, nextPressure] = [nextPressure, pressure];
+    } else {
+      const omega = pressureMethod === &#x27;sor&#x27; ? pressureOmega : 1;
+      // Row-major, in-place sweep: west/south values have already been updated.
+      // Only interior nodes change; the prescribed pressure boundary stays fixed.
+      eachInterior(a =&gt; {
+        const updated = (neighborSum(pressure, a) - hSquared * source[a]) / 4;
+        pressure[a] += omega * (updated - pressure[a]);
+      });
+    }
+    sweep++;
+    // Evaluate the completed field, never a mix of pre- and post-sweep residuals.
+    residual = maxResidual();
+  }
+
+  function advanceVelocity() {
+    eachInterior(a =&gt; {
+      const advect = q =&gt; (u[a] * (q[a] - q[a - 1]) + v[a] * (q[a] - q[a - size])) / h;
+      nextU[a] = u[a] + dt * (-advect(u) - derivativeX(pressure, a) / density + viscosity * laplacian(u, a));
+      nextV[a] = v[a] + dt * (-advect(v) - derivativeY(pressure, a) / density + viscosity * laplacian(v, a));
+    });
+    prescribedValues((layer + 1) * dt, true, (a, exact) =&gt; { nextU[a] = exact.u; nextV[a] = exact.v; });
+    const metrics = velocityMetrics(nextU, nextV);
+    if (!metrics.finite || !Number.isFinite(metrics.rms)) {
+      phase = &#x27;velocity-error&#x27;;
+      failureMessage = `第 ${layer + 1} 层产生非有限速度，已停止；图中保留第 ${layer} 层的有效速度。`;
+      return;
+    }
+    u.set(nextU);
+    v.set(nextV);
+    layer++;
+    divergence = maxDivergence();
+    perturbationRatio = initialPerturbationRms &gt; 1e-12 ? metrics.rms / initialPerturbationRms : null;
+    transportIndicator = metrics.indicator;
+    if (perturbationRatio !== null &amp;&amp; perturbationRatio &gt;= 20) {
+      phase = &#x27;velocity-error&#x27;;
+      failureMessage = &#x27;速度扰动 RMS 超过初值 20 倍，触发数值幅值保护，已停止后续推进。&#x27;;
+    } else if (metrics.reversed) {
+      phase = &#x27;reverse-flow&#x27;;
+      failureMessage = &#x27;速度出现反向，课件的向后差分已不再迎风，演示暂停；「结果对比」使用按流向选择的迎风差分。&#x27;;
+    } else {
+      phase = layer === endLayer ? &#x27;complete&#x27; : &#x27;advanced&#x27;;
+    }
+  }
+
+  function step(batch = 1) {
+    if (phase === &#x27;initial&#x27; || phase === &#x27;advanced&#x27;) {
+      buildSource();
+    } else if (phase === &#x27;source&#x27; || phase === &#x27;pressure&#x27;) {
+      for (let i = 0; i &lt; batch &amp;&amp; residual &gt; tolerance &amp;&amp; sweep &lt; sweepLimit; i++) pressureSweep();
+      if (residual &lt;= tolerance) phase = &#x27;converged&#x27;;
+      else if (!Number.isFinite(residual) || sweep === sweepLimit) {
+        phase = &#x27;error&#x27;;
+        failureMessage = `压力迭代未收敛（最多 ${sweepLimit} 轮），已暂停；这与时间离散的数值发散不同。`;
+      }
+      else phase = &#x27;pressure&#x27;;
+    } else if (phase === &#x27;converged&#x27;) {
+      advanceVelocity();
+    }
+  }
+
+  const root = document.getElementById(&#x27;explicit-ns-animation&#x27;);
+  const find = selector =&gt; root.querySelector(selector);
+  const canvas = find(&#x27;canvas&#x27;);
+  const context = canvas.getContext(&#x27;2d&#x27;);
+  const probe = find(&#x27;.ns-color-probe&#x27;);
+  const play = find(&#x27;[data-play]&#x27;);
+  const singleStep = find(&#x27;[data-step]&#x27;);
+  const presetSelect = find(&#x27;#ns-preset&#x27;);
+  const dtSelect = find(&#x27;#ns-dt&#x27;);
+  const pressureMethodSelect = find(&#x27;#ns-pressure-method&#x27;);
+  const pressureOmegaSelect = find(&#x27;#ns-pressure-omega&#x27;);
+  const stages = Array.from(root.querySelectorAll(&#x27;.ns-stages li&#x27;));
+  const reducedMotion = matchMedia(&#x27;(prefers-reduced-motion: reduce)&#x27;);
+  const stageIndex = { source: 0, pressure: 1, converged: 2, advanced: 3, complete: 3, error: 1, &#x27;velocity-error&#x27;: 3, &#x27;reverse-flow&#x27;: 3 };
+  const messages = {
+    initial: &#x27;初始速度已给定。&#x27;,
+    source: &#x27;右端已计算，准备迭代压力。&#x27;,
+    pressure: &#x27;本轮仅更新压力，速度仍在当前时间层。&#x27;,
+    converged: &#x27;最大残差 ≤ 10⁻³，下一步更新速度。&#x27;,
+    advanced: &#x27;速度已更新，物理时间增加 Δt。&#x27;,
+    complete: &#x27;已到达本次计算终点。&#x27;,
+    error: &#x27;压力未收敛，已暂停时间推进。&#x27;,
+    &#x27;velocity-error&#x27;: &#x27;速度数值异常，已暂停时间推进。&#x27;,
+    &#x27;reverse-flow&#x27;: &#x27;速度反向，已暂停时间推进。&#x27;
+  };
+  const terminal = () =&gt; [&#x27;complete&#x27;, &#x27;error&#x27;, &#x27;velocity-error&#x27;, &#x27;reverse-flow&#x27;].includes(phase);
+  const playing = () =&gt; timer !== undefined;
+
+  function themeColor(token) {
+    probe.style.color = `var(--${token}, var(--foreground))`;
+    return getComputedStyle(probe).color;
+  }
+
+  function draw() {
+    const width = canvas.getBoundingClientRect().width;
+    if (width === 0) return;
+    const ratio = window.devicePixelRatio || 1;
+    const pixels = Math.round(width * ratio);
+    if (canvas.width !== pixels || canvas.height !== pixels) canvas.width = canvas.height = pixels;
+    context.setTransform(ratio, 0, 0, ratio, 0, 0);
+    context.clearRect(0, 0, width, width);
+
+    const background = themeColor(&#x27;background&#x27;);
+    const foreground = themeColor(&#x27;foreground&#x27;);
+    const border = themeColor(&#x27;border&#x27;);
+    const blue = themeColor(&#x27;blue&#x27;);
+    const orange = themeColor(&#x27;orange&#x27;);
+    const left = 19;
+    const top = 9;
+    const side = width - 32;
+    const cell = side / spatialGrid.intervals;
+    const bottom = top + side;
+    const showSource = phase === &#x27;source&#x27;;
+    const colors = showSource ? source : pressure;
+    const scale = showSource ? sourceScale : pressureScale;
+
+    context.fillStyle = background;
+    context.fillRect(left, top, side, side);
+    for (let j = 0; j &lt; spatialGrid.intervals; j++) {
+      for (let i = 0; i &lt; spatialGrid.intervals; i++) {
+        const value = (colors[at(i, j)] + colors[at(i + 1, j)]
+          + colors[at(i, j + 1)] + colors[at(i + 1, j + 1)]) / 4;
+        context.globalAlpha = 0.72 * Math.min(1, Math.abs(value) / scale);
+        context.fillStyle = value &lt; 0 ? blue : orange;
+        context.fillRect(left + i * cell, bottom - (j + 1) * cell, cell, cell);
+      }
+    }
+    context.globalAlpha = 1;
+    context.strokeStyle = border;
+    context.lineWidth = 0.7;
+    context.beginPath();
+    for (let i = 0; i &lt; size; i++) {
+      const offset = i * cell;
+      context.moveTo(left + offset, top);
+      context.lineTo(left + offset, bottom);
+      context.moveTo(left, top + offset);
+      context.lineTo(left + side, top + offset);
+    }
+    context.stroke();
+
+    context.beginPath();
+    for (let j = 1; j &lt; size - 1; j += 2) {
+      for (let i = 1; i &lt; size - 1; i += 2) {
+        const a = at(i, j);
+        const x = left + i * cell;
+        const y = bottom - j * cell;
+        const dx = 0.73 * cell * u[a];
+        const dy = -0.73 * cell * v[a];
+        const endX = x + dx * 0.5;
+        const endY = y + dy * 0.5;
+        const angle = Math.atan2(dy, dx);
+        const head = Math.min(4.5, 0.33 * Math.hypot(dx, dy));
+        context.moveTo(x - dx * 0.5, y - dy * 0.5);
+        context.lineTo(endX, endY);
+        context.lineTo(endX - head * Math.cos(angle - 0.58), endY - head * Math.sin(angle - 0.58));
+        context.moveTo(endX, endY);
+        context.lineTo(endX - head * Math.cos(angle + 0.58), endY - head * Math.sin(angle + 0.58));
+      }
+    }
+    context.strokeStyle = foreground;
+    context.lineWidth = 1.2;
+    context.lineCap = &#x27;round&#x27;;
+    context.stroke();
+    context.fillStyle = foreground;
+    context.font = &#x27;12px system-ui, sans-serif&#x27;;
+    context.fillText(&#x27;y&#x27;, 5, top + 9);
+    context.fillText(&#x27;x&#x27;, left + side - 6, bottom + 15);
+  }
+
+  function write(selector, value) {
+    const element = find(selector);
+    if (element.textContent !== value) element.textContent = value;
+  }
+
+  function render() {
+    const { kind, amplitude, wave } = initialCondition;
+    const mode = wave === 1 ? &#x27;&#x27; : String(wave);
+    const formula = kind === &#x27;uniform&#x27;
+      ? &#x27;u₀ = 0.92，v₀ = 0.78。均匀流保持不变。&#x27;
+      : kind === &#x27;shear&#x27;
+        ? initialCondition.axis === &#x27;x&#x27;
+          ? `u₀ = 0.92 + ${amplitude.toFixed(2)} sin y，v₀ = 0.78。`
+          : `u₀ = 0.92，v₀ = 0.78 + ${amplitude.toFixed(2)} sin x。`
+        : `u₀ = 0.92 + ${amplitude.toFixed(2)} sin(${mode}x) cos(${mode}y)，v₀ = 0.78 − ${amplitude.toFixed(2)} cos(${mode}x) sin(${mode}y)。`;
+    write(&#x27;[data-initial-formula]&#x27;, formula);
+    write(&#x27;[data-spatial-step]&#x27;, `空间步长 Δx = Δy = 2π/${spatialGrid.intervals} ≈ ${h.toFixed(4)}`);
+    write(&#x27;[data-spatial-nodes]&#x27;, `每方向 ${spatialGrid.intervals} 个空间间隔；显式为 ${size} × ${size} 个节点（含边界）。`);
+    write(&#x27;[data-step-plan]&#x27;, `${endLayer} 步 · T = ${finalTime.toFixed(2)}`);
+    dtSelect.value = String(dt);
+    pressureMethodSelect.value = pressureMethod;
+    pressureOmegaSelect.value = String(pressureOmega);
+    find(&#x27;.ns-omega&#x27;).hidden = pressureMethod !== &#x27;sor&#x27;;
+    write(&#x27;[data-pressure-stage]&#x27;, `${pressureMethods[pressureMethod]} 压力迭代`);
+    const iterationNotes = {
+      jacobi: &#x27;Jacobi 每轮统一使用上一轮压力；切换后从第 0 层重新计算。&#x27;,
+      &#x27;gauss-seidel&#x27;: &#x27;Gauss–Seidel 按行扫描，即时使用本轮已更新的压力；切换后从第 0 层重新计算。&#x27;,
+      sor: &#x27;对 Gauss–Seidel 的修正量乘以 ω；ω = 1 等同于 Gauss–Seidel。切换后从第 0 层重新计算。&#x27;
+    };
+    write(&#x27;[data-iteration-note]&#x27;, iterationNotes[pressureMethod]);
+    const showSource = phase === &#x27;source&#x27;;
+    const scale = showSource ? sourceScale : pressureScale;
+    write(&#x27;[data-field]&#x27;, showSource ? `右端 b · 第 ${layer} 层` : `压力 p · 第 ${pressureLayer} 层`);
+    write(&#x27;[data-low]&#x27;, `−${scale.toFixed(2)}`);
+    write(&#x27;[data-high]&#x27;, `+${scale.toFixed(2)}`);
+    write(&#x27;[data-layer]&#x27;, `时间层 n = ${layer} / ${endLayer}`);
+    write(&#x27;[data-time]&#x27;, `t = ${Number((layer * dt).toFixed(3))}`);
+    find(&#x27;.ns-progress&#x27;).max = endLayer;
+    find(&#x27;.ns-progress&#x27;).value = layer;
+    stages.forEach((item, i) =&gt; {
+      if (i === stageIndex[phase]) item.setAttribute(&#x27;aria-current&#x27;, &#x27;step&#x27;);
+      else item.removeAttribute(&#x27;aria-current&#x27;);
+    });
+    const advancing = phase === &#x27;advanced&#x27; || phase === &#x27;complete&#x27;;
+    write(&#x27;[data-sweeps]&#x27;, phase === &#x27;initial&#x27; ? &#x27;—&#x27; : `${sweep}${advancing ? &#x27;（上一层）&#x27; : &#x27;&#x27;}`);
+    write(&#x27;[data-residual]&#x27;, residual === null ? &#x27;—&#x27; : residual.toExponential(2));
+    write(&#x27;[data-divergence]&#x27;, divergence &lt; 1e-12 ? &#x27;≈ 0&#x27; : divergence.toExponential(2));
+    const message = find(&#x27;[data-message]&#x27;);
+    message.setAttribute(&#x27;aria-live&#x27;, playing() &amp;&amp; !terminal() ? &#x27;off&#x27; : &#x27;polite&#x27;);
+    write(&#x27;[data-message]&#x27;, failureMessage || (phase === &#x27;complete&#x27; ? `已完成 ${endLayer} 步，到达 T = ${finalTime.toFixed(2)}。` : messages[phase]));
+    const growthText = perturbationRatio === null ? &#x27;均匀流&#x27; : `扰动 RMS / 初值 = ${perturbationRatio.toFixed(2)}`;
+    write(&#x27;[data-diagnostic]&#x27;, `${growthText}；Q = ${transportIndicator.toFixed(2)}。Q = Δt max(|u|+|v|)/h + 4νΔt/h²；Q ≤ 1 仅是冻结速度的标量对流扩散充分条件。`);
+    write(&#x27;[data-play]&#x27;, playing() ? &#x27;暂停&#x27; : terminal() ? &#x27;重播&#x27; : &#x27;播放&#x27;);
+    singleStep.disabled = terminal();
+    draw();
+  }
+
+  function pause() {
+    clearTimeout(timer);
+    timer = undefined;
+  }
+
+  function playbackFrame() {
+    const slowStart = layer === 0 &amp;&amp; sweep &lt; 6;
+    step(slowStart ? 1 : 20);
+    if (terminal()) pause();
+    else {
+      const stageDelay = { source: 400, pressure: slowStart ? 230 : 95, converged: 420, advanced: 360 };
+      const delay = layer === 0 ? stageDelay[phase] : Math.max(80, stageDelay[phase] * 0.58);
+      timer = setTimeout(playbackFrame, reducedMotion.matches ? Math.max(300, delay) : delay);
+    }
+    render();
+  }
+
+  play.addEventListener(&#x27;click&#x27;, () =&gt; {
+    if (playing()) pause();
+    else {
+      if (terminal()) reset();
+      timer = setTimeout(playbackFrame, 150);
+    }
+    render();
+  });
+
+  singleStep.addEventListener(&#x27;click&#x27;, () =&gt; {
+    pause();
+    step();
+    render();
+  });
+
+  presetSelect.addEventListener(&#x27;change&#x27;, () =&gt; {
+    pause();
+    initialCondition = initialConditions.find(condition =&gt; condition.id === presetSelect.value) || initialConditions[0];
+    reset();
+    render();
+  });
+
+  dtSelect.addEventListener(&#x27;change&#x27;, () =&gt; {
+    pause();
+    const value = Number(dtSelect.value);
+    dt = timeStepOptions.includes(value) ? value : 0.06;
+    endLayer = Math.round(finalTime / dt);
+    reset();
+    render();
+  });
+
+  pressureMethodSelect.addEventListener(&#x27;change&#x27;, () =&gt; {
+    pause();
+    pressureMethod = Object.hasOwn(pressureMethods, pressureMethodSelect.value) ? pressureMethodSelect.value : &#x27;jacobi&#x27;;
+    reset();
+    render();
+  });
+
+  pressureOmegaSelect.addEventListener(&#x27;change&#x27;, () =&gt; {
+    pause();
+    const value = Number(pressureOmegaSelect.value);
+    pressureOmega = pressureOmegaOptions.includes(value) ? value : 1.5;
+    reset();
+    render();
+  });
+
+  document.addEventListener(&#x27;visibilitychange&#x27;, () =&gt; {
+    if (document.hidden &amp;&amp; playing()) {
+      pause();
+      render();
+    }
+  });
+  new ResizeObserver(draw).observe(canvas);
+  matchMedia(&#x27;(prefers-color-scheme: dark)&#x27;).addEventListener(&#x27;change&#x27;, draw);
+  window.addEventListener(&#x27;openai:set_globals&#x27;, () =&gt; requestAnimationFrame(draw));
+  reset();
+  render();
+})();
+&lt;/script&gt;
+
+
+
+&lt;style id=&quot;codex-visualization-document-scrollbar&quot;&gt;html,body{scrollbar-width:none!important}html::-webkit-scrollbar,body::-webkit-scrollbar{display:none!important}&lt;/style&gt;
+
+&lt;script src=&quot;https://unpkg.com/@floating-ui/core@1.7.3/dist/floating-ui.core.umd.min.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;https://unpkg.com/@floating-ui/dom@1.7.4/dist/floating-ui.dom.umd.min.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+(() =&gt; {
+  if (window.FloatingUIDOM == null) {
+    return;
+  }
+  const { autoUpdate, computePosition, flip, offset, shift, size } =
+    window.FloatingUIDOM;
+  const tooltipPlacements = new Set([&quot;top&quot;, &quot;right&quot;, &quot;bottom&quot;, &quot;left&quot;]);
+  const tooltipId = `codex-visualization-tooltip-${
+    window.crypto?.randomUUID?.() ?? Date.now().toString(36)
+  }`;
+  const tooltipGap = 5;
+  const hoverDelay = 700;
+  const skipDelay = 300;
+  let activeTrigger = null;
+  let pendingTrigger = null;
+  let tooltip = null;
+  let openTimeout = null;
+  let autoUpdateCleanup = null;
+  let positionRequest = 0;
+  let skipDelayUntil = 0;
+  let lastPointerWasTouch = false;
+  let pinnedByTouch = false;
+
+  const getTrigger = (event) =&gt; {
+    for (const target of event.composedPath()) {
+      if (target?.nodeType === Node.ELEMENT_NODE) {
+        const trigger = target.closest(&quot;[data-tooltip]&quot;);
+        if (trigger) return trigger;
+      }
+    }
+    return null;
+  };
+  const containsTarget = (trigger, target) =&gt;
+    target?.nodeType != null &amp;&amp; trigger.contains(target);
+  const getContent = (trigger) =&gt;
+    trigger.getAttribute(&quot;data-tooltip&quot;)?.trim() ?? &quot;&quot;;
+  const getPlacement = (trigger) =&gt; {
+    const placement = trigger.getAttribute(&quot;data-tooltip-placement&quot;);
+    return tooltipPlacements.has(placement) ? placement : &quot;top&quot;;
+  };
+  const getTooltip = () =&gt; {
+    if (tooltip == null) {
+      tooltip = document.createElement(&quot;div&quot;);
+      tooltip.id = tooltipId;
+      tooltip.className = &quot;tooltip&quot;;
+      tooltip.setAttribute(&quot;role&quot;, &quot;tooltip&quot;);
+    }
+    return tooltip;
+  };
+  const setDescribedBy = (trigger, described) =&gt; {
+    const ids = new Set(
+      (trigger.getAttribute(&quot;aria-describedby&quot;) ?? &quot;&quot;)
+        .split(/\s+/)
+        .filter(Boolean),
+    );
+    if (described) {
+      ids.add(tooltipId);
+    } else {
+      ids.delete(tooltipId);
+    }
+    if (ids.size === 0) {
+      trigger.removeAttribute(&quot;aria-describedby&quot;);
+    } else {
+      trigger.setAttribute(&quot;aria-describedby&quot;, [...ids].join(&quot; &quot;));
+    }
+  };
+  const clearOpenTimeout = () =&gt; {
+    if (openTimeout != null) {
+      window.clearTimeout(openTimeout);
+      openTimeout = null;
+    }
+    pendingTrigger = null;
+  };
+  const closeTooltip = (activateSkipDelay = true) =&gt; {
+    clearOpenTimeout();
+    pinnedByTouch = false;
+    positionRequest += 1;
+    autoUpdateCleanup?.();
+    autoUpdateCleanup = null;
+    if (activeTrigger == null) {
+      return;
+    }
+    setDescribedBy(activeTrigger, false);
+    activeTrigger = null;
+    tooltip?.remove();
+    if (activateSkipDelay) {
+      skipDelayUntil = Date.now() + skipDelay;
+    }
+  };
+  const updatePosition = (trigger, floating) =&gt; {
+    const request = ++positionRequest;
+    void computePosition(trigger, floating, {
+      middleware: [
+        offset(tooltipGap),
+        flip({ padding: tooltipGap }),
+        shift({ padding: tooltipGap }),
+        size({
+          padding: tooltipGap,
+          apply({ availableHeight, availableWidth, elements }) {
+            elements.floating.style.setProperty(
+              &quot;--tooltip-available-width&quot;,
+              `${Math.max(0, availableWidth)}px`,
+            );
+            elements.floating.style.setProperty(
+              &quot;--tooltip-available-height&quot;,
+              `${Math.max(0, availableHeight)}px`,
+            );
+          },
+        }),
+      ],
+      placement: getPlacement(trigger),
+      strategy: &quot;fixed&quot;,
+    })
+      .then(({ x, y }) =&gt; {
+        if (activeTrigger !== trigger || request !== positionRequest) {
+          return;
+        }
+        const scale = window.devicePixelRatio || 1;
+        floating.style.transform = `translate(${Math.round(x * scale) / scale}px, ${Math.round(y * scale) / scale}px)`;
+        floating.style.visibility = &quot;visible&quot;;
+      })
+      .catch(() =&gt; {
+        if (activeTrigger === trigger &amp;&amp; request === positionRequest) {
+          closeTooltip(false);
+        }
+      });
+  };
+  const openTooltip = (trigger) =&gt; {
+    const content = getContent(trigger);
+    if (!trigger.isConnected || content.length === 0) {
+      return;
+    }
+    clearOpenTimeout();
+    if (activeTrigger === trigger) {
+      return;
+    }
+    closeTooltip();
+    const floating = getTooltip();
+    floating.textContent = content;
+    floating.style.visibility = &quot;hidden&quot;;
+    floating.style.transform = &quot;translate(0, 0)&quot;;
+    document.body.appendChild(floating);
+    activeTrigger = trigger;
+    setDescribedBy(trigger, true);
+    autoUpdateCleanup = autoUpdate(trigger, floating, () =&gt; {
+      updatePosition(trigger, floating);
+    });
+  };
+  const requestOpen = (trigger, immediate = false) =&gt; {
+    if (
+      getContent(trigger).length === 0 ||
+      activeTrigger === trigger ||
+      pendingTrigger === trigger
+    ) {
+      return;
+    }
+    clearOpenTimeout();
+    pendingTrigger = trigger;
+    const delay =
+      immediate || activeTrigger != null || Date.now() &lt; skipDelayUntil
+        ? 0
+        : hoverDelay;
+    if (delay === 0) {
+      openTooltip(trigger);
+      return;
+    }
+    openTimeout = window.setTimeout(() =&gt; {
+      openTimeout = null;
+      pendingTrigger = null;
+      openTooltip(trigger);
+    }, delay);
+  };
+  const handlePointerOpen = (event) =&gt; {
+    if (event.pointerType === &quot;touch&quot;) {
+      return;
+    }
+    const trigger = getTrigger(event);
+    if (trigger == null || containsTarget(trigger, event.relatedTarget)) {
+      return;
+    }
+    requestOpen(trigger);
+  };
+  const handlePointer = (event) =&gt; {
+    lastPointerWasTouch =
+      event.type === &quot;pointerdown&quot; &amp;&amp; event.pointerType === &quot;touch&quot;;
+  };
+  const handleTouchClick = (event) =&gt; {
+    const isTouch = event.pointerType === &quot;touch&quot; || lastPointerWasTouch;
+    lastPointerWasTouch = false;
+    if (!isTouch || event.detail === 0) {
+      return;
+    }
+    const trigger = getTrigger(event);
+    if (
+      trigger == null ||
+      !trigger.isConnected ||
+      getContent(trigger).length === 0 ||
+      (pinnedByTouch &amp;&amp; activeTrigger === trigger)
+    ) {
+      if (pinnedByTouch) {
+        closeTooltip();
+      }
+      return;
+    }
+    openTooltip(trigger);
+    pinnedByTouch = activeTrigger === trigger;
+    window.setTimeout(() =&gt; {
+      if (activeTrigger === trigger &amp;&amp; !trigger.isConnected) {
+        closeTooltip(false);
+      }
+    }, 0);
+  };
+  const handleLeave = (event) =&gt; {
+    if (pinnedByTouch) {
+      return;
+    }
+    const trigger = getTrigger(event);
+    if (trigger == null || containsTarget(trigger, event.relatedTarget)) {
+      return;
+    }
+    if (activeTrigger === trigger || pendingTrigger === trigger) {
+      closeTooltip();
+    }
+  };
+  const handleFocusIn = (event) =&gt; {
+    const trigger = getTrigger(event);
+    if (trigger?.matches(&quot;:focus-visible&quot;)) {
+      requestOpen(trigger, true);
+    }
+  };
+  const handleKeyDown = (event) =&gt; {
+    if (event.key === &quot;Escape&quot;) {
+      closeTooltip();
+    }
+  };
+  const handleContextMenu = (event) =&gt; {
+    lastPointerWasTouch = false;
+    const trigger = getTrigger(event);
+    if (activeTrigger === trigger || pendingTrigger === trigger) {
+      closeTooltip();
+    }
+  };
+  const handlers = {
+    pointerover: handlePointerOpen,
+    pointerdown: handlePointer,
+    pointercancel: handlePointer,
+    click: handleTouchClick,
+    pointerout: handleLeave,
+    focusin: handleFocusIn,
+    focusout: handleLeave,
+    keydown: handleKeyDown,
+    contextmenu: handleContextMenu,
+  };
+  const roots = new Map();
+  const handledEvents = new WeakSet();
+  const handleEvent = (event) =&gt; {
+    if (handledEvents.has(event)) return;
+    handledEvents.add(event);
+    handlers[event.type](event);
+  };
+  const discoverRoots = (node) =&gt; {
+    if (node.shadowRoot) listen(node.shadowRoot);
+    for (const element of node.querySelectorAll(&quot;*&quot;)) {
+      if (element.shadowRoot) listen(element.shadowRoot);
+    }
+  };
+  const listen = (root) =&gt; {
+    if (roots.has(root)) return;
+    for (const type of Object.keys(handlers)) root.addEventListener(type, handleEvent);
+    const observer = new window.MutationObserver((records) =&gt; {
+      for (const { addedNodes } of records) {
+        for (const node of addedNodes) {
+          if (node.nodeType === Node.ELEMENT_NODE) discoverRoots(node);
+        }
+      }
+      for (const [root, cleanup] of roots) {
+        if (root.host &amp;&amp; !root.host.isConnected) {
+          cleanup();
+          roots.delete(root);
+        }
+      }
+      if (activeTrigger &amp;&amp; !activeTrigger.isConnected) closeTooltip(false);
+    });
+    observer.observe(root, { childList: true, subtree: true });
+    roots.set(root, () =&gt; {
+      observer.disconnect();
+      for (const type of Object.keys(handlers)) root.removeEventListener(type, handleEvent);
+    });
+    discoverRoots(root);
+  };
+  const destroy = () =&gt; {
+    closeTooltip(false);
+    lastPointerWasTouch = false;
+    for (const cleanup of roots.values()) cleanup();
+    roots.clear();
+    tooltip = null;
+  };
+
+  // Events between children of one shadow root never reach the document.
+  listen(document);
+  window.addEventListener(&quot;pagehide&quot;, destroy, { once: true });
+})();
+&lt;/script&gt;
+&lt;script id=&quot;codex-visualization-tabs&quot;&gt;
+(() =&gt; {
+  const selector = &#x27;.nav[role=&quot;tablist&quot;] [role=&quot;tab&quot;]&#x27;;
+  const disabled = &#x27;:disabled,[aria-disabled=&quot;true&quot;]&#x27;;
+  const selectTab = (selected) =&gt; {
+    const panelId = selected.getAttribute(&quot;aria-controls&quot;);
+    for (const tab of selected.closest(&#x27;[role=&quot;tablist&quot;]&#x27;).querySelectorAll(&#x27;[role=&quot;tab&quot;]&#x27;)) {
+      const active = tab === selected;
+      tab.classList.toggle(&quot;active&quot;, active);
+      tab.setAttribute(&quot;aria-selected&quot;, String(active));
+      const id = tab.getAttribute(&quot;aria-controls&quot;);
+      const panel = id &amp;&amp; document.getElementById(id);
+      if (panel != null) {
+        panel.hidden = id !== panelId;
+        if (!panel.hidden &amp;&amp; selected.id) {
+          panel.setAttribute(&quot;aria-labelledby&quot;, selected.id);
+        }
+      }
+    }
+  };
+  const interact = (event) =&gt; {
+    const tab = event.target?.closest?.(selector);
+    if (event.defaultPrevented || tab == null || tab.matches(disabled)) {
+      return;
+    }
+    if (event.type === &quot;click&quot;) {
+      selectTab(tab);
+      return;
+    }
+    const tabs = Array.from(
+      tab.closest(&#x27;[role=&quot;tablist&quot;]&#x27;).querySelectorAll(&#x27;[role=&quot;tab&quot;]&#x27;),
+    ).filter((candidate) =&gt; !candidate.matches(disabled));
+    const current = tabs.indexOf(tab);
+    let next;
+    if (event.key === &quot;ArrowRight&quot; || event.key === &quot;ArrowDown&quot;) {
+      next = (current + 1) % tabs.length;
+    } else if (event.key === &quot;ArrowLeft&quot; || event.key === &quot;ArrowUp&quot;) {
+      next = (current + tabs.length - 1) % tabs.length;
+    } else if (event.key === &quot;Home&quot;) {
+      next = 0;
+    } else if (event.key === &quot;End&quot;) {
+      next = tabs.length - 1;
+    } else {
+      return;
+    }
+    event.preventDefault();
+    tabs[next].focus();
+    selectTab(tabs[next]);
+  };
+
+  for (const list of document.querySelectorAll(&#x27;.nav[role=&quot;tablist&quot;]&#x27;)) {
+    const selected =
+      list.querySelector(&#x27;[role=&quot;tab&quot;][aria-selected=&quot;true&quot;]&#x27;) ??
+      list.querySelector(&#x27;[role=&quot;tab&quot;].active&#x27;) ??
+      list.querySelector(&#x27;[role=&quot;tab&quot;]&#x27;);
+    if (selected != null) {
+      selectTab(selected);
+    }
+  }
+  document.addEventListener(&quot;click&quot;, interact);
+  document.addEventListener(&quot;keydown&quot;, interact);
+  window.addEventListener(&quot;pagehide&quot;, () =&gt; {
+    document.removeEventListener(&quot;click&quot;, interact);
+    document.removeEventListener(&quot;keydown&quot;, interact);
+  }, { once: true });
+})();
+&lt;/script&gt;
+&lt;script id=&quot;codex-visualization-carousel&quot;&gt;
+  (() =&gt; {
+    for (const root of document.querySelectorAll(&quot;.viz-carousel&quot;)) {
+      const panels = Array.from(
+        root.querySelectorAll(&quot;:scope &gt; [data-variant]&quot;),
+      );
+      if (panels.length === 0) {
+        continue;
+      }
+      root.setAttribute(&quot;role&quot;, &quot;group&quot;);
+      panels.forEach((panel, index) =&gt; {
+        panel.hidden = index !== 0;
+        panel.setAttribute(&quot;role&quot;, &quot;group&quot;);
+        if (!panel.hasAttribute(&quot;aria-label&quot;)) {
+          panel.setAttribute(&quot;aria-label&quot;, panel.dataset.variant);
+        }
+      });
+      root.dataset.activeVariant = panels[0].dataset.variant;
+      if (panels.length === 1) {
+        continue;
+      }
+
+      const controls = document.createElement(&quot;div&quot;);
+      controls.className = &quot;viz-carousel-controls&quot;;
+      // Portable copy of the settings dropdown&#x27;s legacy glyph; no 14px icon-package preset matches it.
+      // https://github.com/openai/openai/blob/master/codex/codex-apps/webview/src/icons/chevron.svg
+      controls.innerHTML = `
+      &lt;button type=&quot;button&quot; class=&quot;viz-carousel-previous cursor-interaction&quot;&gt;&lt;i data-lucide=&quot;chevron-left&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;/button&gt;
+      &lt;details class=&quot;viz-carousel-picker&quot;&gt;
+        &lt;summary class=&quot;cursor-interaction&quot;&gt;
+          &lt;span class=&quot;viz-carousel-count tabular-nums&quot;&gt;&lt;/span&gt;
+          &lt;span class=&quot;viz-carousel-name&quot;&gt;&lt;/span&gt;
+          &lt;svg class=&quot;viz-carousel-caret&quot; width=&quot;14&quot; height=&quot;14&quot; viewBox=&quot;0 0 20 21&quot; fill=&quot;none&quot; aria-hidden=&quot;true&quot; focusable=&quot;false&quot;&gt;
+            &lt;path d=&quot;M15.2793 7.71101C15.539 7.45131 15.961 7.45131 16.2207 7.71101C16.4804 7.97071 16.4804 8.39272 16.2207 8.65242L10.4707 14.4024C10.211 14.6621 9.78902 14.6621 9.52932 14.4024L3.77932 8.65242L3.69436 8.54792C3.52385 8.28979 3.55205 7.93828 3.77932 7.71101C4.00659 7.48374 4.3581 7.45554 4.61623 7.62605L4.72073 7.71101L10 12.9903L15.2793 7.71101Z&quot; fill=&quot;currentColor&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;0.6&quot; /&gt;
+          &lt;/svg&gt;
+        &lt;/summary&gt;
+        &lt;div class=&quot;viz-carousel-options&quot;&gt;&lt;/div&gt;
+      &lt;/details&gt;
+      &lt;button type=&quot;button&quot; class=&quot;viz-carousel-next cursor-interaction&quot;&gt;&lt;i data-lucide=&quot;chevron-right&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;/button&gt;`;
+      const previous = controls.querySelector(&quot;.viz-carousel-previous&quot;);
+      const next = controls.querySelector(&quot;.viz-carousel-next&quot;);
+      const picker = controls.querySelector(&quot;.viz-carousel-picker&quot;);
+      const summary = picker.querySelector(&quot;summary&quot;);
+      const count = controls.querySelector(&quot;.viz-carousel-count&quot;);
+      const name = controls.querySelector(&quot;.viz-carousel-name&quot;);
+      const options = controls.querySelector(&quot;.viz-carousel-options&quot;);
+      const status = document.createElement(&quot;span&quot;);
+      status.className = &quot;sr-only&quot;;
+      status.setAttribute(&quot;role&quot;, &quot;status&quot;);
+      status.setAttribute(&quot;aria-live&quot;, &quot;polite&quot;);
+      status.setAttribute(&quot;aria-atomic&quot;, &quot;true&quot;);
+      previous.setAttribute(
+        &quot;aria-label&quot;,
+        root.dataset.previousLabel ?? &quot;Previous variant&quot;,
+      );
+      next.setAttribute(&quot;aria-label&quot;, root.dataset.nextLabel ?? &quot;Next variant&quot;);
+
+      let active = 0;
+      let mousePointerId = null;
+      let summaryPointerHandled = false;
+      summary.addEventListener(&quot;pointerdown&quot;, (event) =&gt; {
+        summaryPointerHandled =
+          event.pointerType === &quot;mouse&quot; &amp;&amp; event.button === 0 &amp;&amp; !event.ctrlKey;
+        if (!summaryPointerHandled) {
+          return;
+        }
+        event.preventDefault();
+        summary.focus({ preventScroll: true });
+        picker.open = !picker.open;
+        mousePointerId = picker.open ? event.pointerId : null;
+      });
+      summary.addEventListener(&quot;click&quot;, (event) =&gt; {
+        if (summaryPointerHandled &amp;&amp; event.detail &gt; 0) {
+          event.preventDefault();
+        }
+      });
+      const choices = panels.map((panel, index) =&gt; {
+        const choice = document.createElement(&quot;button&quot;);
+        choice.type = &quot;button&quot;;
+        choice.className = &quot;cursor-interaction&quot;;
+        choice.textContent = panel.dataset.variant;
+        choice.addEventListener(&quot;click&quot;, () =&gt; {
+          select(index);
+          summary.focus();
+        });
+        choice.addEventListener(&quot;pointerup&quot;, (event) =&gt; {
+          if (
+            picker.open &amp;&amp;
+            event.pointerType === &quot;mouse&quot; &amp;&amp;
+            event.button === 0 &amp;&amp;
+            event.pointerId === mousePointerId
+          ) {
+            choice.click();
+          }
+        });
+        options.appendChild(choice);
+        return choice;
+      });
+      const select = (index) =&gt; {
+        const changed = active !== index;
+        active = index;
+        panels.forEach((panel, position) =&gt; {
+          panel.hidden = position !== active;
+          choices[position].setAttribute(
+            &quot;aria-current&quot;,
+            String(position === active),
+          );
+        });
+        root.dataset.activeVariant = panels[active].dataset.variant;
+        count.textContent = `${active + 1} / ${panels.length}`;
+        name.textContent = panels[active].dataset.variant;
+        picker.open = false;
+        mousePointerId = null;
+        if (changed) {
+          status.textContent = `${count.textContent}: ${name.textContent}`;
+        }
+      };
+      previous.addEventListener(&quot;click&quot;, () =&gt;
+        select((active + panels.length - 1) % panels.length),
+      );
+      next.addEventListener(&quot;click&quot;, () =&gt;
+        select((active + 1) % panels.length),
+      );
+      picker.addEventListener(&quot;keydown&quot;, (event) =&gt; {
+        if (event.key === &quot;Escape&quot; &amp;&amp; picker.open) {
+          event.preventDefault();
+          picker.open = false;
+          mousePointerId = null;
+          summary.focus();
+          return;
+        }
+        if (event.altKey || event.ctrlKey || event.metaKey) {
+          return;
+        }
+        const index = choices.indexOf(document.activeElement);
+        let nextIndex;
+        if (event.key === &quot;ArrowDown&quot;) {
+          nextIndex = index &lt; 0 ? active : (index + 1) % choices.length;
+        } else if (event.key === &quot;ArrowUp&quot;) {
+          nextIndex = index &lt; 0 ? active : (index + choices.length - 1) % choices.length;
+        } else if (picker.open &amp;&amp; event.key === &quot;Home&quot;) {
+          nextIndex = 0;
+        } else if (picker.open &amp;&amp; event.key === &quot;End&quot;) {
+          nextIndex = choices.length - 1;
+        } else {
+          return;
+        }
+        event.preventDefault();
+        picker.open = true;
+        choices[nextIndex].focus();
+      });
+      picker.addEventListener(&quot;focusout&quot;, (event) =&gt; {
+        if (!picker.contains(event.relatedTarget)) {
+          picker.open = false;
+          mousePointerId = null;
+        }
+      });
+      const dismiss = (event) =&gt; {
+        if (!summary.contains(event.target)) {
+          mousePointerId = null;
+        }
+        if (!picker.contains(event.target)) {
+          picker.open = false;
+        }
+      };
+      const endPointerSelection = () =&gt; {
+        mousePointerId = null;
+      };
+      const sizePicker = () =&gt; {
+        root.style.setProperty(
+          &quot;--viz-carousel-picker-height&quot;,
+          `${picker.open ? options.offsetHeight : 0}px`,
+        );
+      };
+      picker.addEventListener(&quot;toggle&quot;, sizePicker);
+      window.addEventListener(&quot;resize&quot;, sizePicker);
+      document.addEventListener(&quot;pointerdown&quot;, dismiss);
+      document.addEventListener(&quot;pointerup&quot;, endPointerSelection);
+      document.addEventListener(&quot;pointercancel&quot;, endPointerSelection);
+      window.addEventListener(&quot;blur&quot;, endPointerSelection);
+      window.addEventListener(
+        &quot;pagehide&quot;,
+        () =&gt; {
+          document.removeEventListener(&quot;pointerdown&quot;, dismiss);
+          document.removeEventListener(&quot;pointerup&quot;, endPointerSelection);
+          document.removeEventListener(&quot;pointercancel&quot;, endPointerSelection);
+          window.removeEventListener(&quot;blur&quot;, endPointerSelection);
+          window.removeEventListener(&quot;resize&quot;, sizePicker);
+        },
+        { once: true },
+      );
+      root.append(controls, status);
+      select(0);
+    }
+  })();
+&lt;/script&gt;
+&lt;script id=&quot;codex-visualization-lucide&quot; async src=&quot;https://unpkg.com/lucide@1.17.0/dist/umd/lucide.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+(() =&gt; {
+  const initialize = () =&gt; {
+    globalThis.lucide?.createIcons({ attrs: { width: 16, height: 16 } });
+  };
+  if (globalThis.lucide != null) {
+    initialize();
+    return;
+  }
+  document
+    .getElementById(&quot;codex-visualization-lucide&quot;)
+    ?.addEventListener(&quot;load&quot;, initialize, { once: true });
+})();
+&lt;/script&gt;
+
+&lt;script id=&quot;cfd-i18n-runtime&quot;&gt;
+// Shared DOM translator. The self-contained factory is also embedded in the sandboxed
+// enhanced explicit animation; the archived original animation remains untouched.
+function createLegacyTranslator(dictionary, initialLanguage = &#x27;en&#x27;) {
+  let language = initialLanguage === &#x27;zh&#x27; ? &#x27;zh&#x27; : &#x27;en&#x27;;
+  const sources = new WeakMap();
+  const attributes = new WeakMap();
+  const patterns = dictionary.patterns.map(([pattern, replacement]) =&gt; [new RegExp(pattern), replacement]);
+  const ignored = new Set([&#x27;SCRIPT&#x27;, &#x27;STYLE&#x27;, &#x27;NOSCRIPT&#x27;]);
+  const watchedAttributes = [&#x27;aria-label&#x27;, &#x27;title&#x27;, &#x27;alt&#x27;, &#x27;placeholder&#x27;];
+  let observer;
+  function translateText(value) {
+    if (language !== &#x27;en&#x27; || typeof value !== &#x27;string&#x27;) return value;
+    const trimmed = value.trim();
+    let translated = dictionary.strings[trimmed];
+    if (translated === undefined) {
+      for (const [pattern, replacement] of patterns) {
+        if (pattern.test(trimmed)) { translated = trimmed.replace(pattern, replacement); break; }
+      }
+    }
+    if (translated === undefined) return value;
+    const prefix = value.slice(0, value.length - value.trimStart().length);
+    const suffix = value.slice(value.trimEnd().length);
+    return prefix + translated + suffix;
+  }
+  function textNode(node) {
+    if (!node.parentElement || ignored.has(node.parentElement.tagName) || node.parentElement.closest(&#x27;[data-i18n-ignore]&#x27;)) return;
+    const current = node.nodeValue;
+    const prior = sources.get(node);
+    const original = prior &amp;&amp; current === prior.rendered ? prior.original : current;
+    const rendered = translateText(original);
+    sources.set(node, { original, rendered });
+    if (current !== rendered) node.nodeValue = rendered;
+  }
+  function element(node) {
+    if (ignored.has(node.tagName) || node.closest(&#x27;[data-i18n-ignore]&#x27;)) return;
+    if (node.hasAttribute(&#x27;data-en&#x27;) &amp;&amp; node.hasAttribute(&#x27;data-zh&#x27;) &amp;&amp; node.childElementCount === 0) {
+      const value = node.getAttribute(language === &#x27;zh&#x27; ? &#x27;data-zh&#x27; : &#x27;data-en&#x27;);
+      if (node.textContent !== value) node.textContent = value;
+      // Explicit bilingual attributes are authoritative; no legacy source restoration.
+      for (const child of node.childNodes) if (child.nodeType === 3) sources.delete(child);
+    }
+    const record = attributes.get(node) || {};
+    for (const name of watchedAttributes) {
+      const explicit = node.getAttribute(`data-${language}-${name}`);
+      if (explicit !== null) {
+        if (node.getAttribute(name) !== explicit) node.setAttribute(name, explicit);
+        delete record[name];
+      } else if (node.hasAttribute(name)) {
+        const current = node.getAttribute(name);
+        const prior = record[name];
+        const original = prior &amp;&amp; current === prior.rendered ? prior.original : current;
+        const rendered = translateText(original);
+        record[name] = { original, rendered };
+        if (current !== rendered) node.setAttribute(name, rendered);
+      }
+    }
+    attributes.set(node, record);
+  }
+  function visit(root) {
+    if (root.nodeType === 3) { textNode(root); return; }
+    if (root.nodeType === 1) {
+      if (ignored.has(root.tagName) || root.closest(&#x27;[data-i18n-ignore]&#x27;)) return;
+      element(root);
+    }
+    for (const child of root.childNodes) visit(child);
+  }
+  function watch() {
+    observer?.observe(document.documentElement, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: watchedAttributes });
+  }
+  function translatePage(root = document) {
+    // Flush queued renderer mutations before translating. Disconnecting avoids
+    // observing our own text writes and prevents per-frame full-document scans.
+    const pending = observer?.takeRecords() || [];
+    observer?.disconnect();
+    for (const record of pending) handle(record);
+    visit(root);
+    document.documentElement.lang = language === &#x27;zh&#x27; ? &#x27;zh-CN&#x27; : &#x27;en&#x27;;
+    watch();
+  }
+  function handle(record) {
+    if (record.type === &#x27;childList&#x27;) for (const node of record.addedNodes) visit(node);
+    else if (record.type === &#x27;characterData&#x27;) textNode(record.target);
+    else if (record.type === &#x27;attributes&#x27;) element(record.target);
+  }
+  function setLanguage(value) {
+    language = value === &#x27;zh&#x27; ? &#x27;zh&#x27; : &#x27;en&#x27;;
+    translatePage();
+  }
+  observer = new MutationObserver(records =&gt; {
+    observer.disconnect();
+    for (const record of records) handle(record);
+    watch();
+  });
+  translatePage();
+  return { translateText, translatePage, setLanguage, getLanguage: () =&gt; language };
+}
+
+const cfdTranslator = createLegacyTranslator({&quot;strings&quot;: {&quot;Navier–Stokes 显式时间推进&quot;: &quot;Navier–Stokes · Explicit time stepping&quot;, &quot;Navier–Stokes 时间推进&quot;: &quot;Navier–Stokes time stepping&quot;, &quot;时间推进方法&quot;: &quot;Time-stepping methods&quot;, &quot;显式推进&quot;: &quot;Explicit&quot;, &quot;隐式 MAC&quot;: &quot;Implicit MAC&quot;, &quot;结果对比&quot;: &quot;Compare&quot;, &quot;波浪冲击&quot;: &quot;Wave impact&quot;, &quot;页面内容&quot;: &quot;Page contents&quot;, &quot;动画演示&quot;: &quot;Animation&quot;, &quot;推进流程&quot;: &quot;Workflow&quot;, &quot;离散公式&quot;: &quot;Equations&quot;, &quot;推进动画&quot;: &quot;Time-stepping animation&quot;, &quot;Navier–Stokes 显式时间推进动画&quot;: &quot;Navier–Stokes explicit time-stepping animation&quot;, &quot;单独打开动画&quot;: &quot;Open animation separately&quot;, &quot;查看原始动画&quot;: &quot;View original animation (Chinese)&quot;, &quot;推进流程图&quot;: &quot;Time-stepping workflow&quot;, &quot;是物理时间层，&quot;: &quot;is the physical time level;&quot;, &quot;是当前时间层内的压力迭代轮数。&quot;: &quot;is the pressure iteration within that time level.&quot;, &quot;读入第&quot;: &quot;Read velocity at level&quot;, &quot;层速度&quot;: &quot; &quot;, &quot;已知&quot;: &quot;Known&quot;, &quot;计算压力方程右端&quot;: &quot;Build pressure right-hand side&quot;, &quot;式（6）给出&quot;: &quot;Equation (6) gives&quot;, &quot;，施加压力边界条件&quot;: &quot;; apply pressure boundary conditions&quot;, &quot;压力迭代一轮&quot;: &quot;One pressure iteration&quot;, &quot;+ 1，速度和&quot;: &quot;+ 1; hold velocity and&quot;, &quot;固定&quot;: &quot;fixed&quot;, &quot;最大压力残差 ≤ 10&quot;: &quot;Maximum pressure residual ≤ 10&quot;, &quot;未达标&quot;: &quot;Not yet&quot;, &quot;↶ 回到压力迭代&quot;: &quot;↶ Repeat pressure iteration&quot;, &quot;用收敛的&quot;: &quot;Use converged&quot;, &quot;更新速度&quot;: &quot;to update velocity&quot;, &quot;式（4）（5）给出&quot;: &quot;Equations (4) and (5) give&quot;, &quot;+ 1，返回起点推进下一时间层&quot;: &quot;+ 1; return to the start for the next time level&quot;, &quot;动画使用等距网格，&quot;: &quot;The animation uses a uniform grid,&quot;, &quot;压力泊松方程&quot;: &quot;Pressure Poisson equation&quot;, &quot;式（6）&quot;: &quot;Equation (6)&quot;, &quot;表示中心差分，&quot;: &quot;denotes a centered difference;&quot;, &quot;表示五点离散拉普拉斯算子。以&quot;: &quot;is the five-point discrete Laplacian. In the&quot;, &quot;方向为例。&quot;: &quot;direction, for example:&quot;, &quot;E、W、N、S 分别表示中心点右、左、上、下的四个邻点。&quot;: &quot;E, W, N and S are the right, left, upper and lower neighbors.&quot;, &quot;Jacobi 压力更新&quot;: &quot;Jacobi pressure update&quot;, &quot;默认选项&quot;: &quot;Default&quot;, &quot;固定时间层&quot;: &quot;Fix the time level&quot;, &quot;。用第&quot;: &quot;. Use the four neighbor pressures from iteration&quot;, &quot;轮的四个邻点压力，同时更新所有内点。&quot;: &quot;to update all interior points simultaneously.&quot;, &quot;动画在所有内点的最大残差达到 10&quot;: &quot;When the maximum residual over all interior points reaches 10&quot;, &quot;或更小时，取当前压力为&quot;: &quot;or less, the current pressure is accepted as&quot;, &quot;Gauss–Seidel 与 SOR 压力更新&quot;: &quot;Gauss–Seidel and SOR pressure updates&quot;, &quot;固定当前时间层的速度和压力方程右端，按网格顺序逐点扫描。下标“最新”表示：已更新的邻点使用本轮新值，其余邻点使用上一轮值。&quot;: &quot;Hold velocity and the pressure right-hand side fixed at the current time level, and sweep through the grid. “Latest” means the new value for neighbors already visited, and the previous value for all other neighbors.&quot;, &quot;最新&quot;: &quot;latest&quot;, &quot;新&quot;: &quot;new&quot;, &quot;旧&quot;: &quot;old&quot;, &quot;Gauss–Seidel 对应&quot;: &quot;Gauss–Seidel uses&quot;, &quot;= 1；SOR 可选 1.0–1.9。每完成一整轮扫描，再用完整的新压力场计算最大残差；三种方法使用相同的停止阈值。SOR 的收敛速度取决于松弛因子，并非&quot;: &quot;= 1; SOR offers 1.0–1.9. After each complete sweep, evaluate the maximum residual using the updated pressure field. All three methods use the same stopping tolerance. SOR convergence depends on the relaxation factor; increasing&quot;, &quot;越大越快。&quot;: &quot;does not always make it faster.&quot;, &quot;显式速度更新&quot;: &quot;Explicit velocity update&quot;, &quot;式（4）（5）&quot;: &quot;Equations (4) and (5)&quot;, &quot;令 (&quot;: &quot;Let (&quot;, &quot;) 分别取 (&quot;: &quot;) be (&quot;, &quot;是对流项的向后差分。&quot;: &quot;is the backward difference used for advection.&quot;, &quot;计算出两个速度分量后，物理时间才增加 Δ&quot;: &quot;After both velocity components are updated, physical time increases by Δ&quot;, &quot;隐式时间推进 · MAC 投影法&quot;: &quot;Implicit time stepping · MAC projection&quot;, &quot;隐式 MAC 投影法&quot;: &quot;Implicit MAC projection&quot;, &quot;启用 JavaScript 即可播放动画。&quot;: &quot;Enable JavaScript to play the animation.&quot;, &quot;层面速度&quot;: &quot;face velocities&quot;, &quot;给定已修正的&quot;: &quot;Given the corrected&quot;, &quot;隐式预测中间速度&quot;: &quot;Implicit velocity predictor&quot;, &quot;迭代对流与扩散项，求&quot;: &quot;Iterate advection and diffusion to obtain&quot;, &quot;在每个单元中心对预测面速度取离散散度&quot;: &quot;Take the discrete divergence of predicted face velocities at each cell center&quot;, &quot;迭代求解压力泊松方程&quot;: &quot;Solve the pressure Poisson equation iteratively&quot;, &quot;在单元中心更新&quot;: &quot;Update at cell centers:&quot;, &quot;↶ 继续压力迭代&quot;: &quot;↶ Continue pressure iterations&quot;, &quot;投影修正面速度&quot;: &quot;Project face velocities&quot;, &quot;用相邻单元的压力差修正&quot;: &quot;Use adjacent-cell pressure differences to correct&quot;, &quot;，得到第&quot;: &quot;, yielding velocity at level&quot;, &quot;+ 1 层速度&quot;: &quot;+ 1&quot;, &quot;依据《CFD 5》PDF 第 30–34 页。动画采用等距周期网格，&quot;: &quot;Based on CFD 5, PDF pages 30–34. The animation uses a uniform periodic grid,&quot;, &quot;，压力取零均值。&quot;: &quot;, with zero-mean pressure.&quot;, &quot;隐式预测&quot;: &quot;Implicit predictor&quot;, &quot;结合式（8）和式（10）的分步思路&quot;: &quot;Combining the split-step ideas in equations (8) and (10)&quot;, &quot;第 30 页的式（8）在新时间层计算空间项。第 31 页的式（10）在旧时间层计算对流和扩散，用来说明投影如何拆分。动画把预测步写成后向 Euler，再按式（11）（12）投影。&quot;: &quot;Equation (8) on page 30 evaluates spatial terms at the new time level. Equation (10) on page 31 evaluates advection and diffusion at the old level to illustrate the projection split. This animation uses backward Euler for the predictor, followed by the projection in equations (11) and (12).&quot;, &quot;包含对流和扩散，其中&quot;: &quot;contains advection and diffusion, with&quot;, &quot;。横向速度取周围四个面值的平均。Jacobi 用上一轮速度确定迎风方向并同时更新两个分量；Gauss–Seidel 与 SOR 按网格顺序逐点先更新 u、再更新 v，各局部方程用最新可用速度确定对流系数，SOR 再对该更新作松弛。完整扫描后重新计算下式的非线性残差，直到其最大绝对分量不超过 10&quot;: &quot;. The transverse velocity is averaged from the four surrounding face values. Jacobi uses the preceding iterate for the upwind direction and updates both components simultaneously. Gauss–Seidel and SOR sweep through u, then v, using the latest available velocities for the advection coefficients; SOR relaxes each local update. After each complete sweep, the nonlinear residual below is recomputed until its maximum absolute component is at most 10&quot;, &quot;预测&quot;: &quot;predicted&quot;, &quot;MAC 交错网格上的散度与梯度&quot;: &quot;Divergence and gradient on the staggered MAC grid&quot;, &quot;课件第 33–34 页&quot;: &quot;Course pages 33–34&quot;, &quot;压力在单元中心，&quot;: &quot;Pressure is at cell centers;&quot;, &quot;在左右面中心，&quot;: &quot;is on the left and right faces;&quot;, &quot;在上下面中心。&quot;: &quot;is on the bottom and top faces.&quot;, &quot;用四个面速度求单元散度。&quot;: &quot;The four face velocities determine the cell divergence.&quot;, &quot;用相邻两单元的压力差求面上梯度。&quot;: &quot;The pressure difference between adjacent cells gives the face gradient.&quot;, &quot;课件第 32 页的式（13）用同位网格写中心差分。这里按第 34 页的交错布置计算面通量，两算子复合为&quot;: &quot;Equation (13) on page 32 uses centered differences on a collocated grid. Here the staggered arrangement on page 34 gives face fluxes, with the operator identity&quot;, &quot;，压力直接与左右、上下相邻的单元耦合，避免第 33 页展示的奇偶失联。&quot;: &quot;. Pressure couples directly to its four neighboring cells, avoiding the odd–even decoupling shown on page 33.&quot;, &quot;压力泊松方程与速度修正&quot;: &quot;Pressure Poisson equation and velocity correction&quot;, &quot;式（11）（12）&quot;: &quot;Equations (11) and (12)&quot;, &quot;压力默认使用加权 Jacobi，固定权重&quot;: &quot;The default pressure solver is weighted Jacobi with fixed weight&quot;, &quot;= 2/3；也可选择下方所示的 Gauss–Seidel 或 SOR。E、W、N、S 指右、左、上、下四个邻点，&quot;: &quot;= 2/3. Gauss–Seidel and SOR are also available below. E, W, N and S denote the four adjacent cells,&quot;, &quot;压力残差达标后，用面梯度修正速度。将修正式取散度可得下式，说明压力残差越小，修正后的散度越接近零。&quot;: &quot;Once the pressure residual meets the tolerance, correct velocity using the face gradient. Taking the divergence of that correction gives the identity below: a smaller pressure residual produces a smaller corrected divergence.&quot;, &quot;显式推进与隐式 MAC 投影法对比&quot;: &quot;Explicit vs. implicit MAC projection&quot;, &quot;算例与指标&quot;: &quot;Case and metrics&quot;, &quot;时间步长与稳定性&quot;: &quot;Time step and stability&quot;, &quot;对比说明&quot;: &quot;About the comparison&quot;, &quot;改变 Δt，观察两种方法在同一物理时刻的误差、扰动增长与离散散度。下方扫描同时比较多个步长。&quot;: &quot;Change Δt to compare error, perturbation growth and discrete divergence at the same physical time. The scan below compares several time steps.&quot;, &quot;启用 JavaScript 即可计算并查看对比结果。&quot;: &quot;Enable JavaScript to calculate and view the comparison.&quot;, &quot;两套方法使用同一种初始流场，在 [0, 2π) × [0, 2π) 的周期区域上推进。所选流场均有解析演化解，可逐层比较速度误差。&quot;: &quot;Both methods advance the same initial velocity field on the periodic domain [0, 2π) × [0, 2π). Each selectable field has an analytical evolution, allowing velocity error to be compared at every time level.&quot;, &quot;当前初始流场：&quot;: &quot;Current initial field:&quot;, &quot;在「结果对比」中切换初始流场，这里的定义与结果同步更新。&quot;: &quot;Change the initial field in Compare; this definition updates with the results.&quot;, &quot;统一的计算条件&quot;: &quot;Shared calculation settings&quot;, &quot;。密度&quot;: &quot;. Density&quot;, &quot;= 1，运动黏度&quot;: &quot;= 1, kinematic viscosity&quot;, &quot;= 0.05。背景流速为 (0.60, 0.55)，扰动由所选初始流场给定。&quot;: &quot;= 0.05. The background velocity is (0.60, 0.55); the selected initial field supplies the perturbation.&quot;, &quot;每步的压力迭代都从零开始，可选择加权 Jacobi（权重 2/3）、Gauss–Seidel 或 SOR，以最大绝对残差 ≤ 10&quot;: &quot;Pressure iterations start from zero at every step. Choose weighted Jacobi (weight 2/3), Gauss–Seidel or SOR; the stopping tolerance is maximum absolute residual ≤ 10&quot;, &quot;为停止条件。周期压力方程的右端去掉空间平均值，压力取零均值。切换方法会同时重算当前结果与全部时间步长扫描。&quot;: &quot;. The spatial mean is removed from the periodic pressure right-hand side, and pressure has zero mean. Changing the solver recomputes both the current run and the full time-step scan.&quot;, &quot;如何判断稳定性&quot;: &quot;Assessing stability&quot;, &quot;扰动是速度减去背景流速 (0.60, 0.55)。把每一时刻的扰动 RMS 除以初始扰动 RMS，可观察扰动是否被放大。均匀流的初始扰动为零，增长倍数不定义。&quot;: &quot;The perturbation is velocity minus the background flow (0.60, 0.55). Dividing its RMS at each time by the initial perturbation RMS reveals amplification. Uniform flow has zero initial perturbation, so its growth ratio is undefined.&quot;, &quot;是各自网格上的初始扰动 RMS。本页以 2 倍作为“明显增长”提示，以 20 倍或非有限数作为停止阈值。这是便于观察的判据，不是一般稳定性定理。“未见明显增长”也不代表误差很小。&quot;: &quot;is the initial perturbation RMS on each method’s own grid. This page flags a ratio of 2 as noticeable growth and stops at a ratio of 20 or a non-finite value. These are visualization thresholds, not a general stability theorem. “No noticeable growth” does not imply small error.&quot;, &quot;压力迭代或隐式预测达到迭代上限时，另行报告“迭代未收敛”。它与时间离散本身的不稳定不同。计算停止后保留已有曲线，后续时间不补造结果。&quot;: &quot;Reaching the pressure or implicit-predictor iteration limit is reported separately as “Iteration did not converge.” This differs from instability of the time discretization. Existing curves remain when a run stops; later data are not invented.&quot;, &quot;CFL 与显式对流–扩散限制&quot;: &quot;CFL and the explicit advection–diffusion limit&quot;, &quot;对冻结速度的二维一阶迎风对流与中心差分扩散，χ ≤ 1 是显式更新系数非负的充分条件。这里用两个方向最大速度的和作为保守估计；超过 1 表示该充分条件不再满足，不意味着当前流场一定立即发散。&quot;: &quot;For frozen velocities, first-order two-dimensional upwind advection and centered diffusion, χ ≤ 1 is sufficient for nonnegative explicit-update coefficients. The sum of the maximum velocity magnitudes in the two directions is a conservative estimate. Exceeding 1 invalidates that sufficient condition; it does not prove immediate divergence for the current field.&quot;, &quot;对比中的显式方法按速度正负选择迎风方向。两种方法的压力耦合与网格布置不同，完整稳定性还受这些因素影响，因此应同时观察扰动增长、误差和散度。&quot;: &quot;The comparison’s explicit method selects the upwind direction from the velocity sign. The methods also differ in pressure coupling and grid arrangement, which affect stability. Inspect perturbation growth, error and divergence together.&quot;, &quot;后向 Euler 对线性扩散允许更大的稳定步长，但稳定性与精度需要分别判断。本页的大步长计算可能产生较强的数值耗散或相位误差；非线性预测迭代也可能不收敛。不能把这一线性结论直接当作整套 Navier–Stokes 算法的无条件稳定保证。&quot;: &quot;Backward Euler permits larger stable time steps for linear diffusion, but stability and accuracy are separate questions. Large steps here may cause strong numerical damping or phase error, and the nonlinear predictor may fail to converge. The linear result does not guarantee unconditional stability of the complete Navier–Stokes algorithm.&quot;, &quot;参考：有限差分教材中的扩散时间推进分析&quot;: &quot;Reference: diffusion time stepping in a finite-difference textbook&quot;, &quot;速度均方根误差&quot;: &quot;Velocity RMS error&quot;, &quot;在各方法实际存放速度的位置与解析解比较。显式方法的两个分量都在单元中心，MAC 的两个分量分别在对应的单元面。下式的尖括号表示在对应网格点上取平均。&quot;: &quot;Compare each velocity component with the analytical solution at its actual storage locations. Both explicit components are cell-centered; the MAC components are stored on their respective faces. Angle brackets below mean an average over those locations.&quot;, &quot;解析&quot;: &quot;exact&quot;, &quot;速度误差综合反映了时间离散、网格布置和压力耦合的影响。&quot;: &quot;Velocity error includes the effects of time discretization, grid arrangement and pressure coupling.&quot;, &quot;最大离散散度与迭代量&quot;: &quot;Maximum discrete divergence and iteration counts&quot;, &quot;显式方法在单元中心用中心差分计算散度。其压力方程的五点拉普拉斯与中心差分散度和梯度的复合不同，所以压力方程收敛后，推进所得的速度仍可能有离散散度。&quot;: &quot;The explicit method computes centered divergence at cell centers. Its five-point pressure Laplacian differs from the composition of the centered divergence and gradient operators, so the updated velocity can retain discrete divergence even after the pressure solve converges.&quot;, &quot;MAC 在单元中心计算相邻面通量之差。它的压力算子等于离散散度与梯度的复合，因此投影后最大离散散度由压力残差乘以 Δ&quot;: &quot;MAC uses differences of adjacent face fluxes at cell centers. Its pressure operator is exactly the composition of discrete divergence and gradient, so the maximum divergence after projection equals the pressure residual multiplied by Δ&quot;, &quot;给出，差别在舍入误差量级。&quot;: &quot;, up to rounding error.&quot;, &quot;迭代量按当前时间步统计。两种方法都求解压力方程，隐式 MAC 还要迭代求预测速度。&quot;: &quot;Iteration counts refer to the current time step. Both methods solve for pressure; implicit MAC also iterates the velocity predictor.&quot;, &quot;二维不可压缩流动的显式时间推进动画&quot;: &quot;Explicit time-stepping animation for two-dimensional incompressible flow&quot;, &quot;显式时间推进&quot;: &quot;Explicit time stepping&quot;, &quot;播放&quot;: &quot;Play&quot;, &quot;单步&quot;: &quot;Step&quot;, &quot;初始条件&quot;: &quot;Initial condition&quot;, &quot;平移涡 · 原始条件&quot;: &quot;Advected vortex · original&quot;, &quot;平移涡 · 弱扰动&quot;: &quot;Advected vortex · weak&quot;, &quot;平移涡 · 强扰动&quot;: &quot;Advected vortex · strong&quot;, &quot;多涡 · 小尺度&quot;: &quot;Multiple vortices · small scale&quot;, &quot;水平正弦剪切流&quot;: &quot;Horizontal sine shear&quot;, &quot;竖直正弦剪切流&quot;: &quot;Vertical sine shear&quot;, &quot;均匀流&quot;: &quot;Uniform flow&quot;, &quot;初始条件说明&quot;: &quot;About the initial condition&quot;, &quot;说明&quot;: &quot;Details&quot;, &quot;区域 [0, 2π]²；边界速度和压力由对应解析解给定。切换后从第 0 层重新计算。&quot;: &quot;Domain [0, 2π]². Boundary velocity and pressure follow the analytical solution. Changing this setting restarts at time level 0.&quot;, &quot;空间网格&quot;: &quot;Spatial grid&quot;, &quot;空间网格说明&quot;: &quot;About the spatial grid&quot;, &quot;时间步长 Δt&quot;: &quot;Time step Δt&quot;, &quot;0.06（默认）&quot;: &quot;0.06 (default)&quot;, &quot;时间步长说明&quot;: &quot;About the time step&quot;, &quot;固定终点 T = 1.20。调节后重算；长时间稳定性比较请打开「结果对比」。&quot;: &quot;Fixed end time T = 1.20. Changes restart the calculation; open Compare for a longer stability test.&quot;, &quot;压力迭代&quot;: &quot;Pressure solver&quot;, &quot;Jacobi（默认）&quot;: &quot;Jacobi (default)&quot;, &quot;松弛因子 ω&quot;: &quot;Relaxation factor ω&quot;, &quot;压力迭代说明&quot;: &quot;About the pressure solver&quot;, &quot;箭头 · 速度&quot;: &quot;Arrows · velocity&quot;, &quot;二维网格。底色取四角节点标量的平均值；箭头位于节点，方向和长度表示该节点的速度。&quot;: &quot;Two-dimensional grid. Cell color averages the scalar values at its four corner nodes. Arrows are at nodes; their directions and lengths show nodal velocity.&quot;, &quot;底色数值范围&quot;: &quot;Scalar color range&quot;, &quot;已推进的物理时间步&quot;: &quot;Completed physical time steps&quot;, &quot;每个时间步的计算顺序&quot;: &quot;Calculation order within each time step&quot;, &quot;Jacobi 压力迭代&quot;: &quot;Jacobi pressure iteration&quot;, &quot;压力收敛&quot;: &quot;Pressure converged&quot;, &quot;显式更新速度&quot;: &quot;Explicit velocity update&quot;, &quot;压力最大残差&quot;: &quot;Maximum pressure residual&quot;, &quot;速度最大离散散度&quot;: &quot;Maximum discrete velocity divergence&quot;, &quot;。&quot;: &quot;.&quot;, &quot;、&quot;: &quot;, &quot;, &quot;)、(&quot;: &quot;) and (&quot;, &quot;？&quot;: &quot;?&quot;, &quot;暂停&quot;: &quot;Pause&quot;, &quot;重播&quot;: &quot;Replay&quot;, &quot;重置动画&quot;: &quot;Reset animation&quot;, &quot;演示控制&quot;: &quot;Animation controls&quot;, &quot;初始流场&quot;: &quot;Initial velocity field&quot;, &quot;Taylor–Green 涡（默认）&quot;: &quot;Taylor–Green vortex (default)&quot;, &quot;弱涡旋&quot;: &quot;Weak vortex&quot;, &quot;强涡旋&quot;: &quot;Strong vortex&quot;, &quot;多涡旋（波数 2）&quot;: &quot;Multiple vortices (wave number 2)&quot;, &quot;水平正弦剪切&quot;: &quot;Horizontal sine shear&quot;, &quot;竖直正弦剪切&quot;: &quot;Vertical sine shear&quot;, &quot;均匀平移流&quot;: &quot;Uniform translating flow&quot;, &quot;水平速度随 y 呈正弦变化，竖直速度均匀。剪切条带随背景流平移，并因黏性逐渐减弱。&quot;: &quot;Horizontal velocity varies sinusoidally with y; vertical velocity is uniform. Shear bands drift with the background flow and decay through viscosity.&quot;, &quot;竖直速度随 x 呈正弦变化，水平速度均匀。可与水平剪切比较两个方向的推进结果。&quot;: &quot;Vertical velocity varies sinusoidally with x; horizontal velocity is uniform. Compare with horizontal shear to examine directional effects.&quot;, &quot;一组交替旋转的涡随均匀背景流平移并衰减。保持原对比算例的初始条件。&quot;: &quot;Alternating vortices drift with a uniform background flow and decay. These are the original comparison conditions.&quot;, &quot;保持涡旋形状，将扰动振幅降至 0.15，观察较弱的速度梯度和压力响应。&quot;: &quot;Keep the vortex pattern and lower its amplitude to 0.15 to observe weaker velocity gradients and pressure response.&quot;, &quot;保持涡旋形状，将扰动振幅增至 0.45，观察更强的速度梯度和压力响应。&quot;: &quot;Keep the vortex pattern and raise its amplitude to 0.45 to observe stronger velocity gradients and pressure response.&quot;, &quot;两个方向的波数均为 2，产生更小、更密的涡旋；在相同网格上观察空间尺度的影响。&quot;: &quot;Wave number 2 in both directions produces smaller, more closely spaced vortices. Examine the effect of spatial scale on the same grid.&quot;, &quot;所有位置的速度都为 (0.60, 0.55)。速度保持均匀，压力梯度为零；扣除背景流后图中的扰动为零。&quot;: &quot;Velocity is (0.60, 0.55) everywhere. It remains uniform with zero pressure gradient; subtracting the background flow leaves zero perturbation.&quot;, &quot;区域 [0, 2π)²；采用周期边界，初始离散散度约为 0。切换后从第 0 层重新计算。&quot;: &quot;Periodic domain [0, 2π)²; the initial discrete divergence is approximately zero. Changes restart at time level 0.&quot;, &quot;周期区域 [0, 2π) × [0, 2π)。背景流速 (0.60, 0.55)，初始离散散度约为 0。切换后从第 0 层开始。&quot;: &quot;Periodic domain [0, 2π) × [0, 2π). Background velocity (0.60, 0.55), initial discrete divergence approximately zero. Changes restart at time level 0.&quot;, &quot;加权 Jacobi&quot;: &quot;Weighted Jacobi&quot;, &quot;加权 Jacobi（默认）&quot;: &quot;Weighted Jacobi (default)&quot;, &quot;MAC 预测迭代&quot;: &quot;MAC predictor solver&quot;, &quot;MAC 预测迭代说明&quot;: &quot;About the MAC predictor solver&quot;, &quot;压力松弛因子 ω&quot;: &quot;Pressure relaxation factor ω&quot;, &quot;预测松弛因子 ω&quot;: &quot;Predictor relaxation factor ω&quot;, &quot;箭头样式&quot;: &quot;Arrow style&quot;, &quot;MAC 面速度&quot;: &quot;MAC face velocities&quot;, &quot;合速度（显式样式）&quot;: &quot;Combined velocity (explicit style)&quot;, &quot;固定终点 T = 1.20。调节后重算；长时间稳定性比较请打开&quot;: &quot;Fixed end time T = 1.20. Changes restart the calculation; for longer stability tests, open &quot;, &quot;「结果对比」&quot;: &quot;Compare&quot;, &quot;箭头 ·&quot;: &quot;Arrows ·&quot;, &quot;隐式预测速度&quot;: &quot;Implicit velocity predictor&quot;, &quot;预测迭代 / 最大残差&quot;: &quot;Predictor iterations / max. residual&quot;, &quot;压力迭代 / 最大残差&quot;: &quot;Pressure iterations / max. residual&quot;, &quot;投影前最大离散散度&quot;: &quot;Max. divergence before projection&quot;, &quot;投影后最大离散散度&quot;: &quot;Max. divergence after projection&quot;, &quot;→ 竖直面 u&quot;: &quot;→ u on vertical faces&quot;, &quot;↑ 水平面 v&quot;: &quot;↑ v on horizontal faces&quot;, &quot;↗ 单元中心合速度 · 由相邻面速度平均&quot;: &quot;↗ Cell-centered velocity · averaged from adjacent faces&quot;, &quot;⊙ 单元中心 p*&quot;: &quot;⊙ Cell-centered p*&quot;, &quot;MAC 投影法步骤&quot;: &quot;MAC projection steps&quot;, &quot;投影修正速度&quot;: &quot;Project velocity&quot;, &quot;从第 0 层速度开始隐式预测。&quot;: &quot;Start the implicit predictor from the velocity at time level 0.&quot;, &quot;在当前时间层内迭代预测速度。&quot;: &quot;Iterate the predicted velocity within the current time level.&quot;, &quot;预测速度已收敛，可计算压力方程右端。&quot;: &quot;The predictor has converged. The pressure right-hand side can now be calculated.&quot;, &quot;已用预测速度的离散散度构造压力方程右端。&quot;: &quot;The pressure right-hand side is built from the predicted velocity divergence.&quot;, &quot;在单元中心迭代压力，预测面速度保持固定。&quot;: &quot;Iterate cell-centered pressure while holding predicted face velocities fixed.&quot;, &quot;压力已收敛，可用压力梯度校正面速度。&quot;: &quot;Pressure has converged. Its gradient can now correct the face velocities.&quot;, &quot;隐式预测迭代未收敛，已暂停；这与时间推进发散不是同一判据。&quot;: &quot;The implicit predictor did not converge; the run is paused. This is distinct from time-stepping instability.&quot;, &quot;压力迭代未收敛，已暂停，未接受该时间步。&quot;: &quot;Pressure iterations did not converge. The run is paused; this time step was not accepted.&quot;, &quot;投影压力 p*&quot;: &quot;Projection pressure p*&quot;, &quot;初始面速度&quot;: &quot;Initial face velocity&quot;, &quot;预测面速度&quot;: &quot;Predicted face velocity&quot;, &quot;校正面速度&quot;: &quot;Corrected face velocity&quot;, &quot;初始合速度&quot;: &quot;Initial combined velocity&quot;, &quot;预测合速度&quot;: &quot;Predicted combined velocity&quot;, &quot;校正合速度&quot;: &quot;Corrected combined velocity&quot;, &quot;MAC 交错网格。方格的着色表示单元中心的投影压力 p 星号。单元中心的合速度箭头由相邻面速度平均得到。&quot;: &quot;Staggered MAC grid. Cell color shows the cell-centered projection pressure p*. Combined velocity arrows at cell centers average adjacent face velocities.&quot;, &quot;MAC 交错网格。方格的着色表示单元中心的投影压力 p 星号。竖直面上的横箭头表示 u，水平面上的纵箭头表示 v。&quot;: &quot;Staggered MAC grid. Cell color shows the cell-centered projection pressure p*. Horizontal arrows on vertical faces show u; vertical arrows on horizontal faces show v.&quot;, &quot;0.10（默认）&quot;: &quot;0.10 (default)&quot;, &quot;初始速度已给定。&quot;: &quot;The initial velocity is prescribed.&quot;, &quot;右端已计算，准备迭代压力。&quot;: &quot;The right-hand side is ready. Pressure iterations can begin.&quot;, &quot;本轮仅更新压力，速度仍在当前时间层。&quot;: &quot;This iteration updates pressure only; velocity stays at the current time level.&quot;, &quot;最大残差 ≤ 10⁻³，下一步更新速度。&quot;: &quot;Maximum residual ≤ 10⁻³. The next step updates velocity.&quot;, &quot;速度已更新，物理时间增加 Δt。&quot;: &quot;Velocity has been updated; physical time advances by Δt.&quot;, &quot;已到达本次计算终点。&quot;: &quot;The calculation has reached its end time.&quot;, &quot;压力未收敛，已暂停时间推进。&quot;: &quot;Pressure did not converge; time stepping is paused.&quot;, &quot;速度数值异常，已暂停时间推进。&quot;: &quot;Invalid velocity detected; time stepping is paused.&quot;, &quot;速度反向，已暂停时间推进。&quot;: &quot;Flow reversal detected; time stepping is paused.&quot;, &quot;u₀ = 0.92，v₀ = 0.78。均匀流保持不变。&quot;: &quot;u₀ = 0.92, v₀ = 0.78. Uniform flow remains unchanged.&quot;, &quot;速度扰动 RMS 超过初值 20 倍，触发数值幅值保护，已停止后续推进。&quot;: &quot;Velocity perturbation RMS exceeds 20 times its initial value. The amplitude safeguard has stopped time stepping.&quot;, &quot;速度出现反向，课件的向后差分已不再迎风，演示暂停；「结果对比」使用按流向选择的迎风差分。&quot;: &quot;Velocity has reversed, so the course’s backward difference is no longer upwind. The demo is paused. Compare selects the upwind direction from the flow.&quot;, &quot;Jacobi 每轮统一使用上一轮压力；切换后从第 0 层重新计算。&quot;: &quot;Jacobi uses the previous pressure iterate everywhere. Changes restart at time level 0.&quot;, &quot;Gauss–Seidel 按行扫描，即时使用本轮已更新的压力；切换后从第 0 层重新计算。&quot;: &quot;Gauss–Seidel sweeps row by row using newly updated pressures immediately. Changes restart at time level 0.&quot;, &quot;对 Gauss–Seidel 的修正量乘以 ω；ω = 1 等同于 Gauss–Seidel。切换后从第 0 层重新计算。&quot;: &quot;SOR multiplies the Gauss–Seidel correction by ω; ω = 1 is Gauss–Seidel. Changes restart at time level 0.&quot;, &quot;逐点松弛更新；ω = 1 时等同于 Gauss–Seidel。切换后从第 0 层重算。&quot;: &quot;Relax each point update; ω = 1 is Gauss–Seidel. Changes restart at time level 0.&quot;, &quot;逐点松弛更新；ω = 1 时等同于 Gauss–Seidel。较大的 ω 可能使非线性预测迭代不收敛。&quot;: &quot;Relax each point update; ω = 1 is Gauss–Seidel. Large ω may prevent the nonlinear predictor from converging.&quot;, &quot;逐点松弛更新；ω = 1 时等同于 Gauss–Seidel。每轮结束后检查完整动量方程的残差。&quot;: &quot;Relax each point update; ω = 1 is Gauss–Seidel. Check the full momentum-equation residual after every iteration.&quot;, &quot;逐点更新，后面的点立即使用本轮新值。切换后从第 0 层重算。&quot;: &quot;Update point by point, immediately using new values at later points. Changes restart at time level 0.&quot;, &quot;逐点更新，后面的点立即使用本轮新值。较大的 ω 可能使非线性预测迭代不收敛。&quot;: &quot;Update point by point, immediately using new values at later points. Large ω may prevent the nonlinear predictor from converging.&quot;, &quot;逐点更新，后面的点立即使用本轮新值。每轮结束后检查完整动量方程的残差。&quot;: &quot;Update point by point, immediately using new values at later points. Check the full momentum-equation residual after every iteration.&quot;, &quot;同时更新压力，固定权重为 2/3。切换后从第 0 层重算。&quot;: &quot;Update all pressures simultaneously with fixed weight 2/3. Changes restart at time level 0.&quot;, &quot;同时更新压力，固定权重为 2/3。较大的 ω 可能使非线性预测迭代不收敛。&quot;: &quot;Update all pressures simultaneously with fixed weight 2/3. Large ω may prevent the nonlinear predictor from converging.&quot;, &quot;同时更新压力，固定权重为 2/3。每轮结束后检查完整动量方程的残差。&quot;: &quot;Update all pressures simultaneously with fixed weight 2/3. Check the full momentum-equation residual after every iteration.&quot;, &quot;用上一轮预测速度同时更新。切换后从第 0 层重算。&quot;: &quot;Update simultaneously using the preceding predicted velocity. Changes restart at time level 0.&quot;, &quot;用上一轮预测速度同时更新。较大的 ω 可能使非线性预测迭代不收敛。&quot;: &quot;Update simultaneously using the preceding predicted velocity. Large ω may prevent the nonlinear predictor from converging.&quot;, &quot;用上一轮预测速度同时更新。每轮结束后检查完整动量方程的残差。&quot;: &quot;Update simultaneously using the preceding predicted velocity. Check the full momentum-equation residual after every iteration.&quot;, &quot;统一空间网格&quot;: &quot;Shared spatial grid&quot;, &quot;常用时间步长&quot;: &quot;Common time steps&quot;, &quot;小步长 0.05&quot;: &quot;Small 0.05&quot;, &quot;步长 0.2&quot;: &quot;Medium 0.2&quot;, &quot;大步长 0.6&quot;: &quot;Large 0.6&quot;, &quot;正在计算…&quot;: &quot;Calculating…&quot;, &quot;从头播放&quot;: &quot;Play from start&quot;, &quot;物理时间&quot;: &quot;Physical time&quot;, &quot;同一物理时刻的结果&quot;: &quot;Results at the same physical time&quot;, &quot;指标&quot;: &quot;Metric&quot;, &quot;当前状态&quot;: &quot;Current status&quot;, &quot;扰动增长倍数&quot;: &quot;Perturbation growth ratio&quot;, &quot;速度 RMS 误差&quot;: &quot;Velocity RMS error&quot;, &quot;最大绝对散度&quot;: &quot;Maximum absolute divergence&quot;, &quot;对流 CFL 数&quot;: &quot;Advective CFL number&quot;, &quot;对流–扩散指标 χ&quot;: &quot;Advection–diffusion indicator χ&quot;, &quot;压力迭代 / 轮&quot;: &quot;Pressure iterations&quot;, &quot;隐式预测 / 轮&quot;: &quot;Predictor iterations&quot;, &quot;随物理时间变化&quot;: &quot;History over physical time&quot;, &quot;曲线图例&quot;: &quot;Curve legend&quot;, &quot;两种方法随物理时间的变化曲线&quot;: &quot;Both methods plotted against physical time&quot;, &quot;图表说明&quot;: &quot;About the chart&quot;, &quot;显式推进的速度扰动场，已扣除均匀平移速度&quot;: &quot;Explicit velocity perturbation field, with the uniform background flow subtracted&quot;, &quot;MAC 的速度扰动场，面速度平均至单元中心，已扣除均匀平移速度&quot;: &quot;MAC velocity perturbation field, with face velocities averaged to cell centers and the uniform background flow subtracted&quot;, &quot;流场说明&quot;: &quot;About the velocity fields&quot;, &quot;两幅图在当前时刻使用同一速度尺度；停止计算后不再显示流场，避免将旧结果当作当前结果。MAC 面速度平均到单元中心后绘图。&quot;: &quot;Both fields use the same velocity scale at the current time. A stopped run no longer shows a field, so old results cannot be mistaken for current results. MAC face velocities are averaged to cell centers for plotting.&quot;, &quot;均匀流扣除背景速度后为零，图中没有涡结构；初始扰动为零时，增长倍数不定义。&quot;: &quot;Subtracting the background velocity from uniform flow gives zero, with no vortices to plot. A zero initial perturbation has no defined growth ratio.&quot;, &quot;不同时间步长的稳定性观察&quot;: &quot;Stability across time steps&quot;, &quot;扫描说明&quot;: &quot;About the time-step scan&quot;, &quot;正在扫描全部步长…&quot;: &quot;Scanning all time steps…&quot;, &quot;“未见明显增长”只描述本算例在观察区间内的结果。扰动达到初始值的 2 倍标为明显增长，达到 20 倍或出现非有限数时停止；这两条是演示判据。迭代未收敛单独标记。&quot;: &quot;“No marked growth” describes this case only within the observed interval. A perturbation ratio of 2 is flagged as marked growth; a ratio of 20 or a non-finite value stops the run. These are demonstration thresholds. Iteration non-convergence is flagged separately.&quot;, &quot;计算线程无法运行&quot;: &quot;The calculation worker could not run&quot;, &quot;计算未完成。&quot;: &quot;The calculation did not finish.&quot;, &quot;比较终点必须是时间步长的正整数倍。&quot;: &quot;The comparison end time must be a positive integer multiple of the time step.&quot;}, &quot;patterns&quot;: [[&quot;^空间步长 Δx = Δy = (.*)$&quot;, &quot;Grid spacing Δx = Δy = $1&quot;], [&quot;^每方向 (\\d+) 个空间间隔；MAC 为 (\\d+) × (\\d+) 个压力单元，速度位于单元面。$&quot;, &quot;$1 intervals per direction; MAC has $2 × $3 pressure cells with velocities on cell faces.&quot;], [&quot;^每方向 (\\d+) 个空间间隔；显式为 (\\d+) × (\\d+) 个节点（含边界）。$&quot;, &quot;$1 intervals per direction; explicit uses $2 × $3 nodes including boundaries.&quot;], [&quot;^(\\d+) 步 · T = (.*)$&quot;, &quot;$1 steps · T = $2&quot;], [&quot;^时间层 n = (.*)$&quot;, &quot;Time level n = $1&quot;], [&quot;^面速度已校正，进入第 (\\d+) 层。$&quot;, &quot;Face velocities are corrected; advance to time level $1.&quot;], [&quot;^完成 (\\d+) 个时间步。$&quot;, &quot;Completed $1 time steps.&quot;], [&quot;^(Jacobi|Gauss–Seidel|SOR|加权 Jacobi) 压力迭代$&quot;, &quot;$1 pressure iteration&quot;], [&quot;^右端 b · 第 (\\d+) 层$&quot;, &quot;Right-hand side b · level $1&quot;], [&quot;^压力 p · 第 (\\d+) 层$&quot;, &quot;Pressure p · level $1&quot;], [&quot;^(\\d+)（上一层）$&quot;, &quot;$1 (previous level)&quot;], [&quot;^已完成 (\\d+) 步，到达 T = (.*)。$&quot;, &quot;Completed $1 steps; reached T = $2.&quot;], [&quot;^第 (\\d+) 层产生非有限速度，已停止；图中保留第 (\\d+) 层的有效速度。$&quot;, &quot;Non-finite velocity at level $1; the run has stopped. The plot retains valid velocity from level $2.&quot;], [&quot;^压力迭代未收敛（最多 (\\d+) 轮），已暂停；这与时间离散的数值发散不同。$&quot;, &quot;Pressure did not converge within $1 iterations; the run is paused. This differs from time-discretization instability.&quot;], [&quot;^扰动 RMS / 初值 = (.*?)；Q = (.*?)。Q = Δt max\\(\\|u\\|\\+\\|v\\|\\)/h \\+ 4νΔt/h²；Q ≤ 1 仅是冻结速度的标量对流扩散充分条件。$&quot;, &quot;Perturbation RMS / initial = $1; Q = $2. Q = Δt max(|u|+|v|)/h + 4νΔt/h². Q ≤ 1 is only a sufficient scalar advection–diffusion condition for frozen velocity.&quot;], [&quot;^均匀流；Q = (.*?)。Q = Δt max\\(\\|u\\|\\+\\|v\\|\\)/h \\+ 4νΔt/h²；Q ≤ 1 仅是冻结速度的标量对流扩散充分条件。$&quot;, &quot;Uniform flow; Q = $1. Q = Δt max(|u|+|v|)/h + 4νΔt/h². Q ≤ 1 is only a sufficient scalar advection–diffusion condition for frozen velocity.&quot;], [&quot;^两种方法均使用 (\\d+) × (\\d+) 个周期单元。$&quot;, &quot;Both methods use $1 × $2 periodic cells.&quot;], [&quot;^每个步长都计算到同一物理时刻 t = (.*?)，网格与初始条件保持一致。步长越大，时间步数越少。$&quot;, &quot;Every time step runs to the same physical time t = $1, with the same grid and initial condition. Larger time steps require fewer steps.&quot;], [&quot;^同一初始流场，各步长都尝试推进到 t = (.*?)。点击 Δt 可查看详细结果。$&quot;, &quot;Each time step attempts to reach t = $1 from the same initial field. Select Δt to inspect its detailed results.&quot;], [&quot;^SOR（ω = (.*?)）$&quot;, &quot;SOR (ω = $1)&quot;]]}, &quot;en&quot;);
+
+window.addEventListener(&#x27;message&#x27;, event =&gt; {
+  if (event.source !== parent || event.data?.type !== &#x27;cfd-language&#x27;) return;
+  if (event.data.language !== &#x27;en&#x27; &amp;&amp; event.data.language !== &#x27;zh&#x27;) return;
+  cfdTranslator.setLanguage(event.data.language);
+});
+parent.postMessage({ type: &#x27;cfd-language-ready&#x27; }, &#x27;*&#x27;);
+
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+"></iframe>
+
+<script>(() => {
+  const frame = document.getElementById("codex-visualization");
+  if (!(frame instanceof HTMLIFrameElement)) {
+    return;
+  }
+  const isShare = document.documentElement.classList.contains(
+    "visualization-share-root",
+  );
+  let viewportHeight = globalThis.innerHeight;
+  let sizeFingerprint = null;
+  let sizeWriteTimeout;
+  let lastSize = null;
+  let pendingSize = null;
+  const storageKey = `codex:visualization-widget-state-v2:${JSON.stringify([
+    globalThis.location.pathname,
+    globalThis.location.search,
+  ])}`;
+  const sizeStorageKey = `${storageKey}:share-size-v1`;
+  const parseState = (serializedState) => {
+    if (
+      typeof serializedState !== "string" ||
+      new TextEncoder().encode(serializedState).length > 16 * 1024
+    ) {
+      throw new TypeError(
+        "Widget state must be a JSON object of at most 16 KiB",
+      );
+    }
+    /** @type {unknown} */
+    const state = JSON.parse(serializedState);
+    if (
+      state == null ||
+      typeof state !== "object" ||
+      Array.isArray(state) ||
+      ("imageIds" in state &&
+        (!Array.isArray(state.imageIds) || state.imageIds.length > 0))
+    ) {
+      throw new TypeError("Widget state must be a JSON object");
+    }
+    const storedState = { modelContent: null, privateContent: null, ...state };
+    const canonicalState = JSON.stringify(
+      storedState,
+      (_key, /** @type {unknown} */ value) => {
+        if (typeof value === "number" && !Number.isFinite(value)) {
+          throw new TypeError("Widget state must contain finite numbers");
+        }
+        return value;
+      },
+    );
+    if (new TextEncoder().encode(canonicalState).length > 16 * 1024) {
+      throw new TypeError(
+        "Widget state must be a JSON object of at most 16 KiB",
+      );
+    }
+    return storedState;
+  };
+  let storage = null;
+  let state = null;
+  try {
+    const localStorage = globalThis.localStorage;
+    const probeKey = `${storageKey}:probe`;
+    localStorage.setItem(probeKey, "1");
+    localStorage.removeItem(probeKey);
+    storage = localStorage;
+    const savedState = storage.getItem(storageKey);
+    if (savedState != null) {
+      try {
+        state = parseState(savedState);
+      } catch {
+        // Invalid saved state does not disable future writes.
+      }
+    }
+  } catch {
+    storage = null;
+  }
+  const persistSize = () => {
+    globalThis.clearTimeout(sizeWriteTimeout);
+    if (pendingSize == null) {
+      return;
+    }
+    try {
+      storage?.setItem(sizeStorageKey, pendingSize);
+    } catch {
+      // A denied or full cache must not affect the visualization.
+    }
+    pendingSize = null;
+  };
+  if (isShare) {
+    globalThis.addEventListener("pagehide", persistSize);
+  }
+  const initialGlobals = {
+    widgetState: state,
+    statePersistence: storage == null ? "none" : "local",
+  };
+
+  const channel = new MessageChannel();
+  channel.port1.addEventListener("message", (event) => {
+    const data = event.data;
+    if (typeof data !== "object" || data == null) {
+      return;
+    }
+    if (data.type === "widget-state-write") {
+      if (!Number.isSafeInteger(data.id) || data.id <= 0) {
+        return;
+      }
+      let ok = false;
+      try {
+        if (storage != null) {
+          const state = parseState(data.state);
+          storage.setItem(storageKey, JSON.stringify(state));
+          ok = true;
+        }
+      } catch {
+        // Storage denial, quota limits, and invalid state return a failed receipt.
+      }
+      channel.port1.postMessage({
+        type: "widget-state-result",
+        id: data.id,
+        ok,
+      });
+      return;
+    }
+    if (data.type === "height") {
+      const height = data.height;
+      if (
+        typeof height !== "number" ||
+        !Number.isFinite(height) ||
+        height < 0
+      ) {
+        return;
+      }
+      if (height <= 10_000) {
+        const width = isShare && storage != null ? frame.clientWidth : null;
+        frame.style.height = Math.ceil(height) + "px";
+        if (globalThis.parent !== globalThis) {
+          const bodyStyle = getComputedStyle(document.body);
+          const padding = (Number.parseFloat(bodyStyle.paddingTop) || 0)
+            + (Number.parseFloat(bodyStyle.paddingBottom) || 0);
+          globalThis.parent.postMessage({
+            type: "cfd-explicit-height",
+            height: Math.ceil(height + padding),
+          }, "*");
+        }
+        if (isShare && storage != null) {
+          const size = JSON.stringify({
+            fingerprint: sizeFingerprint,
+            width,
+            viewportHeight: globalThis.innerHeight,
+            dark: globalThis.matchMedia("(prefers-color-scheme: dark)").matches,
+            scale: globalThis.devicePixelRatio,
+            height: Math.ceil(height),
+          });
+          if (size !== lastSize) {
+            lastSize = size;
+            pendingSize = size;
+            globalThis.clearTimeout(sizeWriteTimeout);
+            sizeWriteTimeout = globalThis.setTimeout(persistSize, 100);
+          }
+        }
+      }
+      if (isShare) {
+        // Keep unusually tall content accessible without accepting an unbounded height.
+        if (height > 10_000 && Number.parseFloat(frame.style.height) === 0) {
+          frame.style.removeProperty("height");
+        }
+        frame.scrolling = height > 10_000 ? "auto" : "no";
+        document.documentElement.classList.add("visualization-share-ready");
+      }
+      return;
+    }
+    if (data.type === "scroll-to") {
+      const top = data.top;
+      if (
+        typeof top === "number" &&
+        Number.isFinite(top) &&
+        top >= 0 &&
+        globalThis.navigator.userActivation?.isActive === true
+      ) {
+        globalThis.scrollTo({
+          top: Math.ceil(
+            globalThis.scrollY + frame.getBoundingClientRect().top + top,
+          ),
+        });
+      }
+      return;
+    }
+    if (data.type === "open-external") {
+      const rawHref = data.href;
+      if (typeof rawHref !== "string") {
+        return;
+      }
+      let href;
+      try {
+        const url = new URL(rawHref, document.baseURI);
+        if (url.protocol !== "https:") {
+          return;
+        }
+        href = url.href;
+      } catch {
+        return;
+      }
+      if (globalThis.navigator.userActivation?.isActive === true) {
+        const anchor = document.createElement("a");
+        anchor.href = href;
+        anchor.rel = "noopener noreferrer";
+        anchor.target = "_blank";
+        document.body.appendChild(anchor);
+        anchor.click();
+        anchor.remove();
+      }
+      return;
+    }
+    if (data.type === "follow-up") {
+      const prompt = data.prompt;
+      if (
+        typeof prompt !== "string" ||
+        globalThis.navigator.userActivation?.isActive !== true
+      ) {
+        return;
+      }
+      const title = data.title;
+      globalThis.prompt(typeof title === "string" ? title : prompt, prompt);
+    }
+  });
+  channel.port1.start();
+  const srcdoc = frame.dataset.srcdoc;
+  if (srcdoc == null) {
+    return;
+  }
+  globalThis.addEventListener("resize", () => {
+    const height = Number.parseFloat(frame.style.height);
+    if (!isShare && (!Number.isFinite(height) || height <= viewportHeight)) {
+      frame.style.removeProperty("height");
+    }
+    viewportHeight = globalThis.innerHeight;
+    channel.port1.postMessage({ type: "measure" });
+  });
+  frame.addEventListener(
+    "load",
+    () => {
+      frame.contentWindow?.postMessage(
+        { type: "codex-visualization-initialize" },
+        "*",
+        [channel.port2],
+      );
+    },
+    { once: true },
+  );
+  // Match the trusted bootstrap element, not the same text in an authored title.
+  const frameHtml = srcdoc.replace(
+    '<script type="application/json" id="codex-visualization-widget-state">__CODEX_VISUALIZATION_WIDGET_STATE__<\/script>',
+    () =>
+      '<script type="application/json" id="codex-visualization-widget-state">' +
+      JSON.stringify(initialGlobals).replaceAll("<", "\\u003c") +
+      "<\/script>",
+  );
+  if (isShare && storage != null) {
+    // Fingerprint the rendered document, including restored widget state, without
+    // storing its content. This is a layout cache, not a security identity.
+    let hash = 5381;
+    for (let index = 0; index < frameHtml.length; index += 1) {
+      hash = (hash * 33 + frameHtml.charCodeAt(index)) % 4_294_967_296;
+    }
+    sizeFingerprint = hash.toString(36);
+    try {
+      const size = JSON.parse(storage.getItem(sizeStorageKey) ?? "null");
+      if (
+        size?.fingerprint === sizeFingerprint &&
+        size.width === frame.clientWidth &&
+        size.viewportHeight === globalThis.innerHeight &&
+        size.dark ===
+          globalThis.matchMedia("(prefers-color-scheme: dark)").matches &&
+        size.scale === globalThis.devicePixelRatio &&
+        typeof size.height === "number" &&
+        Number.isFinite(size.height) &&
+        size.height >= 0 &&
+        size.height <= 10_000
+      ) {
+        frame.style.height = size.height + "px";
+      }
+    } catch {
+      // Ignore missing or invalid cache entries and measure the live frame.
+    }
+  }
+  frame.srcdoc = frameHtml;
+  delete frame.dataset.srcdoc;
+})();
+</script>
+
+
+<script id="cfd-language-bridge">
+(() => {
+  const frame = document.getElementById('codex-visualization');
+  let language = 'en';
+  try { if (localStorage.getItem('cfd-language') === 'zh') language = 'zh'; } catch {}
+  const parameter = new URL(location.href).searchParams.get('lang');
+  if (parameter === 'en' || parameter === 'zh') language = parameter;
+  let select, labelText;
+  function apply(value) {
+    language = value === 'zh' ? 'zh' : 'en';
+    document.documentElement.lang = language === 'zh' ? 'zh-CN' : 'en';
+    document.title = language === 'zh' ? '显式时间推进动画' : 'Explicit time-stepping animation';
+    frame.title = document.title;
+    if (select) { select.value = language; select.setAttribute('aria-label', language === 'zh' ? '语言' : 'Language'); labelText.textContent = language === 'zh' ? '语言 ' : 'Language '; }
+    frame.contentWindow?.postMessage({ type: 'cfd-language', language }, '*');
+  }
+  if (parent === window) {
+    const label = document.createElement('label');
+    label.style.cssText = 'display:flex;justify-content:flex-end;align-items:center;gap:8px;max-width:736px;margin:0 auto 12px;font:14px system-ui;color:inherit';
+    labelText = document.createElement('span');
+    select = document.createElement('select');
+    select.style.cssText = 'font:inherit;padding:5px 12px;border-radius:20px';
+    for (const [value, name] of [['en', 'English'], ['zh', '中文']]) { const option = document.createElement('option'); option.value = value; option.textContent = name; select.append(option); }
+    select.addEventListener('change', () => {
+      apply(select.value);
+      try { localStorage.setItem('cfd-language', language); } catch {}
+      try { const url = new URL(location.href); url.searchParams.set('lang', language); history.replaceState(null, '', url.pathname + url.search + url.hash); } catch {}
+    });
+    label.append(labelText, select); frame.before(label);
+  }
+  window.addEventListener('message', event => {
+    if (event.source === parent && parent !== window && event.data?.type === 'cfd-language' && ['en', 'zh'].includes(event.data.language)) apply(event.data.language);
+    if (event.source === frame.contentWindow && event.data?.type === 'cfd-language-ready') { apply(language); if (parent !== window) parent.postMessage({ type: 'cfd-language-ready' }, '*'); }
+  });
+  frame.addEventListener('load', () => apply(language));
+  apply(language);
+  if (parent !== window) parent.postMessage({ type: 'cfd-language-ready' }, '*');
+})();
+</script>
+
+</body>
+</html>

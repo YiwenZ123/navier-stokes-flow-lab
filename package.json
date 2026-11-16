@@ -1,0 +1,23 @@
+{
+  "name": "navier-stokes-flow-lab",
+  "version": "1.0.0",
+  "description": "Interactive incompressible Navier–Stokes and wave-impact teaching simulations.",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "homepage": "https://explicit-ns-animation.lovableglobe2.chatgpt.site/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/YiwenZ123/navier-stokes-flow-lab.git"
+  },
+  "scripts": {
+    "start": "python3 -m http.server 8000 --bind 127.0.0.1 --directory dist",
+    "check:grid": "node scripts/sync-spatial-grid.mjs --check",
+    "test:iterations": "node tests/iterations.mjs",
+    "test:stability": "node tests/stability.mjs",
+    "test:waves": "node tests/waves.mjs",
+    "test": "npm run check:grid && npm run test:iterations && npm run test:stability && npm run test:waves"
+  }
+}

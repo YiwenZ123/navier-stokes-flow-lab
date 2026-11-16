@@ -1,0 +1,46 @@
+.wave-animation { padding: 16px; }
+#wave-demo { display: grid; gap: 16px; max-width: 736px; margin: 0 auto; font-size: 14px; }
+#wave-demo h2 { font-size: 20px; line-height: 1.4; font-weight: 600; }
+.wave-heading, .wave-buttons, .wave-setting, .wave-caption { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 12px; }
+.wave-heading, .wave-caption { justify-content: space-between; }
+.wave-subtitle { color: var(--muted); margin-top: 4px; }
+#wave-demo :is(button, select, input[type="number"]) { min-height: 36px; padding: 7px 14px; border: 1px solid var(--line); border-radius: 999px; font: inherit; color: var(--text); background: var(--paper); }
+#wave-demo select { max-width: 100%; }
+.wave-controls-grid { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 12px 20px; }
+.wave-controls-grid .wave-setting { align-content: start; }
+.wave-number { display: inline-flex; align-items: center; gap: 7px; }
+#wave-demo input[type="number"] { width: 100px; font-variant-numeric: tabular-nums; }
+#wave-demo button { cursor: pointer; }
+#wave-demo button:disabled { opacity: 0.45; cursor: default; }
+#wave-demo .wave-primary { color: var(--primary-text); background: var(--primary-bg); border-color: var(--primary-bg); }
+#wave-demo :is(button, select, input):focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+.wave-checkbox { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
+.wave-checkbox input { accent-color: var(--blue); width: 16px; height: 16px; margin: 0; }
+.wave-setting .parameter-help-body { padding-top: 3px; }
+.wave-tank-figure, .wave-history-figure { margin: 0; min-width: 0; }
+.wave-caption { margin-bottom: 8px; font-variant-numeric: tabular-nums; }
+#wave-tank { display: block; width: 100%; aspect-ratio: 2 / 1.12; }
+.wave-domain { margin-top: 4px; color: var(--muted); font-size: 12px; text-align: right; }
+.wave-metrics { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 24px; margin: 0; }
+.wave-metrics > div { display: grid; gap: 2px; }
+.wave-metrics dt { color: var(--muted); font-size: 12px; }
+.wave-metrics dd { margin: 0; font-size: 16px; font-variant-numeric: tabular-nums; }
+.wave-status { min-height: 21px; color: var(--muted); }
+.wave-status[data-failed="true"] { color: var(--orange); }
+.wave-history-figure { padding-top: 14px; border-top: 1px solid var(--line); }
+.wave-history-figure figcaption { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.wave-history-figure figcaption strong { font-weight: 400; }
+.wave-history-figure figcaption > span { color: var(--muted); font-size: 12px; }
+#wave-history { display: block; width: 100%; height: 150px; margin-top: 8px; }
+.wave-scale { display: grid; grid-template-columns: auto 1fr auto; gap: 8px; align-items: center; margin: 4px 24px 8px 34px; font-size: 12px; font-variant-numeric: tabular-nums; }
+.wave-scale i { height: 7px; border-radius: 4px; background: linear-gradient(90deg, #a7d9f7, #e77e37); }
+@media (max-width: 520px) {
+  .wave-animation { padding: 8px 2px; }
+  .wave-heading { align-items: flex-start; gap: 12px; }
+  .wave-buttons { gap: 6px; }
+  #wave-demo :is(button, select) { padding-inline: 12px; }
+  .wave-controls-grid { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .wave-metrics { gap: 10px 12px; }
+  .wave-metrics dd { font-size: 14px; }
+  .wave-domain { text-align: left; }
+}

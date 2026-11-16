@@ -1,0 +1,245 @@
+/* Match the typography, controls and spacing of the explicit animation. */
+#animation.mac-animation {
+  padding: 16px;
+  container-type: inline-size;
+}
+
+#mac-demo {
+  --mac-font-sans: -apple-system-body, ui-sans-serif, -apple-system, system-ui, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
+  --mac-background: #ffffff;
+  --mac-foreground: #1a1c1f;
+  --mac-primary: #339cff;
+  --mac-primary-foreground: #ffffff;
+  --mac-secondary: rgba(255, 255, 255, 0.96);
+  --mac-muted: rgba(26, 28, 31, 0.494);
+  --mac-accent: #e5f2ff;
+  --mac-border: rgba(26, 28, 31, 0.08);
+  --mac-popover: #ffffff;
+  --mac-negative: rgb(51, 156, 255);
+  --mac-positive: rgb(226, 85, 7);
+  --mac-u: #1a1c1f;
+  --mac-v: #1a1c1f;
+  --mac-grid: rgba(26, 28, 31, 0.08);
+  --mac-dot: rgba(26, 28, 31, 0.494);
+  --mac-focus: #1a1c1f;
+  display: grid;
+  gap: 12px;
+  max-width: 736px;
+  margin: 0 auto;
+  color: var(--mac-foreground);
+  font-family: var(--mac-font-sans);
+  font-size: 16px;
+  line-height: 26px;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+}
+
+@media (prefers-color-scheme: dark) {
+  #mac-demo {
+    --mac-background: #181818;
+    --mac-foreground: #ffffff;
+    --mac-primary: #83c3ff;
+    --mac-primary-foreground: #0d0d0d;
+    --mac-secondary: rgba(54, 54, 54, 0.96);
+    --mac-muted: rgba(255, 255, 255, 0.498);
+    --mac-accent: #0d273f;
+    --mac-border: rgba(255, 255, 255, 0.082);
+    --mac-popover: #2d2d2d;
+    --mac-positive: rgb(251, 106, 34);
+    --mac-u: #ffffff;
+    --mac-v: #ffffff;
+    --mac-grid: rgba(255, 255, 255, 0.082);
+    --mac-dot: rgba(255, 255, 255, 0.498);
+    --mac-focus: #ffffff;
+  }
+}
+
+#mac-demo h2 { margin: 0; font-size: 20px; line-height: 1.4; }
+#mac-demo :is(h2, strong, b) { font-weight: 600; }
+#mac-demo p { margin: 0; }
+
+#mac-demo :is(.mac-header, .mac-controls, .mac-field-caption, .mac-time) {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+}
+
+#mac-demo :is(.mac-header, .mac-field-caption, .mac-time) {
+  justify-content: space-between;
+}
+
+#mac-demo :is(.mac-initial, .mac-timestep, .mac-arrow-settings) {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+}
+
+#mac-demo .mac-initial { margin-bottom: 4px; }
+#mac-demo :is(.mac-initial, .mac-timestep, .mac-arrow-settings) label { font-size: 14px; font-weight: 400; }
+#mac-demo .mac-initial select { width: min(100%, 240px); }
+#mac-demo .mac-timestep select { width: 132px; }
+
+#mac-demo :is(.mac-initial, .mac-timestep) p {
+  flex-basis: 100%;
+  color: var(--mac-muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+#mac-demo :is(.mac-timestep > span, .mac-caption-note, .mac-pressure-scale, .mac-status, .mac-face-legend) {
+  font-size: 14px;
+  line-height: 18px;
+}
+
+#mac-demo :is(.mac-timestep > span, .mac-status, .mac-face-legend) { color: var(--mac-muted); }
+#mac-demo .mac-step-note a { color: inherit; }
+
+#mac-demo .mac-spatial { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; font-size: 14px; line-height: 21px; }
+#mac-demo .mac-spatial-note { color: var(--mac-muted); }
+#mac-demo .iteration-settings { margin: 0; }
+#mac-demo .iteration-note { color: var(--mac-muted); font-size: 14px; line-height: 21px; }
+#mac-demo .parameter-help { color: var(--mac-muted); }
+#mac-demo .parameter-help summary:focus-visible { outline-color: var(--mac-primary); }
+#mac-demo .parameter-help-body > p + p { margin-top: 6px; }
+
+#mac-demo :is(.mac-controls button, select) {
+  height: fit-content;
+  min-height: 36px;
+  margin: 0;
+  border: 1px solid var(--mac-border);
+  border-radius: 9999px;
+  color: var(--mac-foreground);
+  background-color: var(--mac-secondary);
+  font-family: var(--mac-font-sans);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 18px;
+}
+
+#mac-demo .mac-controls button {
+  appearance: button;
+  display: inline-flex;
+  inline-size: fit-content;
+  max-inline-size: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 0 12px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  user-select: none;
+}
+
+#mac-demo .mac-controls .mac-play {
+  color: var(--mac-primary-foreground);
+  background: var(--mac-foreground);
+  background-clip: border-box;
+}
+
+#mac-demo .mac-controls button:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--mac-foreground) 5.5%, transparent);
+}
+
+#mac-demo .mac-controls .mac-play:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--mac-foreground) 80%, transparent);
+}
+
+#mac-demo .mac-controls button:disabled { opacity: 0.5; cursor: default; }
+
+#mac-demo select {
+  --icon-size: 16px;
+  appearance: none;
+  display: block;
+  max-width: 100%;
+  padding: 0 calc(16px + var(--icon-size)) 0 12px;
+  outline: none;
+  background-image:
+    linear-gradient(45deg, transparent calc(50% - 0.6px), var(--mac-muted) calc(50% - 0.6px) calc(50% + 0.6px), transparent calc(50% + 0.6px)),
+    linear-gradient(135deg, transparent calc(50% - 0.6px), var(--mac-muted) calc(50% - 0.6px) calc(50% + 0.6px), transparent calc(50% + 0.6px));
+  background-position:
+    calc(100% - 12px - var(--icon-size) / 2) 50%,
+    calc(100% - 12px - var(--icon-size) * 0.18) 50%;
+  background-repeat: no-repeat;
+  background-size: calc(var(--icon-size) * 0.32) calc(var(--icon-size) * 0.32);
+  cursor: default;
+}
+
+#mac-demo select :is(option, optgroup) { color: var(--mac-foreground); background: var(--mac-popover); }
+#mac-demo :is(button, select, a):focus-visible { outline: 2px solid var(--mac-primary); outline-offset: 2px; }
+
+#mac-demo .mac-demo-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+
+#mac-demo .mac-figure { margin: 0; min-width: 0; }
+#mac-demo .mac-plot { display: block; width: 100%; aspect-ratio: 1; }
+
+#mac-demo .mac-pressure-scale {
+  display: grid;
+  align-items: center;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 8px;
+  margin-inline: 6%;
+}
+
+#mac-demo .mac-pressure-scale i {
+  height: 8px;
+  border-radius: 4px;
+  background: linear-gradient(90deg,
+    color-mix(in srgb, var(--mac-negative) 72%, var(--mac-background)),
+    var(--mac-background),
+    color-mix(in srgb, var(--mac-positive) 72%, var(--mac-background)));
+}
+
+#mac-demo .mac-panel { min-width: 0; display: grid; gap: 12px; }
+#mac-demo .mac-progress { width: 100%; height: 6px; accent-color: var(--mac-primary); }
+#mac-demo .mac-phases { display: grid; gap: 3px; margin: 0; padding: 0; list-style: none; }
+#mac-demo .mac-phases li { border-inline-start: 2px solid var(--mac-border); padding: 5px 9px; }
+#mac-demo .mac-phases li[aria-current] {
+  border-color: var(--mac-primary);
+  background: var(--mac-accent);
+  color: var(--mac-primary);
+  font-weight: 500;
+}
+
+#mac-demo .mac-metrics { display: grid; gap: 6px; margin: 0; }
+#mac-demo .mac-metrics div { display: flex; flex-wrap: wrap; gap: 2px 8px; justify-content: space-between; }
+#mac-demo .mac-metrics dd { margin: 0; }
+#mac-demo :is(.mac-time, .mac-pressure-scale, .mac-metrics) { font-variant-numeric: tabular-nums; }
+#mac-demo .mac-status { min-height: 1.5em; }
+#mac-demo .mac-face-legend { display: flex; flex-wrap: wrap; gap: 4px 12px; line-height: 1.5; }
+
+#mac-demo .mac-reset {
+  appearance: none;
+  justify-self: start;
+  padding: 0;
+  border: 0;
+  color: var(--mac-muted);
+  background: transparent;
+  font: 14px / 18px var(--mac-font-sans);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  cursor: pointer;
+}
+
+@container (max-width: 575px) {
+  #mac-demo .mac-demo-layout { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+  #mac-demo .mac-panel { grid-row: 1; gap: 8px; }
+  #mac-demo .mac-phases { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (prefers-color-scheme: dark) {
+  #mac-demo .mac-controls button:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--mac-foreground) 8%, transparent);
+  }
+  #mac-demo .mac-controls .mac-play:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--mac-foreground) 80%, transparent);
+  }
+}

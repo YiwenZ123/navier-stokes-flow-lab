@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; script-src 'self'; frame-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+  <title>Navier–Stokes Flow Lab · Explicit time stepping</title>
+  <link rel="stylesheet" href="./guide.css?v=5383e2988827">
+  <script defer src="./page-tabs.js"></script>
+  <script type="module" src="./i18n.js?v=14"></script>
+  <script defer src="./animation-frame.js"></script>
+</head>
+<body>
+  <header class="site-header page-width">
+    <h1>Navier–Stokes Flow Lab</h1>
+    <nav class="method-nav" aria-label="时间推进方法">
+      <a href="./" aria-current="page">显式推进</a>
+      <a href="./mac.html">隐式 MAC</a>
+      <a href="./compare.html">结果对比</a>
+      <a href="./waves.html">波浪冲击</a>
+    </nav>
+  </header>
+
+  <main class="page-width">
+    <nav class="section-tabs" aria-label="页面内容" data-section-tabs>
+      <a href="#animation">动画演示</a>
+      <a href="#flow">推进流程</a>
+      <a href="#formulas">离散公式</a>
+    </nav>
+    <section id="animation" class="animation" aria-label="推进动画">
+      <iframe class="explicit-presets-frame" src="./explicit-ns-presets.html?v=14" sandbox="allow-scripts" referrerpolicy="no-referrer" title="Navier–Stokes 显式时间推进动画"></iframe>
+      <a class="standalone" href="./explicit-ns-presets.html?v=14">单独打开动画</a>
+      <a class="standalone" href="./explicit-ns-animation.html">查看原始动画</a>
+    </section>
+
+    <section id="flow" class="study-section" aria-labelledby="flow-title">
+      <h2 id="flow-title">推进流程图</h2>
+      <p class="intro"><var>n</var> 是物理时间层，<var>k</var> 是当前时间层内的压力迭代轮数。</p>
+      <ol class="flow">
+        <li>
+          <span class="flow-node"><strong>读入第 <var>n</var> 层速度</strong><span>已知 <var>u</var><sup><var>n</var></sup>、<var>v</var><sup><var>n</var></sup></span></span>
+        </li>
+        <li>
+          <span class="flow-node"><strong>计算压力方程右端</strong><span>式（6）给出 <var>b</var><sup><var>n</var></sup>，施加压力边界条件</span></span>
+        </li>
+        <li>
+          <span class="flow-node"><strong>压力迭代一轮</strong><span><var>k</var> → <var>k</var> + 1，速度和 <var>b</var><sup><var>n</var></sup> 固定</span></span>
+        </li>
+        <li class="decision">
+          <span class="flow-node"><strong>最大压力残差 ≤ 10<sup>−3</sup>？</strong></span>
+          <span class="retry"><strong>未达标</strong><span>↶ 回到压力迭代</span></span>
+        </li>
+        <li class="accepted">
+          <span class="flow-node"><strong>用收敛的 <var>p</var><sup><var>n</var></sup> 更新速度</strong><span>式（4）（5）给出 <var>u</var><sup><var>n</var>+1</sup>、<var>v</var><sup><var>n</var>+1</sup></span></span>
+        </li>
+      </ol>
+      <p class="repeat"><span aria-hidden="true">↶</span> <var>n</var> ← <var>n</var> + 1，返回起点推进下一时间层</p>
+    </section>
+
+    <section id="formulas" class="study-section" aria-labelledby="formulas-title">
+      <h2 id="formulas-title">离散公式</h2>
+      <p class="intro">动画使用等距网格，<var>h</var> = Δ<var>x</var> = Δ<var>y</var>。</p>
+
+      <article class="formula">
+        <h3>压力泊松方程 <span>式（6）</span></h3>
+        <div class="equations">
+          <math display="block">
+            <msub><mi>L</mi><mi>h</mi></msub><msup><mi>p</mi><mi>n</mi></msup><mo>=</mo><msup><mi>b</mi><mi>n</mi></msup>
+          </math>
+          <math display="block">
+            <msup><mi>b</mi><mi>n</mi></msup><mo>=</mo><mo>−</mo><mi>ρ</mi><mo>[</mo>
+            <msup><mrow><mo>(</mo><msub><mi>δ</mi><mi>x</mi></msub><msup><mi>u</mi><mi>n</mi></msup><mo>)</mo></mrow><mn>2</mn></msup><mo>+</mo>
+            <mn>2</mn><mo>(</mo><msub><mi>δ</mi><mi>y</mi></msub><msup><mi>u</mi><mi>n</mi></msup><mo>)</mo><mo>(</mo><msub><mi>δ</mi><mi>x</mi></msub><msup><mi>v</mi><mi>n</mi></msup><mo>)</mo><mo>+</mo>
+            <msup><mrow><mo>(</mo><msub><mi>δ</mi><mi>y</mi></msub><msup><mi>v</mi><mi>n</mi></msup><mo>)</mo></mrow><mn>2</mn></msup><mo>]</mo>
+          </math>
+        </div>
+        <p><var>δ</var> 表示中心差分，<var>L</var><sub><var>h</var></sub> 表示五点离散拉普拉斯算子。以 <var>x</var> 方向为例。</p>
+        <div class="equations">
+          <math display="block">
+            <msub><mrow><mo>(</mo><msub><mi>δ</mi><mi>x</mi></msub><mi>q</mi><mo>)</mo></mrow><mrow><mi>i</mi><mo>,</mo><mi>j</mi></mrow></msub><mo>=</mo>
+            <mfrac><mrow><msub><mi>q</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn><mo>,</mo><mi>j</mi></mrow></msub><mo>−</mo><msub><mi>q</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn><mo>,</mo><mi>j</mi></mrow></msub></mrow><mrow><mn>2</mn><mi>h</mi></mrow></mfrac>
+          </math>
+          <math display="block">
+            <msub><mrow><mo>(</mo><msub><mi>L</mi><mi>h</mi></msub><mi>q</mi><mo>)</mo></mrow><mrow><mi>i</mi><mo>,</mo><mi>j</mi></mrow></msub><mo>=</mo>
+            <mfrac>
+              <mrow><msub><mi>q</mi><mi mathvariant="normal">E</mi></msub><mo>+</mo><msub><mi>q</mi><mi mathvariant="normal">W</mi></msub><mo>+</mo><msub><mi>q</mi><mi mathvariant="normal">N</mi></msub><mo>+</mo><msub><mi>q</mi><mi mathvariant="normal">S</mi></msub><mo>−</mo><mn>4</mn><msub><mi>q</mi><mrow><mi>i</mi><mo>,</mo><mi>j</mi></mrow></msub></mrow>
+              <msup><mi>h</mi><mn>2</mn></msup>
+            </mfrac>
+          </math>
+        </div>
+        <p>E、W、N、S 分别表示中心点右、左、上、下的四个邻点。</p>
+      </article>
+
+      <article class="formula">
+        <h3>Jacobi 压力更新 <span>默认选项</span></h3>
+        <p>固定时间层 <var>n</var>。用第 <var>k</var> 轮的四个邻点压力，同时更新所有内点。</p>
+        <div class="equations">
+          <math display="block">
+            <msubsup><mi>p</mi><mrow><mi>i</mi><mo>,</mo><mi>j</mi></mrow><mrow><mo>(</mo><mi>k</mi><mo>+</mo><mn>1</mn><mo>)</mo></mrow></msubsup><mo>=</mo>
+            <mfrac>
+              <mrow>
+                <msubsup><mi>p</mi><mi mathvariant="normal">E</mi><mrow><mo>(</mo><mi>k</mi><mo>)</mo></mrow></msubsup><mo>+</mo>
+                <msubsup><mi>p</mi><mi mathvariant="normal">W</mi><mrow><mo>(</mo><mi>k</mi><mo>)</mo></mrow></msubsup><mo>+</mo>
+                <msubsup><mi>p</mi><mi mathvariant="normal">N</mi><mrow><mo>(</mo><mi>k</mi><mo>)</mo></mrow></msubsup><mo>+</mo>
+                <msubsup><mi>p</mi><mi mathvariant="normal">S</mi><mrow><mo>(</mo><mi>k</mi><mo>)</mo></mrow></msubsup><mo>−</mo>
+                <msup><mi>h</mi><mn>2</mn></msup><msubsup><mi>b</mi><mrow><mi>i</mi><mo>,</mo><mi>j</mi></mrow><mi>n</mi></msubsup>
+              </mrow>
+              <mn>4</mn>
+            </mfrac>
+          </math>
+          <math display="block">
+            <msup><mi>r</mi><mrow><mo>(</mo><mi>k</mi><mo>)</mo></mrow></msup><mo>=</mo>
+            <munder><mo>max</mo><mrow><mi>i</mi><mo>,</mo><mi>j</mi></mrow></munder>
+            <mo>|</mo><msub><mrow><mo>(</mo><msub><mi>L</mi><mi>h</mi></msub><msup><mi>p</mi><mrow><mo>(</mo><mi>k</mi><mo>)</mo></mrow></msup><mo>)</mo></mrow><mrow><mi>i</mi><mo>,</mo><mi>j</mi></mrow></msub><mo>−</mo>
+            <msubsup><mi>b</mi><mrow><mi>i</mi><mo>,</mo><mi>j</mi></mrow><mi>n</mi></msubsup><mo>|</mo>
+          </math>
+        </div>
+        <p>动画在所有内点的最大残差达到 10<sup>−3</sup> 或更小时，取当前压力为 <var>p</var><sup><var>n</var></sup>。</p>
+      </article>
+
+
+      <article class="formula">
+        <h3>Gauss–Seidel 与 SOR 压力更新</h3>
+        <p>固定当前时间层的速度和压力方程右端，按网格顺序逐点扫描。下标“最新”表示：已更新的邻点使用本轮新值，其余邻点使用上一轮值。</p>
+        <div class="equations">
+          <math display="block"><msubsup><mi>p</mi><mi>i</mi><mtext>GS</mtext></msubsup><mo>=</mo><mfrac><mrow><munder><mo>∑</mo><mrow><mi>s</mi><mo>∈</mo><mo>{</mo><mi>E</mi><mo>,</mo><mi>W</mi><mo>,</mo><mi>N</mi><mo>,</mo><mi>S</mi><mo>}</mo></mrow></munder><msubsup><mi>p</mi><mi>s</mi><mtext>最新</mtext></msubsup><mo>−</mo><msup><mi>h</mi><mn>2</mn></msup><msub><mi>b</mi><mi>i</mi></msub></mrow><mn>4</mn></mfrac></math>
+          <math display="block"><msubsup><mi>p</mi><mi>i</mi><mtext>新</mtext></msubsup><mo>=</mo><msubsup><mi>p</mi><mi>i</mi><mtext>旧</mtext></msubsup><mo>+</mo><mi>ω</mi><mo>(</mo><msubsup><mi>p</mi><mi>i</mi><mtext>GS</mtext></msubsup><mo>−</mo><msubsup><mi>p</mi><mi>i</mi><mtext>旧</mtext></msubsup><mo>)</mo></math>
+        </div>
+        <p>Gauss–Seidel 对应 <var>ω</var> = 1；SOR 可选 1.0–1.9。每完成一整轮扫描，再用完整的新压力场计算最大残差；三种方法使用相同的停止阈值。SOR 的收敛速度取决于松弛因子，并非 <var>ω</var> 越大越快。</p>
+      </article>
+
+      <article class="formula">
+        <h3>显式速度更新 <span>式（4）（5）</span></h3>
+        <p>令 (<var>q</var>, <var>d</var>) 分别取 (<var>u</var>, <var>x</var>)、(<var>v</var>, <var>y</var>)。<var>D</var><sup>−</sup> 是对流项的向后差分。</p>
+        <div class="equations">
+          <math display="block">
+            <msup><mi>q</mi><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msup><mo>=</mo><msup><mi>q</mi><mi>n</mi></msup><mo>+</mo><mi>Δ</mi><mi>t</mi><mo>[</mo>
+            <mo>−</mo><msup><mi>u</mi><mi>n</mi></msup><msubsup><mi>D</mi><mi>x</mi><mo>−</mo></msubsup><msup><mi>q</mi><mi>n</mi></msup><mo>−</mo>
+            <msup><mi>v</mi><mi>n</mi></msup><msubsup><mi>D</mi><mi>y</mi><mo>−</mo></msubsup><msup><mi>q</mi><mi>n</mi></msup><mo>−</mo>
+            <mfrac><mn>1</mn><mi>ρ</mi></mfrac><msub><mi>δ</mi><mi>d</mi></msub><msup><mi>p</mi><mi>n</mi></msup><mo>+</mo>
+            <mi>ν</mi><msub><mi>L</mi><mi>h</mi></msub><msup><mi>q</mi><mi>n</mi></msup><mo>]</mo>
+          </math>
+          <math display="block">
+            <msub><mrow><mo>(</mo><msubsup><mi>D</mi><mi>x</mi><mo>−</mo></msubsup><mi>q</mi><mo>)</mo></mrow><mrow><mi>i</mi><mo>,</mo><mi>j</mi></mrow></msub><mo>=</mo>
+            <mfrac><mrow><msub><mi>q</mi><mrow><mi>i</mi><mo>,</mo><mi>j</mi></mrow></msub><mo>−</mo><msub><mi>q</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn><mo>,</mo><mi>j</mi></mrow></msub></mrow><mi>h</mi></mfrac>
+          </math>
+        </div>
+        <p>计算出两个速度分量后，物理时间才增加 Δ<var>t</var>。</p>
+      </article>
+    </section>
+  </main>
+</body>
+</html>
