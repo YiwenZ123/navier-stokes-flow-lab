@@ -4,7 +4,7 @@ import { DT_OPTIONS, DEMO_END_TIME, normalizeTimeStep } from "./time-step-option
 import { spatialGridSummary } from "./spatial-grid.js";
 import { readIterationOptions, writeIterationQuery, iterationLabel, mountIterationControls } from "./iteration-controls.js";
 import { mountParameterSidebar } from "./parameter-sidebar.js?v=edb979ef0040";
-import { mountIterationStoryboard } from "./iteration-storyboard.js?v=a2ccaab16e0c";
+import { mountIterationStoryboard } from "./iteration-storyboard.js?v=67320c82aa24";
 
 const root = document.querySelector("#mac-demo");
 let condition = selectedInitialCondition();

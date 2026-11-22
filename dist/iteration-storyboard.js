@@ -142,7 +142,8 @@ export function mountIterationStoryboard(host, { mode = "explicit" } = {}) {
     const words = copy[language()];
     const phase = Number.isInteger(state.phase) ? Math.max(-1, Math.min(3, state.phase)) : -1;
     const layer = Number.isFinite(state.layer) ? Math.max(0, state.layer) : 0;
-    const sourceLayer = phase === 3 && layer > 0 ? layer - 1 : layer;
+    const sourceLayer = Number.isFinite(state.sourceLayer) ? Math.max(0, state.sourceLayer)
+      : phase === 3 && layer > 0 ? layer - 1 : layer;
     const reachedTolerance = !state.failed && Number.isFinite(state.residual) && Number.isFinite(state.tolerance)
       && state.residual <= state.tolerance && phase >= pressureIndex;
     root.dataset.playing = String(Boolean(state.playing));

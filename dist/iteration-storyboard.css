@@ -231,7 +231,7 @@
   font: 500 14px/1.4 ui-monospace, "SFMono-Regular", Consolas, monospace;
 }
 
-.iteration-storyboard[data-phase="3"] .is-target-level {
+.iteration-storyboard[data-phase="3"][data-failed="false"] .is-target-level {
   border-color: #dec985;
   background: var(--is-amber-wash);
   color: var(--is-amber-ink);
