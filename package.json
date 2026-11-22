@@ -15,6 +15,7 @@
   "scripts": {
     "start": "python3 -m http.server 8000 --bind 127.0.0.1 --directory dist",
     "check:grid": "node scripts/sync-spatial-grid.mjs --check",
+    "check:storyboard": "node scripts/sync-iteration-storyboard.mjs --check",
     "test:iterations": "node tests/iterations.mjs",
     "test:stability": "node tests/stability.mjs",
     "test:waves": "node tests/waves.mjs",

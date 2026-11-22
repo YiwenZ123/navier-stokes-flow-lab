@@ -18,6 +18,533 @@
 &lt;meta name=&quot;referrer&quot; content=&quot;no-referrer&quot;&gt;
 &lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;default-src &#x27;none&#x27;; script-src &#x27;unsafe-inline&#x27; &#x27;unsafe-eval&#x27; &#x27;wasm-unsafe-eval&#x27; blob: data: https://persistent.oaistatic.com/plugins/visualize/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src &#x27;unsafe-inline&#x27; blob: data: https://persistent.oaistatic.com/plugins/visualize/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://persistent.oaistatic.com/plugins/visualize/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://persistent.oaistatic.com/plugins/visualize/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://persistent.oaistatic.com/plugins/visualize/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src &#x27;none&#x27;; object-src &#x27;none&#x27;; base-uri &#x27;none&#x27;; form-action &#x27;none&#x27;&quot;&gt;
 &lt;title&gt;explicit-ns-animation.html&lt;/title&gt;
+&lt;style id=&quot;cfd-iteration-storyboard-style&quot;&gt;
+.iteration-storyboard {
+  --is-paper: #f4f5f2;
+  --is-card: #fff;
+  --is-ink: #20252b;
+  --is-text: #5b6169;
+  --is-muted: #747b82;
+  --is-line: #d9ddd6;
+  --is-amber: #e9b840;
+  --is-amber-ink: #7b5910;
+  --is-amber-wash: #fbf2d9;
+  --is-failure: #a34031;
+  padding: 22px;
+  color: var(--is-text);
+  background: var(--is-paper);
+  border: 1px solid var(--is-line);
+  border-radius: 18px;
+  font: 400 14px/1.5 system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+  text-align: start;
+  container-type: inline-size;
+}
+
+.iteration-storyboard *,
+.iteration-storyboard *::before,
+.iteration-storyboard *::after { box-sizing: border-box; }
+
+.iteration-storyboard .is-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin-bottom: 20px;
+}
+
+.iteration-storyboard .is-title {
+  margin: 0;
+  font: 500 18px/1.4 system-ui, sans-serif;
+  color: var(--is-ink);
+}
+
+.iteration-storyboard .is-run-status { color: var(--is-muted); }
+.iteration-storyboard[data-failed=&quot;true&quot;] .is-run-status { color: var(--is-failure); }
+
+.iteration-storyboard .is-cards {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 26px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.iteration-storyboard .is-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  margin: 0;
+  padding: 16px;
+  border: 1px dashed var(--is-line);
+  border-radius: 12px;
+  background: rgb(255 255 255 / 45%);
+  transition: border-color 180ms ease, background-color 180ms ease;
+}
+
+.iteration-storyboard .is-card[data-state=&quot;current&quot;] {
+  border: 1px solid var(--is-amber);
+  background: var(--is-card);
+}
+
+.iteration-storyboard .is-card[data-state=&quot;done&quot;] {
+  border-style: solid;
+  background: rgb(255 255 255 / 80%);
+}
+
+.iteration-storyboard .is-card[data-state=&quot;failed&quot;] { border: 1px solid var(--is-failure); }
+
+.iteration-storyboard .is-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 32px;
+}
+
+.iteration-storyboard .is-icon {
+  flex: none;
+  width: 32px;
+  height: 32px;
+  fill: none;
+  stroke: var(--is-muted);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.iteration-storyboard .is-card[data-state=&quot;current&quot;] .is-icon-accent { stroke: var(--is-amber-ink); }
+.iteration-storyboard .is-card-status { color: var(--is-muted); font-size: 14px; }
+.iteration-storyboard .is-card[data-state=&quot;current&quot;] .is-card-status { color: var(--is-amber-ink); }
+.iteration-storyboard .is-card[data-state=&quot;failed&quot;] .is-card-status { color: var(--is-failure); }
+
+.iteration-storyboard .is-card-title {
+  min-height: 2.8em;
+  margin: 0;
+  color: var(--is-ink);
+  font: 500 16px/1.4 system-ui, sans-serif;
+}
+
+.iteration-storyboard .is-equation {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  min-height: 100px;
+  margin: 0;
+  padding: 12px;
+  border-radius: 8px;
+  background: var(--is-ink);
+  color: #e3e7e4;
+  font: 400 14px/1.6 ui-monospace, &quot;SFMono-Regular&quot;, Consolas, monospace;
+  overflow-wrap: anywhere;
+}
+
+.iteration-storyboard .is-card[data-state=&quot;current&quot;] .is-equation { color: #f5d782; }
+.iteration-storyboard .is-card[data-state=&quot;waiting&quot;] .is-equation { background: #51585c; }
+.iteration-storyboard .is-detail { display: grid; gap: 6px; }
+.iteration-storyboard .is-detail span { font-size: 14px; }
+
+.iteration-storyboard .is-connector {
+  position: absolute;
+  left: calc(100% + 1px);
+  top: 55%;
+  width: 26px;
+  height: 1px;
+  background: var(--is-line);
+}
+
+.iteration-storyboard .is-connector::after {
+  content: &quot;&quot;;
+  position: absolute;
+  right: 1px;
+  top: -3px;
+  width: 6px;
+  height: 6px;
+  border-top: 1px solid var(--is-line);
+  border-right: 1px solid var(--is-line);
+  transform: rotate(45deg);
+}
+
+.iteration-storyboard .is-card:last-child .is-connector { display: none; }
+.iteration-storyboard .is-card[data-state=&quot;done&quot;] .is-connector { background: #d8bb76; }
+.iteration-storyboard .is-connector i,
+.iteration-storyboard .is-level-wire i {
+  position: absolute;
+  top: -2px;
+  left: 0;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--is-amber);
+  opacity: 0;
+  animation: iteration-storyboard-transfer 1.3s linear infinite;
+}
+
+.iteration-storyboard .is-card[data-state=&quot;current&quot;][data-ready=&quot;true&quot;] .is-connector i { opacity: 1; }
+
+.iteration-storyboard .is-feedback {
+  position: relative;
+  height: 28px;
+  margin-top: auto;
+}
+
+.iteration-storyboard .is-feedback svg {
+  display: block;
+  width: 100%;
+  height: 28px;
+  overflow: visible;
+}
+
+.iteration-storyboard .is-feedback path {
+  fill: none;
+  stroke: #d7bc79;
+  stroke-width: 1.3;
+  stroke-dasharray: 3 4;
+  vector-effect: non-scaling-stroke;
+}
+
+.iteration-storyboard .is-feedback-dot {
+  position: absolute;
+  left: 8.33%;
+  top: 6px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--is-amber);
+  opacity: 0;
+  animation: iteration-storyboard-feedback 1.8s linear infinite;
+}
+
+.iteration-storyboard .is-card[data-state=&quot;current&quot;][data-converged=&quot;false&quot;] .is-feedback-dot { opacity: 1; }
+.iteration-storyboard .is-feedback-text { margin: 0; font-size: 14px; color: var(--is-muted); }
+.iteration-storyboard .is-card[data-converged=&quot;true&quot;] .is-feedback-text { color: var(--is-amber-ink); }
+
+.iteration-storyboard .is-context {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px 24px;
+  margin-top: 22px;
+  padding-top: 16px;
+  border-top: 1px solid var(--is-line);
+}
+
+.iteration-storyboard .is-level-transition {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.iteration-storyboard .is-level-transition strong {
+  padding: 6px 10px;
+  border: 1px solid var(--is-line);
+  border-radius: 6px;
+  color: var(--is-ink);
+  background: var(--is-card);
+  font: 500 14px/1.4 ui-monospace, &quot;SFMono-Regular&quot;, Consolas, monospace;
+}
+
+.iteration-storyboard[data-phase=&quot;3&quot;] .is-target-level {
+  border-color: #dec985;
+  background: var(--is-amber-wash);
+  color: var(--is-amber-ink);
+}
+
+.iteration-storyboard .is-level-wire { position: relative; width: 38px; height: 1px; background: var(--is-line); }
+.iteration-storyboard[data-phase=&quot;3&quot;] .is-level-wire i { opacity: 1; }
+.iteration-storyboard .is-time { display: flex; flex-wrap: wrap; gap: 8px; }
+.iteration-storyboard .is-time strong { font-weight: 500; color: var(--is-ink); }
+
+.iteration-storyboard[data-playing=&quot;false&quot;] *,
+.iteration-storyboard[data-complete=&quot;true&quot;] *,
+.iteration-storyboard[data-failed=&quot;true&quot;] * {
+  animation-play-state: paused !important;
+  transition-duration: 0s !important;
+}
+
+.iteration-storyboard[data-failed=&quot;true&quot;] .is-connector i,
+.iteration-storyboard[data-failed=&quot;true&quot;] .is-feedback-dot,
+.iteration-storyboard[data-failed=&quot;true&quot;] .is-level-wire i,
+.iteration-storyboard[data-complete=&quot;true&quot;] .is-connector i,
+.iteration-storyboard[data-complete=&quot;true&quot;] .is-feedback-dot,
+.iteration-storyboard[data-complete=&quot;true&quot;] .is-level-wire i { opacity: 0; }
+
+@keyframes iteration-storyboard-transfer {
+  from { left: 0; }
+  to { left: calc(100% - 5px); }
+}
+
+@keyframes iteration-storyboard-feedback {
+  0% { left: 8.33%; top: 6px; }
+  42% { left: 91.67%; top: 6px; }
+  50% { left: 91.67%; top: 22px; }
+  92% { left: 8.33%; top: 22px; }
+  100% { left: 8.33%; top: 6px; }
+}
+
+@container (max-width: 740px) {
+  .iteration-storyboard .is-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+  .iteration-storyboard .is-connector { width: 20px; }
+  .iteration-storyboard .is-card:nth-child(2) .is-connector { display: none; }
+}
+
+@container (max-width: 430px) {
+  .iteration-storyboard .is-cards { gap: 12px; }
+  .iteration-storyboard .is-card { padding: 11px; gap: 10px; }
+  .iteration-storyboard .is-card-top { flex-wrap: wrap; }
+  .iteration-storyboard .is-card-title { min-height: 0; }
+  .iteration-storyboard .is-equation { min-height: 96px; padding: 9px; }
+  .iteration-storyboard .is-connector { display: none; }
+  .iteration-storyboard .is-context { align-items: start; }
+  .iteration-storyboard .is-level-transition { gap: 7px; }
+  .iteration-storyboard .is-target-label { flex-basis: 100%; }
+}
+
+@container (max-width: 280px) {
+  .iteration-storyboard .is-cards { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .iteration-storyboard *,
+  .iteration-storyboard *::before,
+  .iteration-storyboard *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+&lt;/style&gt;
+&lt;script id=&quot;cfd-iteration-storyboard-script&quot;&gt;
+function mountIterationStoryboard(host, { mode = &quot;explicit&quot; } = {}) {
+  const isMac = mode === &quot;mac&quot;;
+  const language = () =&gt; document.documentElement.lang.toLowerCase().startsWith(&quot;zh&quot;) ? &quot;zh&quot; : &quot;en&quot;;
+  const copy = {
+    en: {
+      title: isMac ? &quot;One MAC projection step&quot; : &quot;One explicit time step&quot;,
+      cards: isMac
+        ? [&quot;Predict velocity&quot;, &quot;Build the right-hand side&quot;, &quot;Solve pressure&quot;, &quot;Project velocity&quot;]
+        : [&quot;Build the right-hand side&quot;, &quot;Solve pressure&quot;, &quot;Check the residual&quot;, &quot;Update velocity&quot;],
+      initial: &quot;Ready for the next time step&quot;,
+      paused: &quot;Paused&quot;,
+      active: &quot;Computing&quot;,
+      done: &quot;Completed&quot;,
+      waiting: &quot;Waiting&quot;,
+      failed: &quot;Calculation stopped&quot;,
+      complete: &quot;End time reached&quot;,
+      layer: &quot;Time level&quot;,
+      time: &quot;Physical time&quot;,
+      iteration: &quot;Iteration&quot;,
+      residual: &quot;Maximum residual&quot;,
+      tolerance: &quot;Tolerance&quot;,
+      accepted: &quot;Residual meets tolerance&quot;,
+      repeat: &quot;Repeat and check the residual&quot;,
+      check: &quot;Residual checked after each sweep&quot;,
+      known: &quot;Known velocity&quot;,
+      fixed: &quot;Velocity stays fixed during this solve&quot;,
+      source: &quot;From the predicted face velocities&quot;,
+      predictor: &quot;Implicit momentum iteration&quot;,
+      acceptedVelocity: &quot;New velocity accepted&quot;,
+      targetVelocity: &quot;Next velocity&quot;,
+      pressure: &quot;Pressure Poisson equation&quot;,
+      projection: &quot;Subtract the pressure-gradient correction&quot;,
+      update: &quot;Advance physical time by Δt&quot;
+    },
+    zh: {
+      title: isMac ? &quot;一个 MAC 投影时间步&quot; : &quot;一个显式时间步&quot;,
+      cards: isMac
+        ? [&quot;预测速度&quot;, &quot;构造压力方程右端&quot;, &quot;迭代求解压力&quot;, &quot;投影修正速度&quot;]
+        : [&quot;构造压力方程右端&quot;, &quot;迭代求解压力&quot;, &quot;检查残差&quot;, &quot;更新速度&quot;],
+      initial: &quot;准备推进下一时间步&quot;,
+      paused: &quot;已暂停&quot;,
+      active: &quot;计算中&quot;,
+      done: &quot;已完成&quot;,
+      waiting: &quot;等待&quot;,
+      failed: &quot;计算已停止&quot;,
+      complete: &quot;已到达终点&quot;,
+      layer: &quot;时间层&quot;,
+      time: &quot;物理时间&quot;,
+      iteration: &quot;迭代轮数&quot;,
+      residual: &quot;最大残差&quot;,
+      tolerance: &quot;收敛阈值&quot;,
+      accepted: &quot;残差达到阈值&quot;,
+      repeat: &quot;继续迭代并检查残差&quot;,
+      check: &quot;每轮扫描后检查残差&quot;,
+      known: &quot;已知速度&quot;,
+      fixed: &quot;求压过程中速度保持固定&quot;,
+      source: &quot;由预测面速度构造&quot;,
+      predictor: &quot;隐式动量方程迭代&quot;,
+      acceptedVelocity: &quot;新速度已接受&quot;,
+      targetVelocity: &quot;下一层速度&quot;,
+      pressure: &quot;压力泊松方程&quot;,
+      projection: &quot;减去压力梯度修正量&quot;,
+      update: &quot;物理时间增加 Δt&quot;
+    }
+  };
+  const icons = [
+    &#x27;&lt;path d=&quot;M6 7h20M6 16h20M6 25h20M7 6v20M16 6v20M25 6v20&quot;/&gt;&lt;path class=&quot;is-icon-accent&quot; d=&quot;M11 16h10m-4-4 4 4-4 4&quot;/&gt;&#x27;,
+    &#x27;&lt;path d=&quot;M6 8h20M6 24h20M10 12v8m6-10v12m6-10v8&quot;/&gt;&lt;circle class=&quot;is-icon-accent&quot; cx=&quot;16&quot; cy=&quot;16&quot; r=&quot;3&quot;/&gt;&#x27;,
+    &#x27;&lt;path d=&quot;M5 24h22M7 20l5-9 5 5 8-10&quot;/&gt;&lt;path class=&quot;is-icon-accent&quot; d=&quot;m11 22 4 4 9-10&quot;/&gt;&#x27;,
+    &#x27;&lt;path d=&quot;M6 25V7m0 18h20&quot;/&gt;&lt;path class=&quot;is-icon-accent&quot; d=&quot;m11 20 12-12m-7 0h7v7&quot;/&gt;&#x27;
+  ];
+  const pressureIndex = isMac ? 2 : 1;
+  const root = document.createElement(&quot;section&quot;);
+  root.className = &quot;iteration-storyboard&quot;;
+  root.dataset.i18nIgnore = &quot;&quot;;
+  root.dataset.mode = isMac ? &quot;mac&quot; : &quot;explicit&quot;;
+  root.dataset.playing = &quot;false&quot;;
+  root.dataset.failed = &quot;false&quot;;
+  root.dataset.complete = &quot;false&quot;;
+  root.innerHTML = `
+    &lt;header class=&quot;is-header&quot;&gt;
+      &lt;h3 class=&quot;is-title&quot;&gt;&lt;/h3&gt;
+      &lt;span class=&quot;is-run-status&quot;&gt;&lt;/span&gt;
+    &lt;/header&gt;
+    &lt;ol class=&quot;is-cards&quot;&gt;
+      ${icons.map((icon, index) =&gt; `
+        &lt;li class=&quot;is-card&quot; data-state=&quot;waiting&quot;&gt;
+          &lt;div class=&quot;is-card-top&quot;&gt;
+            &lt;svg class=&quot;is-icon&quot; viewBox=&quot;0 0 32 32&quot; aria-hidden=&quot;true&quot;&gt;${icon}&lt;/svg&gt;
+            &lt;span class=&quot;is-card-status&quot;&gt;&lt;/span&gt;
+          &lt;/div&gt;
+          &lt;h4 class=&quot;is-card-title&quot;&gt;&lt;/h4&gt;
+          &lt;div class=&quot;is-equation&quot;&gt;&lt;/div&gt;
+          &lt;div class=&quot;is-detail&quot;&gt;&lt;/div&gt;
+          ${index === pressureIndex ? `
+            &lt;div class=&quot;is-feedback&quot; aria-hidden=&quot;true&quot;&gt;
+              &lt;svg viewBox=&quot;0 0 120 28&quot; preserveAspectRatio=&quot;none&quot;&gt;
+                &lt;path d=&quot;M10 8H100Q110 8 110 16Q110 24 100 24H20Q10 24 10 16V8m-5 5 5-5 5 5&quot;/&gt;
+              &lt;/svg&gt;
+              &lt;i class=&quot;is-feedback-dot&quot;&gt;&lt;/i&gt;
+            &lt;/div&gt;
+            &lt;p class=&quot;is-feedback-text&quot;&gt;&lt;/p&gt;
+          ` : &quot;&quot;}
+          &lt;span class=&quot;is-connector&quot; aria-hidden=&quot;true&quot;&gt;&lt;i&gt;&lt;/i&gt;&lt;/span&gt;
+        &lt;/li&gt;
+      `).join(&quot;&quot;)}
+    &lt;/ol&gt;
+    &lt;footer class=&quot;is-context&quot;&gt;
+      &lt;div class=&quot;is-level-transition&quot;&gt;
+        &lt;span class=&quot;is-source-label&quot;&gt;&lt;/span&gt;
+        &lt;strong class=&quot;is-source-level&quot;&gt;&lt;/strong&gt;
+        &lt;span class=&quot;is-level-wire&quot; aria-hidden=&quot;true&quot;&gt;&lt;i&gt;&lt;/i&gt;&lt;/span&gt;
+        &lt;strong class=&quot;is-target-level&quot;&gt;&lt;/strong&gt;
+        &lt;span class=&quot;is-target-label&quot;&gt;&lt;/span&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;is-time&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;strong&gt;&lt;/strong&gt;&lt;/div&gt;
+    &lt;/footer&gt;
+  `;
+  host.append(root);
+  const cards = Array.from(root.querySelectorAll(&quot;.is-card&quot;));
+  let latestState = { phase: -1, layer: 0, time: 0, playing: false };
+
+  function format(value) {
+    if (!Number.isFinite(value)) return &quot;—&quot;;
+    if (value === 0) return &quot;0&quot;;
+    return value.toExponential(2).replaceAll(&quot;-&quot;, &quot;−&quot;);
+  }
+
+  function setLines(element, lines) {
+    const values = lines.filter(Boolean);
+    if (element.dataset.lines === JSON.stringify(values)) return;
+    element.replaceChildren(...values.map(value =&gt; {
+      const line = document.createElement(&quot;span&quot;);
+      line.textContent = value;
+      return line;
+    }));
+    element.dataset.lines = JSON.stringify(values);
+  }
+
+  function update(state) {
+    latestState = state;
+    const words = copy[language()];
+    const phase = Number.isInteger(state.phase) ? Math.max(-1, Math.min(3, state.phase)) : -1;
+    const layer = Number.isFinite(state.layer) ? Math.max(0, state.layer) : 0;
+    const sourceLayer = phase === 3 &amp;&amp; layer &gt; 0 ? layer - 1 : layer;
+    const reachedTolerance = !state.failed &amp;&amp; Number.isFinite(state.residual) &amp;&amp; Number.isFinite(state.tolerance)
+      &amp;&amp; state.residual &lt;= state.tolerance &amp;&amp; phase &gt;= pressureIndex;
+    root.dataset.playing = String(Boolean(state.playing));
+    root.dataset.failed = String(Boolean(state.failed));
+    root.dataset.complete = String(Boolean(state.complete));
+    root.dataset.phase = String(phase);
+    root.querySelector(&quot;.is-title&quot;).textContent = words.title;
+    root.querySelector(&quot;.is-run-status&quot;).textContent = state.failed ? words.failed
+      : state.complete ? words.complete
+      : phase === -1 ? words.initial
+      : state.playing ? words.active : words.paused;
+    const equations = isMac ? [
+      [&quot;U* = Uⁿ + Δt Hₕ(U*)&quot;],
+      [&quot;b = (ρ / Δt) DₕU*&quot;],
+      [&quot;Lₕp* = b&quot;, &quot;r = ‖Lₕp* − b‖∞&quot;],
+      [&quot;Uⁿ⁺¹ = U*&quot;, &quot;− (Δt / ρ) Gₕp*&quot;]
+    ] : [
+      [&quot;bⁿ = −ρ[(δₓu)²&quot;, &quot;+ 2δᵧu δₓv + (δᵧv)²]&quot;],
+      [&quot;Lₕpⁿ = bⁿ&quot;],
+      [&quot;r = ‖Lₕp − bⁿ‖∞&quot;, &quot;r ≤ ε&quot;],
+      [&quot;ΔU = Δt(−U·∇ₕU&quot;, &quot;− ∇ₕp / ρ + νLₕU)&quot;, &quot;Uⁿ⁺¹ = Uⁿ + ΔU&quot;]
+    ];
+    const method = language() === &quot;zh&quot;
+      ? ({ &quot;Weighted Jacobi&quot;: &quot;加权 Jacobi&quot;, &quot;Gauss–Seidel&quot;: &quot;高斯–塞德尔&quot; }[state.method] || state.method)
+      : state.method;
+    const pressureMetrics = [
+      method || &quot;&quot;,
+      `${words.iteration} ${Number.isFinite(state.iteration) ? state.iteration : &quot;—&quot;}`,
+      `${words.residual} ${format(state.residual)}`
+    ];
+    const details = isMac ? [
+      [words.predictor,
+        `${words.iteration} ${Number.isFinite(state.predictorIterations) ? state.predictorIterations : &quot;—&quot;}`,
+        `${words.residual} ${format(state.predictorResidual)}`],
+      [words.source],
+      pressureMetrics,
+      [words.projection, words.update]
+    ] : [
+      [`${words.known} Uⁿ`, words.fixed],
+      pressureMetrics,
+      [`${words.residual} ${format(state.residual)}`, `${words.tolerance} ${format(state.tolerance)}`],
+      [words.update]
+    ];
+    cards.forEach((card, index) =&gt; {
+      const current = index === phase;
+      const status = current &amp;&amp; state.failed ? &quot;failed&quot;
+        : current ? &quot;current&quot; : index &lt; phase ? &quot;done&quot; : &quot;waiting&quot;;
+      card.dataset.state = status;
+      const predictorReady = Number.isFinite(state.predictorResidual) &amp;&amp; state.predictorResidual &lt;= 1e-7;
+      card.dataset.ready = String(!state.failed &amp;&amp; (index === pressureIndex ? reachedTolerance
+        : isMac &amp;&amp; index === 0 ? predictorReady : index &lt;= phase));
+      if (current) card.setAttribute(&quot;aria-current&quot;, &quot;step&quot;);
+      else card.removeAttribute(&quot;aria-current&quot;);
+      card.querySelector(&quot;.is-card-title&quot;).textContent = words.cards[index];
+      card.querySelector(&quot;.is-card-status&quot;).textContent = status === &quot;failed&quot; ? words.failed
+        : status === &quot;done&quot; || current &amp;&amp; state.complete ? words.done
+        : current ? state.playing ? words.active : words.paused : words.waiting;
+      setLines(card.querySelector(&quot;.is-equation&quot;), equations[index]);
+      setLines(card.querySelector(&quot;.is-detail&quot;), details[index]);
+    });
+    const pressureCard = cards[pressureIndex];
+    pressureCard.dataset.converged = String(reachedTolerance);
+    pressureCard.querySelector(&quot;.is-feedback-text&quot;).textContent = reachedTolerance ? words.accepted
+      : phase === pressureIndex &amp;&amp; Number.isFinite(state.residual) ? words.repeat : words.check;
+    root.querySelector(&quot;.is-source-label&quot;).textContent = words.layer;
+    root.querySelector(&quot;.is-source-level&quot;).textContent = `n = ${sourceLayer}`;
+    root.querySelector(&quot;.is-target-level&quot;).textContent = `n = ${sourceLayer + 1}`;
+    root.querySelector(&quot;.is-target-label&quot;).textContent = phase === 3 &amp;&amp; !state.failed ? words.acceptedVelocity : words.targetVelocity;
+    root.querySelector(&quot;.is-time span&quot;).textContent = words.time;
+    root.querySelector(&quot;.is-time strong&quot;).textContent = Number.isFinite(state.time) ? `t = ${Number(state.time.toFixed(4))}` : &quot;—&quot;;
+  }
+
+  const languageObserver = new MutationObserver(() =&gt; update(latestState));
+  languageObserver.observe(document.documentElement, { attributes: true, attributeFilter: [&quot;lang&quot;] });
+  update(latestState);
+  return { update };
+}
+&lt;/script&gt;
 &lt;/head&gt;
 &lt;body&gt;
 &lt;script type=&quot;application/json&quot; id=&quot;codex-visualization-widget-state&quot;&gt;__CODEX_VISUALIZATION_WIDGET_STATE__&lt;/script&gt;
@@ -2020,6 +2547,7 @@ html&gt;body{padding:0}&lt;/style&gt;
   &lt;/div&gt;
 
   &lt;div class=&quot;ns-layout&quot;&gt;
+    &lt;div class=&quot;ns-storyboard&quot;&gt;&lt;/div&gt;
     &lt;figure class=&quot;ns-figure&quot;&gt;
       &lt;figcaption&gt;&lt;strong data-field&gt;&lt;/strong&gt;&lt;span class=&quot;text-small&quot;&gt;箭头 · 速度&lt;/span&gt;&lt;/figcaption&gt;
       &lt;canvas role=&quot;img&quot; aria-label=&quot;二维网格。底色取四角节点标量的平均值；箭头位于节点，方向和长度表示该节点的速度。&quot;&gt;&lt;/canvas&gt;
@@ -2031,12 +2559,6 @@ html&gt;body{padding:0}&lt;/style&gt;
     &lt;div class=&quot;ns-status&quot;&gt;
       &lt;div class=&quot;ns-time tabular-nums&quot;&gt;&lt;strong data-layer&gt;&lt;/strong&gt;&lt;span data-time&gt;&lt;/span&gt;&lt;/div&gt;
       &lt;progress class=&quot;ns-progress&quot; max=&quot;20&quot; value=&quot;0&quot; aria-label=&quot;已推进的物理时间步&quot;&gt;&lt;/progress&gt;
-      &lt;ol class=&quot;ns-stages&quot; aria-label=&quot;每个时间步的计算顺序&quot;&gt;
-        &lt;li&gt;计算压力方程右端 &lt;span class=&quot;text-small&quot;&gt;式（6）&lt;/span&gt;&lt;/li&gt;
-        &lt;li data-pressure-stage&gt;Jacobi 压力迭代&lt;/li&gt;
-        &lt;li&gt;压力收敛&lt;/li&gt;
-        &lt;li&gt;显式更新速度 &lt;span class=&quot;text-small&quot;&gt;式（4）（5）&lt;/span&gt;&lt;/li&gt;
-      &lt;/ol&gt;
       &lt;dl class=&quot;ns-values tabular-nums&quot;&gt;
         &lt;div&gt;&lt;dt&gt;压力迭代 &lt;i&gt;k&lt;/i&gt;&lt;/dt&gt;&lt;dd data-sweeps&gt;—&lt;/dd&gt;&lt;/div&gt;
         &lt;div&gt;&lt;dt&gt;压力最大残差&lt;/dt&gt;&lt;dd data-residual&gt;—&lt;/dd&gt;&lt;/div&gt;
@@ -2086,16 +2608,14 @@ html&gt;body{padding:0}&lt;/style&gt;
   #explicit-ns-animation .parameter-help-body p + p { margin-top: 6px; }
   #explicit-ns-animation .ns-diagnostic { margin: 0; color: var(--muted-foreground); line-height: 1.5; }
   #explicit-ns-animation .ns-layout { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); gap: 18px; align-items: start; }
+  #explicit-ns-animation .ns-storyboard { grid-column: 1 / -1; min-width: 0; }
   #explicit-ns-animation .ns-figure { margin: 0; min-width: 0; }
   #explicit-ns-animation canvas { display: block; width: 100%; aspect-ratio: 1; }
   #explicit-ns-animation .ns-legend { display: grid; align-items: center; grid-template-columns: auto minmax(0, 1fr) auto; gap: 8px; margin-inline: 6%; }
   #explicit-ns-animation .ns-gradient { height: 8px; border-radius: 4px; background: linear-gradient(90deg, color-mix(in srgb, var(--blue) 72%, var(--background)), var(--background), color-mix(in srgb, var(--orange) 72%, var(--background))); }
   #explicit-ns-animation .ns-status { min-width: 0; display: grid; gap: 12px; }
   #explicit-ns-animation .ns-progress { width: 100%; height: 6px; accent-color: var(--primary); }
-  #explicit-ns-animation .ns-stages { display: grid; gap: 3px; margin: 0; padding: 0; list-style: none; }
-  #explicit-ns-animation .ns-stages li { border-inline-start: 2px solid var(--border); padding: 5px 9px; }
-  #explicit-ns-animation .ns-stages li[aria-current] { border-color: var(--primary); background: var(--accent); color: var(--accent-foreground); font-weight: 500; }
-  #explicit-ns-animation .ns-stages span, #explicit-ns-animation .ns-message { color: var(--muted-foreground); }
+  #explicit-ns-animation .ns-message { color: var(--muted-foreground); }
   #explicit-ns-animation .ns-values { display: grid; gap: 6px; margin: 0; }
   #explicit-ns-animation .ns-values div { display: flex; flex-wrap: wrap; gap: 2px 8px; justify-content: space-between; }
   #explicit-ns-animation .ns-values dd { margin: 0; }
@@ -2103,8 +2623,7 @@ html&gt;body{padding:0}&lt;/style&gt;
   #explicit-ns-animation .ns-color-probe { display: none; }
   @media (max-width: 575px) {
     #explicit-ns-animation .ns-layout { grid-template-columns: minmax(0, 1fr); gap: 14px; }
-    #explicit-ns-animation .ns-status { grid-row: 1; gap: 8px; }
-    #explicit-ns-animation .ns-stages { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    #explicit-ns-animation .ns-status { gap: 8px; }
   }
 &lt;/style&gt;
 
@@ -2343,9 +2862,9 @@ html&gt;body{padding:0}&lt;/style&gt;
   const dtSelect = find(&#x27;#ns-dt&#x27;);
   const pressureMethodSelect = find(&#x27;#ns-pressure-method&#x27;);
   const pressureOmegaSelect = find(&#x27;#ns-pressure-omega&#x27;);
-  const stages = Array.from(root.querySelectorAll(&#x27;.ns-stages li&#x27;));
+  const storyboard = mountIterationStoryboard(find(&#x27;.ns-storyboard&#x27;), { mode: &#x27;explicit&#x27; });
   const reducedMotion = matchMedia(&#x27;(prefers-reduced-motion: reduce)&#x27;);
-  const stageIndex = { source: 0, pressure: 1, converged: 2, advanced: 3, complete: 3, error: 1, &#x27;velocity-error&#x27;: 3, &#x27;reverse-flow&#x27;: 3 };
+  const stageIndex = { initial: -1, source: 0, pressure: 1, converged: 2, advanced: 3, complete: 3, error: 1, &#x27;velocity-error&#x27;: 3, &#x27;reverse-flow&#x27;: 3 };
   const messages = {
     initial: &#x27;初始速度已给定。&#x27;,
     source: &#x27;右端已计算，准备迭代压力。&#x27;,
@@ -2464,7 +2983,6 @@ html&gt;body{padding:0}&lt;/style&gt;
     pressureMethodSelect.value = pressureMethod;
     pressureOmegaSelect.value = String(pressureOmega);
     find(&#x27;.ns-omega&#x27;).hidden = pressureMethod !== &#x27;sor&#x27;;
-    write(&#x27;[data-pressure-stage]&#x27;, `${pressureMethods[pressureMethod]} 压力迭代`);
     const iterationNotes = {
       jacobi: &#x27;Jacobi 每轮统一使用上一轮压力；切换后从第 0 层重新计算。&#x27;,
       &#x27;gauss-seidel&#x27;: &#x27;Gauss–Seidel 按行扫描，即时使用本轮已更新的压力；切换后从第 0 层重新计算。&#x27;,
@@ -2480,9 +2998,17 @@ html&gt;body{padding:0}&lt;/style&gt;
     write(&#x27;[data-time]&#x27;, `t = ${Number((layer * dt).toFixed(3))}`);
     find(&#x27;.ns-progress&#x27;).max = endLayer;
     find(&#x27;.ns-progress&#x27;).value = layer;
-    stages.forEach((item, i) =&gt; {
-      if (i === stageIndex[phase]) item.setAttribute(&#x27;aria-current&#x27;, &#x27;step&#x27;);
-      else item.removeAttribute(&#x27;aria-current&#x27;);
+    storyboard.update({
+      phase: stageIndex[phase],
+      layer,
+      time: layer * dt,
+      iteration: sweep,
+      residual,
+      tolerance,
+      method: pressureMethods[pressureMethod],
+      playing: playing(),
+      failed: terminal() &amp;&amp; phase !== &#x27;complete&#x27;,
+      complete: phase === &#x27;complete&#x27;
     });
     const advancing = phase === &#x27;advanced&#x27; || phase === &#x27;complete&#x27;;
     write(&#x27;[data-sweeps]&#x27;, phase === &#x27;initial&#x27; ? &#x27;—&#x27; : `${sweep}${advancing ? &#x27;（上一层）&#x27; : &#x27;&#x27;}`);

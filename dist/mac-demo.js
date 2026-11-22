@@ -4,6 +4,7 @@ import { DT_OPTIONS, DEMO_END_TIME, normalizeTimeStep } from "./time-step-option
 import { spatialGridSummary } from "./spatial-grid.js";
 import { readIterationOptions, writeIterationQuery, iterationLabel, mountIterationControls } from "./iteration-controls.js";
 import { mountParameterSidebar } from "./parameter-sidebar.js?v=edb979ef0040";
+import { mountIterationStoryboard } from "./iteration-storyboard.js?v=a2ccaab16e0c";
 
 const root = document.querySelector("#mac-demo");
 let condition = selectedInitialCondition();
@@ -56,6 +57,7 @@ root.innerHTML = `
     </select>
   </div>
   <div class="mac-demo-layout">
+    <div class="mac-storyboard"></div>
     <figure class="mac-figure">
       <figcaption class="mac-field-caption"><strong data-mac="field"></strong><span class="mac-caption-note">箭头 · <span data-mac="velocity"></span></span></figcaption>
       <canvas class="mac-plot" role="img"></canvas>
@@ -66,9 +68,6 @@ root.innerHTML = `
     <div class="mac-panel">
       <div class="mac-time"><strong data-mac="layer"></strong><span data-mac="time"></span></div>
       <progress class="mac-progress" data-mac="progress" max="12" value="0" aria-label="已推进的物理时间步"></progress>
-      <ol class="mac-phases" aria-label="MAC 投影法步骤">
-        <li>隐式预测速度</li><li>计算压力方程右端</li><li data-mac="pressure-phase">压力迭代</li><li>投影修正速度</li>
-      </ol>
       <dl class="mac-metrics">
         <div><dt>预测迭代 / 最大残差</dt><dd data-mac="predictor"></dd></div>
         <div><dt>压力迭代 / 最大残差</dt><dd data-mac="pressure"></dd></div>
@@ -89,7 +88,7 @@ root.innerHTML = `
 const elements = Object.fromEntries(
   Array.from(root.querySelectorAll("[data-mac]"), element => [element.dataset.mac, element])
 );
-const phases = root.querySelectorAll(".mac-phases li");
+const storyboard = mountIterationStoryboard(root.querySelector(".mac-storyboard"), { mode: "mac" });
 const canvas = root.querySelector("canvas");
 const context = canvas.getContext("2d");
 const arrowStyleSelect = root.querySelector("#mac-arrow-style");
@@ -317,7 +316,6 @@ function render() {
   elements.progress.max = solver.steps;
   elements.progress.value = state.layer;
   write("status", describe(state));
-  write("pressure-phase", `${iterationLabel(iterationOptions.pressureMethod)} 压力迭代`);
   write("predictor", iterationText(state.predictorSweeps, state.predictorResidual));
   write("pressure", iterationText(state.pressureSweeps, state.pressureResidual));
   write("before", format(state.maxStarDivergence));
@@ -326,9 +324,19 @@ function render() {
   elements.step.disabled = playing || isFinished(state);
   elements.reset.disabled = state.stage === "initial" && !playing;
 
-  phases.forEach((phase, index) => {
-    if (index === currentPhase) phase.setAttribute("aria-current", "step");
-    else phase.removeAttribute("aria-current");
+  storyboard.update({
+    phase: currentPhase ?? -1,
+    layer: state.layer,
+    time: state.time,
+    iteration: state.pressureSweeps,
+    residual: state.pressureResidual,
+    tolerance: solver.pressureTolerance,
+    method: iterationOptions.pressureMethod === "jacobi" ? "Weighted Jacobi" : iterationLabel(iterationOptions.pressureMethod),
+    playing,
+    failed: state.stage === "failed",
+    complete: state.stage === "complete",
+    predictorIterations: state.predictorSweeps,
+    predictorResidual: state.predictorResidual
   });
   drawPlot(state.pressure, usePrediction ? state.uStar : state.u, usePrediction ? state.vStar : state.v, peak, showCombined);
 }
